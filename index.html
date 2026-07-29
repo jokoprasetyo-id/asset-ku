@@ -106,6 +106,10 @@
   .val.pos{color:var(--primary-ink);} .val.neg{color:var(--debt);}
   .row2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
   
+  .gauge-wrap { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px 10px; }
+  .gauge-title { font-size: 13px; font-weight: 700; color: var(--ink); margin-top: 14px; text-align: center; }
+  .gauge-sub { font-size: 11.5px; color: var(--muted); margin-top: 4px; text-align: center; line-height: 1.4; }
+
   .chart-container { display: flex; align-items: flex-end; justify-content: space-between; height: 120px; margin-top: 20px; gap: 4px; }
   .chart-col { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; flex: 1; gap: 6px; height:100%; }
   .chart-bar { width: 100%; max-width: 32px; background: var(--primary-soft); border-radius: 6px 6px 0 0; transition: height 0.6s cubic-bezier(0.4, 0, 0.2, 1); position:relative; min-height:4px;}
@@ -320,7 +324,7 @@
           <svg width="88" height="88" viewBox="0 0 88 88">
             <circle cx="44" cy="44" r="38" fill="none" stroke="#EEF2F4" stroke-width="8"/>
             <circle id="health-arc" cx="44" cy="44" r="38" fill="none" stroke="var(--primary)" stroke-width="8" stroke-linecap="round" transform="rotate(-90 44 44)" stroke-dasharray="238.7" stroke-dashoffset="238.7"/>
-            <text id="health-score-text" x="44" y="49" text-anchor="middle" font-family="Sora" font-size="22" font-weight="700" fill="var(--ink)">0</text>
+            <text id="health-score-text" x="44" y="52" text-anchor="middle" font-family="Sora" font-size="24" font-weight="700" fill="var(--ink)">0</text>
           </svg>
           <div class="gauge-title">Skor Kesehatan</div>
           <div class="gauge-sub" id="health-status">Belum ada data</div>
@@ -329,7 +333,7 @@
           <svg width="88" height="88" viewBox="0 0 88 88">
             <circle cx="44" cy="44" r="38" fill="none" stroke="#EEF2F4" stroke-width="8"/>
             <circle id="div-arc" cx="44" cy="44" r="38" fill="none" stroke="var(--gold)" stroke-width="8" stroke-linecap="round" transform="rotate(-90 44 44)" stroke-dasharray="238.7" stroke-dashoffset="238.7"/>
-            <text id="div-count-text" x="44" y="49" text-anchor="middle" font-family="Sora" font-size="22" font-weight="700" fill="var(--ink)">0</text>
+            <text id="div-count-text" x="44" y="52" text-anchor="middle" font-family="Sora" font-size="24" font-weight="700" fill="var(--ink)">0</text>
           </svg>
           <div class="gauge-title">Diversifikasi</div>
           <div class="gauge-sub" id="div-status">kategori aset</div>
@@ -522,6 +526,32 @@ let rates = {
 };
 
 function rupiah(n){ return "Rp " + Math.round(Number(n) || 0).toLocaleString("id-ID"); }
+
+// --- NEW HELPERS (Formatter & Vibration) ---
+function formatNumberWithDot(num) {
+  if (num === null || num === undefined) return "";
+  return new Intl.NumberFormat('id-ID').format(num);
+}
+
+function unformatNumber(str) {
+  return Number(String(str).replace(/\./g, '')) || 0;
+}
+
+function attachNumFormatter(selector) {
+  const el = $(selector);
+  if(!el) return;
+  el.addEventListener('input', function() {
+    let raw = this.value.replace(/\D/g, '');
+    this.value = raw ? new Intl.NumberFormat('id-ID').format(raw) : '';
+  });
+}
+
+document.addEventListener('click', (e) => {
+  const target = e.target.closest('button, .nav-btn, .chip, .list-item, .lainnya-row, .goal-header, .seg button');
+  if (target && navigator.vibrate) navigator.vibrate(15);
+});
+// --- END NEW HELPERS ---
+
 function toast(msg){
   const t = $("#toast"); t.textContent = msg; t.classList.add("show");
   clearTimeout(toast._t); toast._t = setTimeout(()=>t.classList.remove("show"), 2500);
@@ -1129,7 +1159,7 @@ function openAssetSheet(existing){
 
     <div class="field" id="dyn-amount-wrap">
       <label>Nilai Manual (Rp)</label>
-      <input type="number" inputmode="numeric" id="f-amount" placeholder="0" value="${isEdit?existing.amount||"":""}">
+      <input type="text" inputmode="numeric" id="f-amount" placeholder="0" value="${isEdit?formatNumberWithDot(existing.amount):""}">
     </div>
     
     <div class="field">
@@ -1175,7 +1205,7 @@ function openGoalAssetForm(goalId, existingAsset = null){
 
     <div class="field" id="dyn-amount-wrap">
       <label>Nilai Dialokasikan (Rp)</label>
-      <input type="number" inputmode="numeric" id="f-amount" placeholder="0" value="${isEdit?existingAsset.amount||"":""}">
+      <input type="text" inputmode="numeric" id="f-amount" placeholder="0" value="${isEdit?formatNumberWithDot(existingAsset.amount):""}">
     </div>
     
     <button class="btn-primary" id="f-save" style="background:var(--blue);">${isEdit?"Simpan Perubahan":"Simpan Aset"}</button>
@@ -1249,6 +1279,8 @@ function setupAssetFormLogic(existing, onSaveCallback) {
   fQty.addEventListener("input", calcPreview);
   syncForm();
 
+  attachNumFormatter('#f-amount');
+
   $("#f-cancel").addEventListener("click", closeSheet);
   if (isEdit && $("#f-delete")) {
       $("#f-delete").addEventListener("click", ()=>{ closeSheet(); confirmDelete("asset", existing.id); });
@@ -1269,7 +1301,7 @@ function setupAssetFormLogic(existing, onSaveCallback) {
       if(category !== 'dinar') payload.subType = fSubtype.value;
       if(payload.qty <= 0){ toast("Jumlah harus lebih dari 0"); return; }
     } else {
-      payload.amount = Number($("#f-amount").value || 0);
+      payload.amount = unformatNumber($("#f-amount").value);
       if(payload.amount <= 0){ toast("Nilai aset harus lebih dari 0"); return; }
     }
     
@@ -1309,11 +1341,11 @@ function openDebtSheet(existing){
     </div>
     <div class="field">
       <label>Sisa Pokok (Rp)</label>
-      <input type="number" inputmode="numeric" id="f-amount" placeholder="0" value="${isEdit?existing.amount||"":""}">
+      <input type="text" inputmode="numeric" id="f-amount" placeholder="0" value="${isEdit?formatNumberWithDot(existing.amount):""}">
     </div>
     <div class="field">
       <label>Cicilan per Bulan (Rp) - Opsional</label>
-      <input type="number" inputmode="numeric" id="f-installment" placeholder="0" value="${isEdit&&existing.installment?existing.installment:""}">
+      <input type="text" inputmode="numeric" id="f-installment" placeholder="0" value="${isEdit&&existing.installment?formatNumberWithDot(existing.installment):""}">
     </div>
     <div class="field">
       <label>Jatuh Tempo (opsional)</label>
@@ -1337,10 +1369,13 @@ function openDebtSheet(existing){
   $("#f-cancel").addEventListener("click", closeSheet);
   if (isEdit) $("#f-delete").addEventListener("click", ()=>{ closeSheet(); confirmDelete("debt", existing.id); });
   
+  attachNumFormatter('#f-amount');
+  attachNumFormatter('#f-installment');
+  
   $("#f-save").addEventListener("click", async ()=>{
     const name = $("#f-name").value.trim();
-    const amount = Number($("#f-amount").value || 0);
-    const installment = Number($("#f-installment").value || 0);
+    const amount = unformatNumber($("#f-amount").value);
+    const installment = unformatNumber($("#f-installment").value);
     const dueDate = $("#f-due").value || null;
     const note = $("#f-note").value.trim();
     
@@ -1365,7 +1400,7 @@ function openGoalSheet(existing){
     </div>
     <div class="field">
       <label>Target Dana (Rp)</label>
-      <input type="number" inputmode="numeric" id="g-target" placeholder="0" value="${isEdit?existing.target||"":""}">
+      <input type="text" inputmode="numeric" id="g-target" placeholder="0" value="${isEdit?formatNumberWithDot(existing.target):""}">
     </div>
     <button class="btn-primary" id="g-save" style="background:var(--blue);">${isEdit?"Simpan Perubahan":"Simpan Target"}</button>
     ${isEdit?`<button class="btn-danger-outline" id="g-delete">Hapus Target & Semua Aset di Dalamnya</button>`:""}
@@ -1375,9 +1410,11 @@ function openGoalSheet(existing){
   $("#g-cancel").addEventListener("click", closeSheet);
   if (isEdit) $("#g-delete").addEventListener("click", ()=>{ closeSheet(); confirmDelete("goal", existing.id); });
   
+  attachNumFormatter('#g-target');
+  
   $("#g-save").addEventListener("click", async ()=>{
     const name = $("#g-name").value.trim();
-    const target = Number($("#g-target").value || 0);
+    const target = unformatNumber($("#g-target").value);
     
     if (!name){ toast("Nama target wajib diisi"); return; }
     if (target <= 0){ toast("Target dana harus lebih dari 0"); return; }
@@ -1404,16 +1441,16 @@ $("#btn-manage-rates").addEventListener("click", ()=>{
     <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
       <div class="field">
         <label>Emas Antam / g</label>
-        <input type="number" id="r-antam" value="${rates.antam}">
+        <input type="text" inputmode="numeric" id="r-antam" value="${formatNumberWithDot(rates.antam)}">
       </div>
       <div class="field">
         <label>Emas Galeri24 / g</label>
-        <input type="number" id="r-galeri" value="${rates.galeri24}">
+        <input type="text" inputmode="numeric" id="r-galeri" value="${formatNumberWithDot(rates.galeri24)}">
       </div>
     </div>
     <div class="field">
       <label>Dinar KR / Keping</label>
-      <input type="number" id="r-dinar" value="${rates.dinarKR}">
+      <input type="text" inputmode="numeric" id="r-dinar" value="${formatNumberWithDot(rates.dinarKR)}">
     </div>
     <div style="height:1px; background:var(--line); margin:18px 0;"></div>
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
@@ -1421,9 +1458,9 @@ $("#btn-manage-rates").addEventListener("click", ()=>{
         <button id="r-auto-valas" style="background:#E0F2FE; color:#0284C7; border:1px solid #BAE6FD; padding:5px 10px; border-radius:8px; font-size:11px; font-weight:700; cursor:pointer;">Update Otomatis</button>
     </div>
     <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px;">
-      <div class="field"><label>1 USD</label><input type="number" id="r-usd" value="${rates.valas_usd}"></div>
-      <div class="field"><label>1 EUR</label><input type="number" id="r-eur" value="${rates.valas_eur}"></div>
-      <div class="field"><label>1 SGD</label><input type="number" id="r-sgd" value="${rates.valas_sgd}"></div>
+      <div class="field"><label>1 USD</label><input type="text" inputmode="numeric" id="r-usd" value="${formatNumberWithDot(rates.valas_usd)}"></div>
+      <div class="field"><label>1 EUR</label><input type="text" inputmode="numeric" id="r-eur" value="${formatNumberWithDot(rates.valas_eur)}"></div>
+      <div class="field"><label>1 SGD</label><input type="text" inputmode="numeric" id="r-sgd" value="${formatNumberWithDot(rates.valas_sgd)}"></div>
     </div>
     
     <button class="btn-primary" id="r-save" style="margin-top:10px;">Simpan Pengaturan</button>
@@ -1432,6 +1469,13 @@ $("#btn-manage-rates").addEventListener("click", ()=>{
   
   $("#r-cancel").addEventListener("click", closeSheet);
 
+  attachNumFormatter('#r-antam');
+  attachNumFormatter('#r-galeri');
+  attachNumFormatter('#r-dinar');
+  attachNumFormatter('#r-usd');
+  attachNumFormatter('#r-eur');
+  attachNumFormatter('#r-sgd');
+
   $("#r-auto-valas").addEventListener("click", async () => {
       const btn = $("#r-auto-valas");
       btn.textContent = "Loading..."; btn.disabled = true;
@@ -1439,9 +1483,9 @@ $("#btn-manage-rates").addEventListener("click", ()=>{
           const res = await fetch("https://open.er-api.com/v6/latest/USD");
           const data = await res.json();
           const r = data.rates;
-          $("#r-usd").value = Math.round(r.IDR);
-          $("#r-eur").value = Math.round(r.IDR / r.EUR);
-          $("#r-sgd").value = Math.round(r.IDR / r.SGD);
+          $("#r-usd").value = formatNumberWithDot(Math.round(r.IDR));
+          $("#r-eur").value = formatNumberWithDot(Math.round(r.IDR / r.EUR));
+          $("#r-sgd").value = formatNumberWithDot(Math.round(r.IDR / r.SGD));
           toast("Kurs Valas berhasil diperbarui dari internet!");
       } catch (e) {
           console.error(e);
@@ -1453,12 +1497,12 @@ $("#btn-manage-rates").addEventListener("click", ()=>{
   $("#r-save").addEventListener("click", async ()=>{
     $("#r-save").textContent = "Menyimpan...";
     const newRates = {
-      antam: Number($("#r-antam").value||0),
-      galeri24: Number($("#r-galeri").value||0),
-      dinarKR: Number($("#r-dinar").value||0),
-      valas_usd: Number($("#r-usd").value||0),
-      valas_eur: Number($("#r-eur").value||0),
-      valas_sgd: Number($("#r-sgd").value||0)
+      antam: unformatNumber($("#r-antam").value),
+      galeri24: unformatNumber($("#r-galeri").value),
+      dinarKR: unformatNumber($("#r-dinar").value),
+      valas_usd: unformatNumber($("#r-usd").value),
+      valas_eur: unformatNumber($("#r-eur").value),
+      valas_sgd: unformatNumber($("#r-sgd").value)
     };
     await updateRates(newRates);
     closeSheet();
