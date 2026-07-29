@@ -36,7 +36,7 @@
     -webkit-font-smoothing:antialiased;
     overscroll-behavior-y:none;
   }
-  h1,h2,h3,.num,.brand{font-family:'Sora',system-ui,sans-serif;}
+  h1,h2,h3,.num,.brand, .sora{font-family:'Sora',system-ui,sans-serif;}
   button{font-family:inherit;}
   .hidden{display:none !important;}
   a{color:inherit;}
@@ -104,8 +104,20 @@
   .hero-grid div{font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.04em;}
   .hero-grid .val{display:block;font-size:14.5px;color:var(--ink);font-weight:700;margin-top:3px;text-transform:none;letter-spacing:0;font-family:'Sora',sans-serif;}
   .val.pos{color:var(--primary-ink);} .val.neg{color:var(--debt);}
+  
   .row2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
   
+  .gauge-wrap {
+    display: flex; flex-direction: column; align-items: center; text-align: center;
+    padding: 20px 14px;
+  }
+  .gauge-title {
+    font-size: 13.5px; font-weight: 600; margin-top: 14px; color: var(--ink);
+  }
+  .gauge-sub {
+    font-size: 12px; color: var(--muted); margin-top: 3px; line-height: 1.4; font-weight: 500;
+  }
+
   .empty{text-align:center;padding:34px 14px;color:var(--muted);font-size:13.5px;line-height:1.5;}
   .empty b{display:block;color:var(--ink);font-size:15px;margin-bottom:6px;font-weight:700;}
   
@@ -129,6 +141,47 @@
     background:var(--surface);border:1px solid var(--line);color:var(--muted);cursor:pointer;
   }
   .chip.active{background:var(--primary);border-color:var(--primary);color:#fff;}
+
+  .goal-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; cursor:pointer; user-select:none; }
+  .goal-title-wrap { flex:1; min-width:0; }
+  .goal-title { font-size: 18px; font-weight: 700; color: var(--ink); margin: 0 0 4px; font-family: 'Sora', sans-serif;}
+  .goal-target-lbl { font-size: 10px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; display:flex; align-items:center; justify-content:space-between;}
+  .goal-target-val { font-size: 15px; font-weight: 700; color: var(--ink); font-family: 'Sora', sans-serif; }
+  
+  .goal-progress-track { height: 6px; background: var(--line); border-radius: 3px; margin: 8px 0; overflow: hidden; }
+  .goal-progress-fill { height: 100%; background: #38BDF8; border-radius: 3px; transition: width 0.3s ease; }
+  .goal-stats { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+  .goal-pct { background: #E0F2FE; color: #0284C7; font-size: 10.5px; font-weight: 700; padding: 4px 8px; border-radius: 8px; }
+  .goal-collected { font-size: 12px; font-weight: 600; color: var(--muted); }
+  .goal-collected-val { color: #10B981; font-family: 'Sora', sans-serif; font-weight: 700;}
+
+  .goal-reco-box { background: #F8FAFC; border: 1px dashed #CBD5E1; border-radius: 14px; padding: 14px; margin-bottom: 20px; }
+  .goal-reco-head { display: flex; align-items: center; gap: 6px; color: #0284C7; font-size: 12.5px; font-weight: 700; margin-bottom: 8px; }
+  .goal-reco-desc { font-size: 11.5px; color: var(--muted); line-height: 1.5; margin-bottom: 12px; }
+  .goal-reco-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+  .goal-reco-item { background: var(--surface); border: 1px solid #E2E8F0; border-radius: 10px; padding: 10px 4px; text-align: center; }
+  .goal-reco-lbl { font-size: 9.5px; font-weight: 700; color: var(--muted); margin-bottom: 4px; letter-spacing: 0.05em; }
+  .goal-reco-val { font-size: 12px; font-weight: 700; color: #0284C7; font-family: 'Sora', sans-serif; }
+
+  .goal-assets-section { border-top: 1px dashed var(--line); padding-top: 16px; }
+  .goal-assets-head { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 12px; display:flex; justify-content:space-between; align-items:center;}
+  
+  .goal-asset-item { display: flex; align-items: center; gap: 12px; padding: 12px; border: 1px solid var(--line); border-radius: 12px; margin-bottom: 8px; }
+  .goal-asset-icon { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex: 0 0 auto; color:#fff; font-size:14px; font-weight:bold;}
+  .goal-asset-info { flex: 1; min-width: 0; }
+  .goal-asset-name { font-size: 13.5px; font-weight: 600; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .goal-asset-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .goal-asset-val-box { text-align: right; }
+  .goal-asset-val { font-size: 13.5px; font-weight: 700; font-family: 'Sora', sans-serif; color: var(--ink); }
+  .goal-asset-val-eq { font-size: 10px; color: var(--muted); margin-top: 2px; }
+  .goal-asset-del { width: 28px; height: 28px; border-radius: 8px; background: var(--debt-soft); color: var(--debt); border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; margin-left: 8px; flex: 0 0 auto;}
+
+  .btn-add-dashed { width: 100%; padding: 12px; border: 1px dashed #94A3B8; border-radius: 12px; background: #F8FAFC; color: var(--muted); font-size: 13px; font-weight: 600; cursor: pointer; display:flex; align-items:center; justify-content:center; gap:6px; transition:all .2s;}
+  .btn-add-dashed:hover { background: #F1F5F9; border-color: var(--primary); color: var(--primary-ink); }
+  
+  .chevron { transition: transform 0.3s ease; }
+  .collapsed .chevron { transform: rotate(-90deg); }
+  .collapsed .goal-body { display: none; }
 
   nav.bottomnav{
     position:fixed;bottom:0;left:0;right:0;z-index:30; display:flex;justify-content:center;
@@ -302,7 +355,7 @@
       <div id="goal-list"></div>
       <div class="empty hidden" id="goal-empty">
         <b>Belum ada target tabungan</b>
-        Tentukan impian finansialmu, pantau progressnya, dan dapatkan rekomendasi tabungan bulanan.
+        Tentukan impian finansialmu, pantau progressnya, dan alokasikan aset untuk mencapai target.
       </div>
     </section>
 
@@ -414,16 +467,16 @@ const $ = (sel) => document.querySelector(sel);
 const $$ = (sel) => Array.from(document.querySelectorAll(sel));
 
 const DEFAULT_CATEGORIES = [
-  { id: "tabungan", name: "Tabungan / Kas", hue: 158 },
-  { id: "saham",    name: "Saham",          hue: 265 },
-  { id: "reksadana",name: "Reksadana",      hue: 205 },
-  { id: "emas",     name: "Emas",           hue: 45  },
-  { id: "dinar",    name: "Dinar",          hue: 35  },
-  { id: "valas",    name: "Valas",          hue: 190 },
-  { id: "kripto",   name: "Kripto",         hue: 28  },
-  { id: "properti", name: "Properti",       hue: 340 },
-  { id: "kendaraan",name: "Kendaraan",      hue: 220 },
-  { id: "lainnya",  name: "Lainnya",        hue: 0, gray:true },
+  { id: "tabungan", name: "Tabungan / Kas", hue: 158, icon: "💰" },
+  { id: "saham",    name: "Saham",          hue: 265, icon: "📈" },
+  { id: "reksadana",name: "Reksadana",      hue: 205, icon: "🥧" },
+  { id: "emas",     name: "Emas",           hue: 45,  icon: "🪙" },
+  { id: "dinar",    name: "Dinar",          hue: 35,  icon: "📀" },
+  { id: "valas",    name: "Valas",          hue: 190, icon: "💵" },
+  { id: "kripto",   name: "Kripto",         hue: 28,  icon: "₿" },
+  { id: "properti", name: "Properti",       hue: 340, icon: "🏠" },
+  { id: "kendaraan",name: "Kendaraan",      hue: 220, icon: "🚗" },
+  { id: "lainnya",  name: "Lainnya",        hue: 0, gray:true, icon: "📦" },
 ];
 let customCategories = [];
 function allCategories(){ return [...DEFAULT_CATEGORIES, ...customCategories]; }
@@ -435,6 +488,7 @@ let debts = [];
 let goals = [];
 let assetFilter = "all";
 let debtTab = "hutang";
+let expandedGoals = new Set(); // Track which goals are expanded
 
 // Pengaturan Harga Default
 let rates = {
@@ -453,8 +507,8 @@ function toast(msg){
 }
 function uid(){ return currentUser ? currentUser.uid : null; }
 function escapeHtml(s){ return String(s??"").replace(/[&<>"']/g, m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m])); }
+function generateId(){ return Date.now().toString(36) + Math.random().toString(36).substr(2); }
 
-// Helper untuk menghitung nilai aset dinamis (Emas/Dinar/Valas)
 function calcAssetValue(a){
   if(a.category === 'emas' && a.qty && a.subType){ return Number(a.qty) * (rates[a.subType] || 0); }
   if(a.category === 'dinar' && a.qty){ return Number(a.qty) * rates.dinarKR; }
@@ -605,6 +659,32 @@ async function saveGoal(data, id){
 }
 async function removeGoal(id){ const u = uid(); if(!u) return; await deleteDoc(doc(db, "users", u, "goals", id)); }
 
+// New Helper for Goal Assets
+async function saveGoalAsset(goalId, assetData, assetId = null) {
+  const u = uid(); if(!u) return;
+  const goalRef = doc(db, "users", u, "goals", goalId);
+  const goalSnap = await getDoc(goalRef);
+  if(goalSnap.exists()){
+      let currentAssets = goalSnap.data().assets || [];
+      if(assetId){
+          currentAssets = currentAssets.map(a => a.id === assetId ? {...a, ...assetData} : a);
+      } else {
+          currentAssets.push({ id: generateId(), ...assetData });
+      }
+      await updateDoc(goalRef, { assets: currentAssets, updatedAt: serverTimestamp() });
+  }
+}
+async function removeGoalAsset(goalId, assetId) {
+  const u = uid(); if(!u) return;
+  const goalRef = doc(db, "users", u, "goals", goalId);
+  const goalSnap = await getDoc(goalRef);
+  if(goalSnap.exists()){
+      let currentAssets = goalSnap.data().assets || [];
+      currentAssets = currentAssets.filter(a => a.id !== assetId);
+      await updateDoc(goalRef, { assets: currentAssets, updatedAt: serverTimestamp() });
+  }
+}
+
 async function updateRates(newRates){
   const u = uid(); if(!u) return;
   await setDoc(doc(db, "users", u, "settings", "rates"), newRates, {merge:true});
@@ -722,55 +802,132 @@ function renderGoals(){
   const list = $("#goal-list"); const empty = $("#goal-empty");
   if (goals.length === 0){ list.innerHTML = ""; empty.classList.remove("hidden"); return; }
   empty.classList.add("hidden");
+  
+  window.toggleGoal = function(id) {
+    if (expandedGoals.has(id)) expandedGoals.delete(id);
+    else expandedGoals.add(id);
+    renderGoals(); // Re-render to update UI state
+  };
+
   list.innerHTML = goals.sort((a,b)=> Number(b.target)-Number(a.target)).map(g => {
-    const target = Number(g.target || 0); const collected = Number(g.collected || 0);
+    const target = Number(g.target || 0);
+    // Calculate total collected from linked assets
+    const gAssets = g.assets || [];
+    const collected = gAssets.reduce((sum, a) => sum + calcAssetValue(a), 0);
+    
     const rem = Math.max(0, target - collected);
     const pct = target > 0 ? Math.min(100, Math.floor((collected/target)*100)) : 0;
+    const isExpanded = expandedGoals.has(g.id);
     
+    // Build Assets HTML
+    let assetsHtml = "";
+    if (gAssets.length > 0) {
+      assetsHtml = gAssets.map(a => {
+        const cat = catById(a.category);
+        let subTxt = cat.name;
+        let eqTxt = "";
+        let valTxt = rupiah(calcAssetValue(a));
+        
+        if (a.category === 'emas' && a.qty) {
+            subTxt = `Emas ${a.subType === 'antam' ? 'Antam' : 'G24'}`;
+            valTxt = `${a.qty}g`;
+            eqTxt = `≈ ${rupiah(calcAssetValue(a))}`;
+        }
+        else if (a.category === 'dinar' && a.qty) {
+            subTxt = `Dinar KR`;
+            valTxt = `${a.qty} Kpg`;
+            eqTxt = `≈ ${rupiah(calcAssetValue(a))}`;
+        }
+        else if (a.category === 'valas' && a.qty) {
+            subTxt = `Valas (${a.subType.toUpperCase()})`;
+            valTxt = Number(a.qty).toLocaleString('id-ID');
+            eqTxt = `≈ ${rupiah(calcAssetValue(a))}`;
+        }
+
+        return `
+        <div class="goal-asset-item">
+          <div class="goal-asset-icon" style="background:${catDot(cat)}">${cat.icon||''}</div>
+          <div class="goal-asset-info">
+            <div class="goal-asset-name">${escapeHtml(a.name||cat.name)}</div>
+            <div class="goal-asset-sub">${subTxt}</div>
+          </div>
+          <div class="goal-asset-val-box">
+             <div class="goal-asset-val">${valTxt}</div>
+             ${eqTxt ? `<div class="goal-asset-val-eq">${eqTxt}</div>` : ''}
+          </div>
+          <button class="goal-asset-del" onclick="confirmDeleteGoalAsset('${g.id}', '${a.id}')">${trashIcon()}</button>
+        </div>`;
+      }).join("");
+    } else {
+      assetsHtml = `<div class="empty" style="padding:16px 0; font-size:12px;">Belum ada aset disimpan.</div>`;
+    }
+
     return `
-    <div class="card" style="margin-bottom:14px; padding:20px;">
-      <div style="display:flex; justify-content:space-between; align-items:flex-start;">
-        <h2 style="margin:0; font-size:17px; font-weight:700;">${escapeHtml(g.name)}</h2>
-        <button class="icon-btn" style="width:28px;height:28px;border:none;background:transparent;box-shadow:none;" data-editg="${g.id}">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg>
-        </button>
-      </div>
-      <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-top:10px;">
-        <div style="font-size:10px; font-weight:700; color:var(--muted); text-transform:uppercase;">Target Dana:</div>
-        <div style="font-size:15px; font-weight:700; font-family:'Sora',sans-serif;">${rupiah(target)}</div>
-      </div>
-      <div style="height:6px; background:#E2E8F0; border-radius:3px; margin:8px 0; overflow:hidden;">
-        <div style="height:100%; background:#38BDF8; border-radius:3px; width:${pct}%;"></div>
-      </div>
-      <div style="display:flex; justify-content:space-between; align-items:center;">
-        <div style="background:#E0F2FE; color:#0284C7; font-size:10.5px; font-weight:700; padding:3px 8px; border-radius:8px;">${pct}%</div>
-        <div style="font-size:11.5px; font-weight:600; color:var(--muted);">Terkumpul: <span style="color:#10B981;">${rupiah(collected)}</span></div>
-      </div>
-      <div style="background:#F8FAFC; border:1px solid #E2E8F0; border-radius:14px; padding:14px; margin-top:18px;">
-        <div style="display:flex; align-items:center; gap:6px; color:#0284C7; font-size:12.5px; font-weight:700; margin-bottom:8px;">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
-          Rekomendasi Tabungan
+    <div class="card ${isExpanded ? '' : 'collapsed'}" style="margin-bottom:14px; padding:20px;">
+      <div class="goal-header" onclick="toggleGoal('${g.id}')">
+        <div class="goal-title-wrap">
+          <h2 class="goal-title">${escapeHtml(g.name)}</h2>
+          <div class="goal-target-lbl">TARGET DANA: <span class="goal-target-val">${rupiah(target)}</span></div>
         </div>
-        <div style="font-size:11.5px; color:var(--muted); line-height:1.5; margin-bottom:12px;">Sisa dana yang perlu dikumpulkan: <b style="color:var(--ink);">${rupiah(rem)}</b></div>
-        <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:6px;">
-          <div style="background:var(--surface); border:1px solid #E2E8F0; border-radius:10px; padding:10px 2px; text-align:center;">
-            <div style="font-size:9.5px; font-weight:700; color:var(--muted); margin-bottom:4px;">6 BULAN</div>
-            <div style="font-size:12px; font-weight:700; color:#0284C7; font-family:'Sora',sans-serif;">${rupiah(rem/6)}</div>
+        <div class="chevron icon-btn" style="width:32px; height:32px; border:none; box-shadow:none; margin-top:2px;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
+        </div>
+      </div>
+      
+      <div class="goal-progress-track">
+        <div class="goal-progress-fill" style="width:${pct}%;"></div>
+      </div>
+      
+      <div class="goal-stats">
+        <div class="goal-pct">${pct}%</div>
+        <div class="goal-collected">Terkumpul: <span class="goal-collected-val">${rupiah(collected)}</span></div>
+      </div>
+      
+      <div class="goal-body">
+        <div class="goal-reco-box">
+          <div class="goal-reco-head">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+            Rekomendasi Tabungan
           </div>
-          <div style="background:var(--surface); border:1px solid #E2E8F0; border-radius:10px; padding:10px 2px; text-align:center;">
-            <div style="font-size:9.5px; font-weight:700; color:var(--muted); margin-bottom:4px;">12 BULAN</div>
-            <div style="font-size:12px; font-weight:700; color:#0284C7; font-family:'Sora',sans-serif;">${rupiah(rem/12)}</div>
+          <div class="goal-reco-desc">Sisa dana yang perlu dikumpulkan: <b style="color:var(--ink);">${rupiah(rem)}</b></div>
+          <div class="goal-reco-grid">
+            <div class="goal-reco-item">
+              <div class="goal-reco-lbl">6 BULAN</div>
+              <div class="goal-reco-val">${rupiah(rem/6)}</div>
+            </div>
+            <div class="goal-reco-item">
+              <div class="goal-reco-lbl">12 BULAN</div>
+              <div class="goal-reco-val">${rupiah(rem/12)}</div>
+            </div>
+            <div class="goal-reco-item">
+              <div class="goal-reco-lbl">24 BULAN</div>
+              <div class="goal-reco-val">${rupiah(rem/24)}</div>
+            </div>
           </div>
-          <div style="background:var(--surface); border:1px solid #E2E8F0; border-radius:10px; padding:10px 2px; text-align:center;">
-            <div style="font-size:9.5px; font-weight:700; color:var(--muted); margin-bottom:4px;">24 BULAN</div>
-            <div style="font-size:12px; font-weight:700; color:#0284C7; font-family:'Sora',sans-serif;">${rupiah(rem/24)}</div>
+        </div>
+
+        <div class="goal-assets-section">
+          <div class="goal-assets-head">
+             <span>Aset Disimpan</span>
+             <button class="icon-btn" style="width:26px;height:26px;border:none;background:var(--bg);box-shadow:none;" onclick="openGoalSheetBtn('${g.id}')">
+               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg>
+             </button>
           </div>
+          ${assetsHtml}
+          <button class="btn-add-dashed" onclick="openGoalAssetSheet('${g.id}')" style="margin-top:12px;">
+             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+             Tambah Catatan Aset
+          </button>
         </div>
       </div>
     </div>`;
   }).join("");
-  list.querySelectorAll("[data-editg]").forEach(b=>b.addEventListener("click",()=>openGoalSheet(goals.find(g=>g.id===b.dataset.editg))));
 }
+
+// Ensure these functions are accessible globally for onclick attributes
+window.openGoalSheetBtn = function(id) { openGoalSheet(goals.find(g=>g.id===id)); };
+window.openGoalAssetSheet = function(id) { openGoalAssetForm(id); };
+window.confirmDeleteGoalAsset = function(goalId, assetId) { confirmDelete("goalAsset", assetId, goalId); };
 
 function pencilIcon(){ return `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>`; }
 function trashIcon(){ return `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0-1 14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L4 6h16z"/></svg>`; }
@@ -781,7 +938,7 @@ $("#btn-fab").addEventListener("click", ()=>{
     <h3>Tambah Catatan</h3>
     <button class="btn-primary" id="qa-asset" style="margin-bottom:10px;">+ Tambah Aset / Tabungan</button>
     <button class="btn-primary" id="qa-debt" style="background:var(--debt); margin-bottom:10px;">+ Tambah Hutang / Piutang</button>
-    <button class="btn-primary" id="qa-goal" style="background:var(--blue);">+ Tambah Target Tabungan</button>
+    <button class="btn-primary" id="qa-goal" style="background:var(--blue);">+ Buat Target Tabungan</button>
     <button class="btn-text-cancel" id="qa-cancel" style="margin-top:8px;">Batal</button>
   `);
   $("#qa-asset").addEventListener("click", ()=>{ closeSheet(); openAssetSheet(); });
@@ -797,7 +954,7 @@ function openSheet(innerHtml){
 }
 function closeSheet(){ $("#modal-root").innerHTML = ""; }
 
-function confirmDelete(kind, id){
+function confirmDelete(kind, id, extraId = null){
   openSheet(`
     <div class="sheet-close-bar"></div>
     <h3>Hapus catatan ini?</h3>
@@ -810,7 +967,8 @@ function confirmDelete(kind, id){
     try {
       if (kind==="asset") await removeAsset(id); 
       else if (kind==="debt") await removeDebt(id);
-      else await removeGoal(id);
+      else if (kind==="goal") await removeGoal(id);
+      else if (kind==="goalAsset") await removeGoalAsset(extraId, id);
       closeSheet(); toast("Berhasil dihapus");
     } catch(e){ console.error(e); toast("Gagal menghapus"); }
   });
@@ -861,6 +1019,56 @@ function openAssetSheet(existing){
     <button class="btn-text-cancel" id="f-cancel">Batal</button>
   `);
   
+  setupAssetFormLogic(isEdit ? existing : null, async (payload) => {
+     await saveAsset(payload, isEdit?existing.id:null);
+     toast(isEdit?"Aset diperbarui":"Aset ditambahkan");
+  });
+}
+
+function openGoalAssetForm(goalId, existingAsset = null){
+  const isEdit = !!existingAsset;
+  openSheet(`
+    <div class="sheet-close-bar"></div>
+    <h3>${isEdit?"Edit Aset Target":"Tambah Aset ke Target"}</h3>
+    <div class="field">
+      <label>Nama Aset</label>
+      <input type="text" id="f-name" placeholder="Contoh: Reksadana Sucor" value="${isEdit?escapeHtml(existingAsset.name||""):""}">
+    </div>
+    <div class="field">
+      <label>Kategori</label>
+      <select id="f-category">${categoryOptions(isEdit?existingAsset.category:"tabungan")}</select>
+    </div>
+    
+    <div id="dyn-qty-wrap" class="hidden">
+      <div class="field" id="f-subtype-wrap">
+        <label id="lbl-subtype">Penyedia / Mata Uang</label>
+        <select id="f-subtype"></select>
+      </div>
+      <div class="field">
+        <label id="lbl-qty">Jumlah</label>
+        <input type="number" step="any" inputmode="decimal" id="f-qty" placeholder="0" value="${isEdit?existingAsset.qty||"":""}">
+        <div class="field-hint" id="hint-calc">Nilai saat ini: Rp 0</div>
+      </div>
+    </div>
+
+    <div class="field" id="dyn-amount-wrap">
+      <label>Nilai Dialokasikan (Rp)</label>
+      <input type="number" inputmode="numeric" id="f-amount" placeholder="0" value="${isEdit?existingAsset.amount||"":""}">
+    </div>
+    
+    <button class="btn-primary" id="f-save" style="background:var(--blue);">${isEdit?"Simpan Perubahan":"Simpan Aset"}</button>
+    <button class="btn-text-cancel" id="f-cancel">Batal</button>
+  `);
+  
+  setupAssetFormLogic(isEdit ? existingAsset : null, async (payload) => {
+     await saveGoalAsset(goalId, payload, isEdit?existingAsset.id:null);
+     toast(isEdit?"Aset target diperbarui":"Aset target ditambahkan");
+  });
+}
+
+// Reusable logic for Asset forms (Main & Goal)
+function setupAssetFormLogic(existing, onSaveCallback) {
+  const isEdit = !!existing;
   const catSel = $("#f-category");
   const dynQtyWrap = $("#dyn-qty-wrap");
   const dynAmountWrap = $("#dyn-amount-wrap");
@@ -909,12 +1117,15 @@ function openAssetSheet(existing){
   syncForm();
 
   $("#f-cancel").addEventListener("click", closeSheet);
-  if (isEdit) $("#f-delete").addEventListener("click", ()=>{ closeSheet(); confirmDelete("asset", existing.id); });
+  if (isEdit && $("#f-delete")) {
+      $("#f-delete").addEventListener("click", ()=>{ closeSheet(); confirmDelete("asset", existing.id); });
+  }
   
   $("#f-save").addEventListener("click", async ()=>{
     const name = $("#f-name").value.trim();
     const category = catSel.value;
-    const note = $("#f-note").value.trim();
+    const noteEl = $("#f-note");
+    const note = noteEl ? noteEl.value.trim() : "";
     
     let payload = { name, category, note };
     if(['emas','dinar','valas'].includes(category)){
@@ -927,11 +1138,19 @@ function openAssetSheet(existing){
     }
     
     if (!name){ toast("Nama aset wajib diisi"); return; }
-    $("#f-save").textContent = "Menyimpan...";
+    const btn = $("#f-save");
+    const originalText = btn.textContent;
+    btn.textContent = "Menyimpan...";
+    btn.disabled = true;
     try {
-      await saveAsset(payload, isEdit?existing.id:null);
-      closeSheet(); toast(isEdit?"Aset diperbarui":"Aset ditambahkan");
-    } catch(e){ console.error(e); toast("Gagal menyimpan aset"); }
+      await onSaveCallback(payload);
+      closeSheet();
+    } catch(e){ 
+        console.error(e); 
+        toast("Gagal menyimpan"); 
+        btn.textContent = originalText;
+        btn.disabled = false;
+    }
   });
 }
 
@@ -1003,7 +1222,7 @@ function openGoalSheet(existing){
   const isEdit = !!existing;
   openSheet(`
     <div class="sheet-close-bar"></div>
-    <h3>${isEdit?"Edit Target":"Tambah Target Tabungan"}</h3>
+    <h3>${isEdit?"Edit Target":"Buat Target Tabungan"}</h3>
     <div class="field">
       <label>Nama Target</label>
       <input type="text" id="g-name" placeholder="Contoh: Dana Darurat" value="${isEdit?escapeHtml(existing.name||""):""}">
@@ -1012,12 +1231,8 @@ function openGoalSheet(existing){
       <label>Target Dana (Rp)</label>
       <input type="number" inputmode="numeric" id="g-target" placeholder="0" value="${isEdit?existing.target||"":""}">
     </div>
-    <div class="field">
-      <label>Terkumpul Saat Ini (Rp)</label>
-      <input type="number" inputmode="numeric" id="g-collected" placeholder="0" value="${isEdit?existing.collected||"":""}">
-    </div>
     <button class="btn-primary" id="g-save" style="background:var(--blue);">${isEdit?"Simpan Perubahan":"Simpan Target"}</button>
-    ${isEdit?`<button class="btn-danger-outline" id="g-delete">Hapus Target</button>`:""}
+    ${isEdit?`<button class="btn-danger-outline" id="g-delete">Hapus Target & Semua Aset di Dalamnya</button>`:""}
     <button class="btn-text-cancel" id="g-cancel">Batal</button>
   `);
   
@@ -1027,14 +1242,18 @@ function openGoalSheet(existing){
   $("#g-save").addEventListener("click", async ()=>{
     const name = $("#g-name").value.trim();
     const target = Number($("#g-target").value || 0);
-    const collected = Number($("#g-collected").value || 0);
     
     if (!name){ toast("Nama target wajib diisi"); return; }
     if (target <= 0){ toast("Target dana harus lebih dari 0"); return; }
     $("#g-save").textContent = "Menyimpan...";
     try {
-      await saveGoal({ name, target, collected }, isEdit?existing.id:null);
+      // Keep existing assets if editing
+      const payload = { name, target };
+      if(!isEdit) payload.assets = []; 
+      
+      await saveGoal(payload, isEdit?existing.id:null);
       closeSheet(); toast(isEdit?"Target diperbarui":"Target ditambahkan");
+      if(!isEdit && currentUser) expandedGoals.add(existing?.id || 'new'); // expanding new won't work perfectly without ID, but re-render will fetch it
     } catch(e){ console.error(e); toast("Gagal menyimpan target"); }
   });
 }
