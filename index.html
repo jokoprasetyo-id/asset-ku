@@ -3,7 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#146356">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Neraca — Catatan Kekayaan</title>
+
+<!-- PWA Manifest -->
+<link rel="manifest" href="manifest.json">
+<!-- PWA Apple Touch Icon (Fallback to placeholder for now, replace with your logo) -->
+<link rel="apple-touch-icon" href="https://placehold.co/192x192/146356/FFFFFF.png?text=N">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -63,12 +72,7 @@
   }
   .btn-google:active{transform:scale(.97);}
   .login-foot{margin-top:22px;font-size:12px;color:var(--muted);max-width:280px;}
-  #config-warning{
-    margin-top:20px;max-width:360px;background:var(--gold-soft);
-    border:1px solid #EFE1B0;color:#7A5F1E;font-size:12.5px;
-    padding:12px 14px;border-radius:12px;text-align:left;line-height:1.5;
-  }
-
+  
   #app{max-width:520px;margin:0 auto;padding-bottom:96px;min-height:100vh;}
   header.topbar{
     position:sticky;top:0;z-index:20;
@@ -144,7 +148,7 @@
     background:var(--surface);border:1px solid var(--line);color:var(--muted);cursor:pointer;
   }
   .chip.active{background:var(--primary);border-color:var(--primary);color:#fff;}
-
+  
   .goal-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; cursor:pointer; user-select:none; }
   .goal-title-wrap { flex:1; min-width:0; }
   .goal-title { font-size: 18px; font-weight: 700; color: var(--ink); margin: 0 0 4px; font-family: 'Sora', sans-serif;}
@@ -185,7 +189,7 @@
   .chevron { transition: transform 0.3s ease; }
   .collapsed .chevron { transform: rotate(-90deg); }
   .collapsed .goal-body { display: none; }
-
+  
   nav.bottomnav{
     position:fixed;bottom:0;left:0;right:0;z-index:30; display:flex;justify-content:center;
     padding:10px 14px calc(10px + env(safe-area-inset-bottom));
@@ -284,9 +288,6 @@
     Masuk dengan Google
   </button>
   <div class="login-foot">Data kamu bersifat pribadi — hanya kamu yang bisa melihatnya.</div>
-  <div id="config-warning" class="hidden">
-    ⚠️ Firebase belum dikonfigurasi. Buka file <code>index.html</code>, cari bagian <code>firebaseConfig</code> dan isi dengan kredensial project Anda.
-  </div>
 </div>
 
 <div id="app" class="hidden">
@@ -363,6 +364,10 @@
       </div>
       <div class="chip-row" id="asset-filter-chips"></div>
       <div class="card" style="padding:6px 18px;">
+        <div class="card-label" style="justify-content:space-between; margin-bottom:8px; margin-top:8px; border-bottom: 1px solid var(--line); padding-bottom:8px;" id="asset-count-header">
+           <span>Daftar Aset</span>
+           <span id="asset-count">0 Aset</span>
+        </div>
         <div id="asset-list"></div>
         <div class="empty hidden" id="asset-empty">
           <b>Belum ada aset tercatat</b>
@@ -466,9 +471,15 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/fireba
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getFirestore, collection, doc, setDoc, getDoc, addDoc, updateDoc, deleteDoc, onSnapshot, query, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-/* =========================================================
-   1) KONFIGURASI FIREBASE — GANTI DENGAN MILIKMU SENDIRI
-   ========================================================= */
+// Register Service Worker for PWA
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').then(reg => {
+      console.log('ServiceWorker registered:', reg.scope);
+    }).catch(err => console.log('ServiceWorker error:', err));
+  });
+}
+
 const firebaseConfig = {
   apiKey: "AIzaSyBkZ_fSIDHm4RYTlxBgzhVGlkUy0tTdzV8",
   authDomain: "asset-ku.firebaseapp.com",
@@ -478,8 +489,6 @@ const firebaseConfig = {
   appId: "1:1069465304934:web:cb9dc624f2c1102a1752a7",
   measurementId: "G-0LMRXDK9Q8"
 };
-
-const isConfigured = !Object.values(firebaseConfig).some(v => String(v).startsWith("GANTI_DENGAN"));
 
 let auth, db, currentUser = null;
 let unsubAssets = null, unsubDebts = null, unsubCats = null, unsubGoals = null, unsubHistory = null;
@@ -513,9 +522,8 @@ let lastSavedMonth = null;
 let assetFilter = "all";
 let assetGroupTab = "investasi";
 let debtTab = "hutang";
-let expandedGoals = new Set(); // Track which goals are expanded
+let expandedGoals = new Set(); 
 
-// Pengaturan Harga Default
 let rates = {
   antam: 1350000, 
   galeri24: 1320000,
@@ -527,7 +535,6 @@ let rates = {
 
 function rupiah(n){ return "Rp " + Math.round(Number(n) || 0).toLocaleString("id-ID"); }
 
-// --- NEW HELPERS (Formatter & Vibration) ---
 function formatNumberWithDot(num) {
   if (num === null || num === undefined) return "";
   return new Intl.NumberFormat('id-ID').format(num);
@@ -550,7 +557,6 @@ document.addEventListener('click', (e) => {
   const target = e.target.closest('button, .nav-btn, .chip, .list-item, .lainnya-row, .goal-header, .seg button');
   if (target && navigator.vibrate) navigator.vibrate(15);
 });
-// --- END NEW HELPERS ---
 
 function toast(msg){
   const t = $("#toast"); t.textContent = msg; t.classList.add("show");
@@ -564,7 +570,19 @@ function calcAssetValue(a){
   if(a.category === 'emas' && a.qty && a.subType){ return Number(a.qty) * (rates[a.subType] || 0); }
   if(a.category === 'dinar' && a.qty){ return Number(a.qty) * rates.dinarKR; }
   if(a.category === 'valas' && a.qty && a.subType){ return Number(a.qty) * (rates["valas_"+a.subType] || 0); }
-  return Number(a.amount || 0);
+  
+  let baseValue = Number(a.amount || 0);
+
+  // LOGIKA DEPRESIASI / PENYUSUTAN
+  if (a.assetGroup === 'penyusutan' && a.purchaseYear && a.usefulLife) {
+      const currentYear = new Date().getFullYear();
+      const age = Math.max(0, currentYear - Number(a.purchaseYear));
+      const depreciationPerYear = baseValue / Number(a.usefulLife);
+      const depreciatedValue = baseValue - (depreciationPerYear * age);
+      return Math.max(0, depreciatedValue); // Value cannot go below zero
+  }
+
+  return baseValue;
 }
 
 function initFirebase(){
@@ -586,39 +604,9 @@ function initFirebase(){
       await signInWithPopup(auth, provider);
     } catch (e) {
       console.error(e);
-      if (e.code === 'auth/unauthorized-domain') {
-        showDomainErrorDialog();
-      } else {
-        toast("Gagal masuk: " + (e.message));
-      }
+      toast("Gagal masuk: " + (e.message));
     }
   });
-}
-
-function showDomainErrorDialog(){
-  const currentDomain = window.location.hostname;
-  openSheet(`
-    <div class="sheet-close-bar"></div>
-    <div style="text-align:center; padding-bottom:10px;">
-      <div style="font-size:40px; margin-bottom:10px;">🛡️</div>
-      <h3 style="margin-bottom:8px; color:var(--debt);">Akses Diblokir Firebase</h3>
-      <p style="font-size:13.5px; color:var(--muted); line-height:1.5; margin-bottom:16px;">
-        Domain ini belum diizinkan untuk login Google. Silakan tambahkan domain di bawah ini ke Firebase Console Anda:
-      </p>
-      <div style="background:#F1F5F9; border:1px dashed #CBD5E1; padding:12px; border-radius:12px; font-family:monospace; font-size:14px; font-weight:700; color:var(--ink); margin-bottom:20px; user-select:all;">
-        ${currentDomain}
-      </div>
-      <p style="font-size:12px; color:var(--muted); text-align:left; line-height:1.5;">
-        <b>Langkah-langkah:</b><br>
-        1. Buka Firebase Console > Authentication.<br>
-        2. Pilih tab <b>Settings</b> > <b>Authorized domains</b>.<br>
-        3. Klik <b>Add domain</b> dan paste domain di atas.<br>
-        4. Refresh halaman ini dan coba login kembali.
-      </p>
-      <button class="btn-primary" id="btn-close-domain-err" style="margin-top:20px;">Mengerti</button>
-    </div>
-  `);
-  $("#btn-close-domain-err").addEventListener("click", closeSheet);
 }
 
 function showLogin(){ $("#screen-login").classList.remove("hidden"); $("#app").classList.add("hidden"); $("#bottomnav").classList.add("hidden"); }
@@ -719,7 +707,6 @@ async function saveGoal(data, id){
 }
 async function removeGoal(id){ const u = uid(); if(!u) return; await deleteDoc(doc(db, "users", u, "goals", id)); }
 
-// New Helper for Goal Assets
 async function saveGoalAsset(goalId, assetData, assetId = null) {
   const u = uid(); if(!u) return;
   const goalRef = doc(db, "users", u, "goals", goalId);
@@ -756,7 +743,7 @@ function renderAll(){
 }
 
 function computeStats(){
-  // Perhitungan Kekayaan Bersih (Net Worth) HANYA dari Aset di dalam Target Tabungan
+  // Kekayaan Bersih HANYA dari Aset di dalam Target Tabungan
   const totalAsset = goals.reduce((sum, g) => sum + (g.assets || []).reduce((s,a) => s + calcAssetValue(a), 0), 0);
   
   const totalDebt = debts.filter(d=>d.type!=="piutang").reduce((s,d)=>s+Number(d.amount||0),0);
@@ -768,8 +755,21 @@ function computeStats(){
   // Diversifikasi dihitung berdasarkan kategori unik yang ada di dalam target tabungan
   const usedCats = new Set();
   goals.forEach(g => (g.assets||[]).forEach(a => usedCats.add(a.category)));
+
+  // Kualitas Aset (Berapa rasio investasi vs penyusutan) - Dihitung dari semua aset user
+  const totalInvest = assets.filter(a => a.assetGroup !== 'penyusutan').reduce((s,a) => s + calcAssetValue(a), 0);
+  const totalDepresiasi = assets.filter(a => a.assetGroup === 'penyusutan').reduce((s,a) => s + calcAssetValue(a), 0);
+  const assetQualityRatio = (totalInvest + totalDepresiasi) > 0 ? (totalInvest / (totalInvest + totalDepresiasi)) : 1;
   
-  return { totalAsset, totalDebt, totalReceivable, netWorth, debtRatio, diversification: usedCats.size };
+  return { 
+    totalAsset, 
+    totalDebt, 
+    totalReceivable, 
+    netWorth, 
+    debtRatio, 
+    diversification: usedCats.size,
+    assetQualityRatio
+  };
 }
 
 function renderBeranda(){
@@ -779,13 +779,20 @@ function renderBeranda(){
   $("#sum-debt").textContent = rupiah(s.totalDebt);
   $("#sum-receivable").textContent = rupiah(s.totalReceivable);
 
-  let health = Math.round(Math.max(0, 100 - s.debtRatio*100) * 0.8 + Math.min(s.diversification,6)/6*20);
+  // SKOR KESEHATAN BARU (Maks 100)
+  // Beban Hutang = Maks 60, Diversifikasi = Maks 20, Kualitas Aset = Maks 20
+  let debtScore = Math.max(0, 100 - (s.debtRatio * 100)) * 0.6;
+  let divScore = Math.min(s.diversification, 6) / 6 * 20;
+  let qualityScore = s.assetQualityRatio * 20;
+  
+  let health = Math.round(debtScore + divScore + qualityScore);
   health = Math.max(0, Math.min(100, health));
+  
   const CIRC = 238.7; const healthOffset = CIRC - (CIRC * health/100);
   $("#health-arc").style.strokeDashoffset = healthOffset;
-  $("#health-arc").style.stroke = health>=65 ? "var(--primary)" : (health>=35 ? "var(--gold)" : "var(--debt)");
+  $("#health-arc").style.stroke = health>=70 ? "var(--primary)" : (health>=45 ? "var(--gold)" : "var(--debt)");
   $("#health-score-text").textContent = health;
-  $("#health-status").textContent = assets.length===0 && debts.length===0 ? "Belum ada data" : (health>=65?"Sehat":(health>=35?"Perlu Perhatian":"Berisiko Tinggi"));
+  $("#health-status").textContent = assets.length===0 && debts.length===0 ? "Belum ada data" : (health>=70?"Sehat":(health>=45?"Perlu Perhatian":"Berisiko Tinggi"));
 
   const divPct = Math.min(s.diversification/6,1)*100;
   const divOffset = CIRC - (CIRC*divPct/100);
@@ -850,10 +857,9 @@ function renderHistoryChart() {
     return { label: m.label, value: found ? found.netWorth : 0, isCurrent: m.val === lastSavedMonth };
   });
 
-  const maxVal = Math.max(...chartData.map(d=>d.value), 1); // Avoid div by 0
+  const maxVal = Math.max(...chartData.map(d=>d.value), 1); 
 
   $("#history-chart").innerHTML = chartData.map(d => {
-    // calculate percentage height (min 4% to show bar exists)
     const pct = d.value === 0 && !d.isCurrent ? 0 : Math.max(d.value / maxVal * 100, 4); 
     return `
       <div class="chart-col">
@@ -877,29 +883,39 @@ function renderAssetFilters(){
 }
 
 function renderAssetList(){
-  const list = $("#asset-list"); const empty = $("#asset-empty");
+  const list = $("#asset-list"); const empty = $("#asset-empty"); const countSpan = $("#asset-count");
   let items = [...assets].map(a => ({...a, calcVal: calcAssetValue(a)})).sort((a,b)=>b.calcVal - a.calcVal);
   
-  // Filter berdasarkan Grup (Investasi vs Penyusutan)
   items = items.filter(a => (a.assetGroup || "investasi") === assetGroupTab);
   
   if (assetFilter !== "all") items = items.filter(a=>a.category===assetFilter);
+  
+  // Set Total Asset Count
+  countSpan.textContent = `${items.length} Aset`;
   
   if (items.length===0){ list.innerHTML=""; empty.classList.remove("hidden"); return; }
   empty.classList.add("hidden");
   list.innerHTML = items.map(a=>{
     const cat = catById(a.category);
     let subTxt = cat.name;
+    
+    // Tampilan khusus untuk emas, valas, dsb.
     if (a.category === 'emas' && a.qty) subTxt = `Emas ${a.subType === 'antam' ? 'Antam' : 'Galeri24'} · ${a.qty}g`;
     if (a.category === 'dinar' && a.qty) subTxt = `Dinar KR · ${a.qty} Keping`;
     if (a.category === 'valas' && a.qty) subTxt = `Valas (${a.subType.toUpperCase()}) · ${Number(a.qty).toLocaleString('id-ID')}`;
+    
+    // Informasi depresiasi jika digrup penyusutan
+    let depTxt = "";
+    if (a.assetGroup === 'penyusutan' && a.purchaseYear && a.amount > 0) {
+        depTxt = `<span style="display:block; margin-top:2px; font-size:10px; color:var(--debt);">Nilai Asli: ${rupiah(a.amount)}</span>`;
+    }
     
     return `
     <div class="list-item">
       <div class="dot" style="background:${catDot(cat)}"></div>
       <div class="li-main">
         <div class="li-title">${escapeHtml(a.name||cat.name)}</div>
-        <div class="li-sub">${subTxt}${a.note?" · "+escapeHtml(a.note):""}</div>
+        <div class="li-sub">${subTxt}${a.note?" · "+escapeHtml(a.note):""} ${depTxt}</div>
       </div>
       <div class="li-amt">${rupiah(a.calcVal)}</div>
       <div class="li-actions">
@@ -949,12 +965,11 @@ function renderGoals(){
   window.toggleGoal = function(id) {
     if (expandedGoals.has(id)) expandedGoals.delete(id);
     else expandedGoals.add(id);
-    renderGoals(); // Re-render to update UI state
+    renderGoals(); 
   };
 
   list.innerHTML = goals.sort((a,b)=> Number(b.target)-Number(a.target)).map(g => {
     const target = Number(g.target || 0);
-    // Calculate total collected from linked assets
     const gAssets = g.assets || [];
     const collected = gAssets.reduce((sum, a) => sum + calcAssetValue(a), 0);
     
@@ -962,7 +977,6 @@ function renderGoals(){
     const pct = target > 0 ? Math.min(100, Math.floor((collected/target)*100)) : 0;
     const isExpanded = expandedGoals.has(g.id);
     
-    // Build Assets HTML
     let assetsHtml = "";
     if (gAssets.length > 0) {
       assetsHtml = gAssets.map(a => {
@@ -1067,7 +1081,6 @@ function renderGoals(){
   }).join("");
 }
 
-// Ensure these functions are accessible globally for onclick attributes
 window.openGoalSheetBtn = function(id) { openGoalSheet(goals.find(g=>g.id===id)); };
 window.openGoalAssetSheet = function(id) { openGoalAssetForm(id); };
 window.confirmDeleteGoalAsset = function(goalId, assetId) { confirmDelete("goalAsset", assetId, goalId); };
@@ -1144,7 +1157,6 @@ function openAssetSheet(existing){
       <select id="f-category">${categoryOptions(isEdit?existing.category:"tabungan")}</select>
     </div>
     
-    <!-- Dynamic Fields for Gold/Dinar/Valas -->
     <div id="dyn-qty-wrap" class="hidden">
       <div class="field" id="f-subtype-wrap">
         <label id="lbl-subtype">Penyedia / Mata Uang</label>
@@ -1158,8 +1170,23 @@ function openAssetSheet(existing){
     </div>
 
     <div class="field" id="dyn-amount-wrap">
-      <label>Nilai Manual (Rp)</label>
+      <label id="lbl-amount">Nilai Manual (Rp)</label>
       <input type="text" inputmode="numeric" id="f-amount" placeholder="0" value="${isEdit?formatNumberWithDot(existing.amount):""}">
+    </div>
+
+    <!-- FIELD PENYUSUTAN (Hanya muncul jika grup penyusutan) -->
+    <div id="dyn-depreciation-wrap" class="hidden" style="background:#F8FAFC; border:1px dashed #CBD5E1; padding:12px; border-radius:12px; margin-bottom:14px;">
+      <div style="font-size:11px; font-weight:700; color:var(--muted); margin-bottom:8px;">PARAMETER PENYUSUTAN</div>
+      <div style="display:flex; gap:10px;">
+        <div class="field" style="flex:1; margin-bottom:0;">
+          <label>Tahun Beli</label>
+          <input type="number" id="f-year" placeholder="Contoh: 2020" value="${isEdit?existing.purchaseYear||"":new Date().getFullYear()}">
+        </div>
+        <div class="field" style="flex:1; margin-bottom:0;">
+          <label>Umur (Tahun)</label>
+          <input type="number" id="f-life" placeholder="Contoh: 5" value="${isEdit?existing.usefulLife||"":""}">
+        </div>
+      </div>
     </div>
     
     <div class="field">
@@ -1218,7 +1245,6 @@ function openGoalAssetForm(goalId, existingAsset = null){
   });
 }
 
-// Reusable logic for Asset forms (Main & Goal)
 function setupAssetFormLogic(existing, onSaveCallback) {
   const isEdit = !!existing;
   const catSel = $("#f-category");
@@ -1229,16 +1255,32 @@ function setupAssetFormLogic(existing, onSaveCallback) {
   const fQty = $("#f-qty");
   const lblQty = $("#lbl-qty");
   const hintCalc = $("#hint-calc");
+  const dynDepWrap = $("#dyn-depreciation-wrap");
+  const lblAmount = $("#lbl-amount");
 
-  // Untuk Aset umum (memilih grup aset)
   let selectedGroup = isEdit ? (existing.assetGroup || "investasi") : assetGroupTab;
+  
+  function updateGroupUI() {
+     if (dynDepWrap) {
+        if (selectedGroup === 'penyusutan') {
+            dynDepWrap.classList.remove("hidden");
+            if (lblAmount) lblAmount.textContent = "Harga Beli / Nilai Awal (Rp)";
+        } else {
+            dynDepWrap.classList.add("hidden");
+            if (lblAmount) lblAmount.textContent = "Nilai Manual (Rp)";
+        }
+     }
+  }
+
   if ($("#f-group-seg")) {
       $("#f-group-seg").querySelectorAll("button").forEach(b => {
           b.addEventListener("click", () => {
               selectedGroup = b.dataset.g;
               $("#f-group-seg").querySelectorAll("button").forEach(x => x.classList.toggle("active", x === b));
+              updateGroupUI();
           });
       });
+      updateGroupUI();
   }
 
   function syncForm(){
@@ -1293,8 +1335,13 @@ function setupAssetFormLogic(existing, onSaveCallback) {
     const note = noteEl ? noteEl.value.trim() : "";
     
     let payload = { name, category, note };
-    // Jika sheet ini punya segment grup (Berarti sheet aset umum, bukan sheet aset target)
-    if ($("#f-group-seg")) payload.assetGroup = selectedGroup;
+    if ($("#f-group-seg")) {
+       payload.assetGroup = selectedGroup;
+       if (selectedGroup === 'penyusutan') {
+           payload.purchaseYear = Number($("#f-year").value) || new Date().getFullYear();
+           payload.usefulLife = Number($("#f-life").value) || 1;
+       }
+    }
 
     if(['emas','dinar','valas'].includes(category)){
       payload.qty = Number(fQty.value || 0);
@@ -1302,7 +1349,7 @@ function setupAssetFormLogic(existing, onSaveCallback) {
       if(payload.qty <= 0){ toast("Jumlah harus lebih dari 0"); return; }
     } else {
       payload.amount = unformatNumber($("#f-amount").value);
-      if(payload.amount <= 0){ toast("Nilai aset harus lebih dari 0"); return; }
+      if(payload.amount <= 0){ toast("Nilai/Harga Beli harus lebih dari 0"); return; }
     }
     
     if (!name){ toast("Nama aset wajib diisi"); return; }
@@ -1420,13 +1467,12 @@ function openGoalSheet(existing){
     if (target <= 0){ toast("Target dana harus lebih dari 0"); return; }
     $("#g-save").textContent = "Menyimpan...";
     try {
-      // Keep existing assets if editing
       const payload = { name, target };
       if(!isEdit) payload.assets = []; 
       
       await saveGoal(payload, isEdit?existing.id:null);
       closeSheet(); toast(isEdit?"Target diperbarui":"Target ditambahkan");
-      if(!isEdit && currentUser) expandedGoals.add(existing?.id || 'new'); // expanding new won't work perfectly without ID, but re-render will fetch it
+      if(!isEdit && currentUser) expandedGoals.add(existing?.id || 'new');
     } catch(e){ console.error(e); toast("Gagal menyimpan target"); }
   });
 }
@@ -1469,12 +1515,8 @@ $("#btn-manage-rates").addEventListener("click", ()=>{
   
   $("#r-cancel").addEventListener("click", closeSheet);
 
-  attachNumFormatter('#r-antam');
-  attachNumFormatter('#r-galeri');
-  attachNumFormatter('#r-dinar');
-  attachNumFormatter('#r-usd');
-  attachNumFormatter('#r-eur');
-  attachNumFormatter('#r-sgd');
+  attachNumFormatter('#r-antam'); attachNumFormatter('#r-galeri'); attachNumFormatter('#r-dinar');
+  attachNumFormatter('#r-usd'); attachNumFormatter('#r-eur'); attachNumFormatter('#r-sgd');
 
   $("#r-auto-valas").addEventListener("click", async () => {
       const btn = $("#r-auto-valas");
@@ -1488,7 +1530,6 @@ $("#btn-manage-rates").addEventListener("click", ()=>{
           $("#r-sgd").value = formatNumberWithDot(Math.round(r.IDR / r.SGD));
           toast("Kurs Valas berhasil diperbarui dari internet!");
       } catch (e) {
-          console.error(e);
           toast("Gagal mengupdate kurs otomatis");
       }
       btn.textContent = "Update Otomatis"; btn.disabled = false;
@@ -1509,9 +1550,7 @@ $("#btn-manage-rates").addEventListener("click", ()=>{
   });
 });
 
-$("#btn-manage-categories").addEventListener("click", ()=>{
-  openCategoryManager();
-});
+$("#btn-manage-categories").addEventListener("click", openCategoryManager);
 
 function openCategoryManager() {
   openSheet(`
@@ -1599,14 +1638,6 @@ window.deleteCategory = async function(catId) {
 
 function boot(){
   $("#loading-overlay").classList.add("hidden");
-  if (!isConfigured){
-    $("#screen-login").classList.remove("hidden");
-    $("#config-warning").classList.remove("hidden");
-    $("#btn-google-login").disabled = true;
-    $("#btn-google-login").style.opacity = ".5";
-    $("#btn-google-login").style.cursor = "not-allowed";
-    return;
-  }
   initFirebase();
 }
 
