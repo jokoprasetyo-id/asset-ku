@@ -577,22 +577,22 @@ function calcAssetValue(a){
   if (a.assetGroup === 'penyusutan' && a.purchaseYear && a.usefulLife) {
       const currentYear = new Date().getFullYear();
       
-      // Usia aset dibatasi maksimal sama dengan usefulLife agar penyusutan berhenti setelah umur habis
-      const age = Math.min(Math.max(0, currentYear - Number(a.purchaseYear)), Number(a.usefulLife));
+      // Hitung usia aset
+      const age = Math.max(0, currentYear - Number(a.purchaseYear));
       
-      // Asumsi Nilai Sisa (Salvage Value) = 10% dari harga beli
-      // Bisa diubah misal 0.20 untuk 20%
-      const salvageValue = baseValue * 0.10;
+      // MENGGUNAKAN METODE SALDO MENURUN (Declining Balance)
+      // Laju penyusutan per tahun = 1 / Umur Ekonomis
+      let rate = 1 / Number(a.usefulLife);
       
-      // Nilai yang bisa menyusut hanya (Harga Beli - Nilai Sisa)
-      const depreciableAmount = baseValue - salvageValue;
+      // Batasi maksimal laju depresiasi 80% per tahun (mencegah harga terjun bebas jika umur diisi 1 tahun)
+      rate = Math.min(rate, 0.8);
       
-      // Penyusutan per tahun
-      const depreciationPerYear = depreciableAmount / Number(a.usefulLife);
+      // Harga menyusut mengikuti persentase eksponensial sisa nilai
+      const depreciatedValue = baseValue * Math.pow((1 - rate), age);
       
-      const depreciatedValue = baseValue - (depreciationPerYear * age);
+      // Batas Nilai Sisa (Salvage Value) minimal 5% dari harga beli
+      const salvageValue = baseValue * 0.05;
       
-      // Kembalikan nilai yang sudah disusutkan (minimal akan mentok di 10% harga beli)
       return Math.max(salvageValue, depreciatedValue); 
   }
 
@@ -1349,12 +1349,13 @@ function setupAssetFormLogic(existing, onSaveCallback) {
     const note = noteEl ? noteEl.value.trim() : "";
     
     let payload = { name, category, note };
+    // Jika sheet ini punya segment grup (Berarti sheet aset umum, bukan sheet aset target)
     if ($("#f-group-seg")) {
-       payload.assetGroup = selectedGroup;
-       if (selectedGroup === 'penyusutan') {
-           payload.purchaseYear = Number($("#f-year").value) || new Date().getFullYear();
-           payload.usefulLife = Number($("#f-life").value) || 1;
-       }
+        payload.assetGroup = selectedGroup;
+        if (selectedGroup === 'penyusutan') {
+            payload.purchaseYear = Number($("#f-year").value) || new Date().getFullYear();
+            payload.usefulLife = Number($("#f-life").value) || 5; // Default 5 tahun agar tidak ekstrem
+        }
     }
 
     if(['emas','dinar','valas'].includes(category)){
