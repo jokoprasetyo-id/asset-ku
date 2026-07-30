@@ -573,13 +573,27 @@ function calcAssetValue(a){
   
   let baseValue = Number(a.amount || 0);
 
-  // LOGIKA DEPRESIASI / PENYUSUTAN
+  // LOGIKA DEPRESIASI / PENYUSUTAN (Diperbaiki)
   if (a.assetGroup === 'penyusutan' && a.purchaseYear && a.usefulLife) {
       const currentYear = new Date().getFullYear();
-      const age = Math.max(0, currentYear - Number(a.purchaseYear));
-      const depreciationPerYear = baseValue / Number(a.usefulLife);
+      
+      // Usia aset dibatasi maksimal sama dengan usefulLife agar penyusutan berhenti setelah umur habis
+      const age = Math.min(Math.max(0, currentYear - Number(a.purchaseYear)), Number(a.usefulLife));
+      
+      // Asumsi Nilai Sisa (Salvage Value) = 10% dari harga beli
+      // Bisa diubah misal 0.20 untuk 20%
+      const salvageValue = baseValue * 0.10;
+      
+      // Nilai yang bisa menyusut hanya (Harga Beli - Nilai Sisa)
+      const depreciableAmount = baseValue - salvageValue;
+      
+      // Penyusutan per tahun
+      const depreciationPerYear = depreciableAmount / Number(a.usefulLife);
+      
       const depreciatedValue = baseValue - (depreciationPerYear * age);
-      return Math.max(0, depreciatedValue); // Value cannot go below zero
+      
+      // Kembalikan nilai yang sudah disusutkan (minimal akan mentok di 10% harga beli)
+      return Math.max(salvageValue, depreciatedValue); 
   }
 
   return baseValue;
