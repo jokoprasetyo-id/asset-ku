@@ -182,7 +182,6 @@
   .goal-asset-val { font-size: 13.5px; font-weight: 700; font-family: 'Sora', sans-serif; color: var(--ink); }
   .goal-asset-val-eq { font-size: 10px; color: var(--muted); margin-top: 2px; }
   
-  /* Update: Action Buttons on Goal Assets */
   .goal-asset-actions { display: flex; gap: 6px; margin-left: 8px; flex: 0 0 auto; }
   .goal-asset-btn { width: 28px; height: 28px; border-radius: 8px; border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; }
   .goal-asset-btn.edit { background: var(--line); color: var(--muted); }
@@ -386,6 +385,14 @@
 
     <!-- VIEW: TARGET -->
     <section class="view hidden" id="view-target">
+      <!-- Card Summary Baru -->
+      <div class="card" style="padding:6px 18px; margin-bottom: 14px;" id="goal-summary-card">
+        <div class="card-label" style="justify-content:space-between; margin-bottom:8px; margin-top:8px; border-bottom: 1px solid var(--line); padding-bottom:8px;">
+           <span>Total Terkumpul & Target</span>
+           <span id="goal-summary">Rp 0 / Rp 0</span>
+        </div>
+      </div>
+
       <div id="goal-list"></div>
       <div class="empty hidden" id="goal-empty">
         <b>Belum ada target tabungan</b>
@@ -400,6 +407,12 @@
         <button id="tab-piutang">Piutang</button>
       </div>
       <div class="card" style="padding:6px 18px;">
+        <!-- Card Summary Baru -->
+        <div class="card-label" style="justify-content:space-between; margin-bottom:8px; margin-top:8px; border-bottom: 1px solid var(--line); padding-bottom:8px;" id="debt-count-header">
+           <span id="debt-type-label">Daftar Hutang</span>
+           <span id="debt-total-value" style="font-weight:700; color:var(--ink); font-family:'Sora',sans-serif;">Rp 0</span>
+        </div>
+        
         <div id="debt-list"></div>
         <div class="empty hidden" id="debt-empty">
           <b id="debt-empty-title">Belum ada hutang tercatat</b>
@@ -541,8 +554,8 @@ let rates = {
   galeri24: 1320000,
   dinarKR: 4400000,
   valas_usd: 15500,
-  valas_eur: 16800,
-  valas_sgd: 11500
+  valas_sgd: 11500,
+  valas_aud: 10200 // Diubah dari EUR menjadi AUD
 };
 
 function rupiah(n){ return "Rp " + Math.round(Number(n) || 0).toLocaleString("id-ID"); }
@@ -910,6 +923,12 @@ function renderDebtList(){
   const items = debts.filter(d => (debtTab==="hutang") ? d.type!=="piutang" : d.type==="piutang").sort((a,b)=>Number(b.amount||0)-Number(a.amount||0));
   $("#debt-empty-title").textContent = debtTab==="hutang" ? "Belum ada hutang tercatat" : "Belum ada piutang tercatat";
   
+  // Mengkalkulasi dan mengupdate total nilai
+  const totalTabValue = items.reduce((sum, d) => sum + Number(d.amount || 0), 0);
+  $("#debt-type-label").textContent = debtTab === "hutang" ? "Daftar Hutang" : "Daftar Piutang";
+  $("#debt-total-value").textContent = rupiah(totalTabValue);
+  $("#debt-total-value").style.color = debtTab === "hutang" ? "var(--debt)" : "var(--primary-ink)";
+  
   if (items.length===0){ list.innerHTML=""; empty.classList.remove("hidden"); return; }
   empty.classList.add("hidden");
   list.innerHTML = items.map(d=>{
@@ -935,9 +954,22 @@ function renderDebtList(){
 }
 
 function renderGoals(){
-  const list = $("#goal-list"); const empty = $("#goal-empty");
-  if (goals.length === 0){ list.innerHTML = ""; empty.classList.remove("hidden"); return; }
+  const list = $("#goal-list"); const empty = $("#goal-empty"); const summaryCard = $("#goal-summary-card");
+  
+  if (goals.length === 0){ 
+     list.innerHTML = ""; 
+     empty.classList.remove("hidden"); 
+     summaryCard.classList.add("hidden");
+     return; 
+  }
+  
   empty.classList.add("hidden");
+  summaryCard.classList.remove("hidden");
+  
+  // Mengkalkulasi dan mengupdate total target dana 
+  const totalTargetAll = goals.reduce((sum, g) => sum + Number(g.target || 0), 0);
+  const totalCollectedAll = goals.reduce((sum, g) => sum + (g.assets || []).reduce((s, a) => s + calcAssetValue(a), 0), 0);
+  $("#goal-summary").innerHTML = `<span style="font-weight:600; color:var(--muted); font-size:11px;">Terkumpul</span> <span style="margin:0 6px; color:var(--line);">|</span> <span style="font-weight:700; color:var(--primary-ink); font-family:'Sora',sans-serif;">${rupiah(totalCollectedAll)}</span> <span style="color:var(--muted); font-size:12px; font-weight:600;">/ ${rupiah(totalTargetAll)}</span>`;
   
   window.toggleGoal = function(id) {
     if (expandedGoals.has(id)) expandedGoals.delete(id);
@@ -978,7 +1010,6 @@ function renderGoals(){
             eqTxt = `≈ ${rupiah(calcAssetValue(a))}`;
         }
 
-        // Updated HTML block with Edit and Delete functionality for Goal Asset
         return `
         <div class="goal-asset-item">
           <div class="goal-asset-icon" style="background:${catDot(cat)}">${cat.icon||''}</div>
@@ -1333,7 +1364,8 @@ function setupAssetFormLogic(existing, onSaveCallback) {
         lblQty.textContent = "Jumlah (Keping)";
       } else if (cat === 'valas'){
         fSubtypeWrap.classList.remove("hidden");
-        fSubtype.innerHTML = `<option value="usd">USD</option><option value="eur">EUR</option><option value="sgd">SGD</option>`;
+        // Update Options Valas: Hanya USD, SGD, AUD
+        fSubtype.innerHTML = `<option value="usd">USD</option><option value="sgd">SGD</option><option value="aud">AUD</option>`;
         lblQty.textContent = "Nominal";
       }
       if(isEdit && existing.category === cat && existing.subType) fSubtype.value = existing.subType;
@@ -1551,8 +1583,8 @@ $("#btn-manage-rates").addEventListener("click", ()=>{
     </div>
     <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px;">
       <div class="field"><label>1 USD</label><input type="text" inputmode="numeric" id="r-usd" value="${formatNumberWithDot(rates.valas_usd)}"></div>
-      <div class="field"><label>1 EUR</label><input type="text" inputmode="numeric" id="r-eur" value="${formatNumberWithDot(rates.valas_eur)}"></div>
       <div class="field"><label>1 SGD</label><input type="text" inputmode="numeric" id="r-sgd" value="${formatNumberWithDot(rates.valas_sgd)}"></div>
+      <div class="field"><label>1 AUD</label><input type="text" inputmode="numeric" id="r-aud" value="${formatNumberWithDot(rates.valas_aud)}"></div>
     </div>
     
     <button class="btn-primary" id="r-save" style="margin-top:10px;">Simpan Pengaturan</button>
@@ -1562,7 +1594,7 @@ $("#btn-manage-rates").addEventListener("click", ()=>{
   $("#r-cancel").addEventListener("click", closeSheet);
 
   attachNumFormatter('#r-antam'); attachNumFormatter('#r-galeri'); attachNumFormatter('#r-dinar');
-  attachNumFormatter('#r-usd'); attachNumFormatter('#r-eur'); attachNumFormatter('#r-sgd');
+  attachNumFormatter('#r-usd'); attachNumFormatter('#r-sgd'); attachNumFormatter('#r-aud');
 
   $("#r-auto-valas").addEventListener("click", async () => {
       const btn = $("#r-auto-valas");
@@ -1572,8 +1604,8 @@ $("#btn-manage-rates").addEventListener("click", ()=>{
           const data = await res.json();
           const r = data.rates;
           $("#r-usd").value = formatNumberWithDot(Math.round(r.IDR));
-          $("#r-eur").value = formatNumberWithDot(Math.round(r.IDR / r.EUR));
           $("#r-sgd").value = formatNumberWithDot(Math.round(r.IDR / r.SGD));
+          $("#r-aud").value = formatNumberWithDot(Math.round(r.IDR / r.AUD)); // Update API calculation to AUD
           toast("Kurs Valas berhasil diperbarui dari internet!");
       } catch (e) {
           toast("Gagal mengupdate kurs otomatis");
@@ -1588,8 +1620,8 @@ $("#btn-manage-rates").addEventListener("click", ()=>{
       galeri24: unformatNumber($("#r-galeri").value),
       dinarKR: unformatNumber($("#r-dinar").value),
       valas_usd: unformatNumber($("#r-usd").value),
-      valas_eur: unformatNumber($("#r-eur").value),
-      valas_sgd: unformatNumber($("#r-sgd").value)
+      valas_sgd: unformatNumber($("#r-sgd").value),
+      valas_aud: unformatNumber($("#r-aud").value)
     };
     await updateRates(newRates);
     closeSheet();
