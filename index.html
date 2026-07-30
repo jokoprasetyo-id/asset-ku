@@ -366,6 +366,7 @@
       <div class="card" style="padding:6px 18px;">
         <div class="card-label" style="justify-content:space-between; margin-bottom:8px; margin-top:8px; border-bottom: 1px solid var(--line); padding-bottom:8px;" id="asset-count-header">
            <span>Daftar Aset</span>
+           <!-- Di sini kita akan menampilkan total count & value -->
            <span id="asset-count">0 Aset</span>
         </div>
         <div id="asset-list"></div>
@@ -506,12 +507,25 @@ const DEFAULT_CATEGORIES = [
   { id: "kripto",   name: "Kripto",         hue: 28,  icon: "₿" },
   { id: "properti", name: "Properti",       hue: 340, icon: "🏠" },
   { id: "kendaraan",name: "Kendaraan",      hue: 220, icon: "🚗" },
+  { id: "elektronik",name:"Elektronik",     hue: 200, icon: "💻" },
   { id: "lainnya",  name: "Lainnya",        hue: 0, gray:true, icon: "📦" },
 ];
 let customCategories = [];
 function allCategories(){ return [...DEFAULT_CATEGORIES, ...customCategories]; }
 function catById(id){ return allCategories().find(c => c.id === id) || DEFAULT_CATEGORIES[DEFAULT_CATEGORIES.length-1]; }
 function catDot(cat){ return cat.gray ? "#CBD5E1" : `hsl(${cat.hue} 60% 55%)`; }
+
+// Utility function to determine default useful life based on category
+function getDefaultUsefulLife(categoryId) {
+    const defaultLifeMap = {
+        'kendaraan': 10,
+        'properti': 20,
+        'elektronik': 5,
+        'tabungan': 0, 'saham': 0, 'reksadana': 0, 'emas': 0, 'dinar': 0, 'valas': 0, 'kripto': 0,
+        'lainnya': 5
+    };
+    return defaultLifeMap[categoryId] !== undefined ? defaultLifeMap[categoryId] : 5;
+}
 
 let assets = [];
 let debts = [];
@@ -573,27 +587,29 @@ function calcAssetValue(a){
   
   let baseValue = Number(a.amount || 0);
 
-  // LOGIKA DEPRESIASI / PENYUSUTAN (Diperbaiki)
-  if (a.assetGroup === 'penyusutan' && a.purchaseYear && a.usefulLife) {
+  // LOGIKA PENYUSUTAN (Diperbaiki menjadi Garis Lurus)
+  if (a.assetGroup === 'penyusutan' && a.purchaseYear) {
       const currentYear = new Date().getFullYear();
       
       // Hitung usia aset
       const age = Math.max(0, currentYear - Number(a.purchaseYear));
       
-      // MENGGUNAKAN METODE SALDO MENURUN (Declining Balance)
-      // Laju penyusutan per tahun = 1 / Umur Ekonomis
-      let rate = 1 / Number(a.usefulLife);
+      // Ambil umur ekonomis dari data, atau gunakan umur otomatis berdasarkan kategorinya
+      const life = Number(a.usefulLife) || getDefaultUsefulLife(a.category) || 5;
       
-      // Batasi maksimal laju depresiasi 80% per tahun (mencegah harga terjun bebas jika umur diisi 1 tahun)
-      rate = Math.min(rate, 0.8);
+      // Batas Nilai Sisa (Salvage Value) = 10% dari harga beli
+      const salvageValue = baseValue * 0.10;
       
-      // Harga menyusut mengikuti persentase eksponensial sisa nilai
-      const depreciatedValue = baseValue * Math.pow((1 - rate), age);
+      // Jika umur aset sudah melebihi batas, kembalikan nilai sisa
+      if (age >= life) return salvageValue;
       
-      // Batas Nilai Sisa (Salvage Value) minimal 5% dari harga beli
-      const salvageValue = baseValue * 0.05;
+      // Penyusutan per tahun (Harga Beli - Nilai Sisa) / Umur
+      const yearlyDepreciation = (baseValue - salvageValue) / life;
       
-      return Math.max(salvageValue, depreciatedValue); 
+      // Estimasi harga saat ini = Harga Beli - (Penyusutan per tahun x Usia)
+      const currentEstimatedValue = baseValue - (yearlyDepreciation * age);
+      
+      return Math.max(salvageValue, currentEstimatedValue); 
   }
 
   return baseValue;
@@ -794,7 +810,6 @@ function renderBeranda(){
   $("#sum-receivable").textContent = rupiah(s.totalReceivable);
 
   // SKOR KESEHATAN BARU (Maks 100)
-  // Beban Hutang = Maks 60, Diversifikasi = Maks 20, Kualitas Aset = Maks 20
   let debtScore = Math.max(0, 100 - (s.debtRatio * 100)) * 0.6;
   let divScore = Math.min(s.diversification, 6) / 6 * 20;
   let qualityScore = s.assetQualityRatio * 20;
@@ -901,11 +916,13 @@ function renderAssetList(){
   let items = [...assets].map(a => ({...a, calcVal: calcAssetValue(a)})).sort((a,b)=>b.calcVal - a.calcVal);
   
   items = items.filter(a => (a.assetGroup || "investasi") === assetGroupTab);
-  
   if (assetFilter !== "all") items = items.filter(a=>a.category===assetFilter);
   
-  // Set Total Asset Count
-  countSpan.textContent = `${items.length} Aset`;
+  // Total Nilai Kalkulasi dari Tab yang aktif
+  const totalTabValue = items.reduce((sum, a) => sum + a.calcVal, 0);
+  
+  // Set Total Asset Count and Value
+  countSpan.innerHTML = `<span style="font-weight:600;">${items.length} Aset</span> <span style="margin:0 6px; color:var(--line);">|</span> <span style="font-weight:700; color:var(--ink); font-family:'Sora',sans-serif;">${rupiah(totalTabValue)}</span>`;
   
   if (items.length===0){ list.innerHTML=""; empty.classList.remove("hidden"); return; }
   empty.classList.add("hidden");
@@ -918,10 +935,10 @@ function renderAssetList(){
     if (a.category === 'dinar' && a.qty) subTxt = `Dinar KR · ${a.qty} Keping`;
     if (a.category === 'valas' && a.qty) subTxt = `Valas (${a.subType.toUpperCase()}) · ${Number(a.qty).toLocaleString('id-ID')}`;
     
-    // Informasi depresiasi jika digrup penyusutan
+    // Informasi penyusutan jika digrup penyusutan
     let depTxt = "";
     if (a.assetGroup === 'penyusutan' && a.purchaseYear && a.amount > 0) {
-        depTxt = `<span style="display:block; margin-top:2px; font-size:10px; color:var(--debt);">Nilai Asli: ${rupiah(a.amount)}</span>`;
+        depTxt = `<span style="display:block; margin-top:2px; font-size:10.5px; color:var(--muted);">Nilai Beli: <span style="color:var(--debt); text-decoration:line-through;">${rupiah(a.amount)}</span></span>`;
     }
     
     return `
@@ -1164,7 +1181,7 @@ function openAssetSheet(existing){
     </div>
     <div class="field">
       <label>Nama Aset</label>
-      <input type="text" id="f-name" placeholder="Contoh: Tabungan BCA" value="${isEdit?escapeHtml(existing.name||""):""}">
+      <input type="text" id="f-name" placeholder="Contoh: Mobil Keluarga" value="${isEdit?escapeHtml(existing.name||""):""}">
     </div>
     <div class="field">
       <label>Kategori</label>
@@ -1188,7 +1205,7 @@ function openAssetSheet(existing){
       <input type="text" inputmode="numeric" id="f-amount" placeholder="0" value="${isEdit?formatNumberWithDot(existing.amount):""}">
     </div>
 
-    <!-- FIELD PENYUSUTAN (Hanya muncul jika grup penyusutan) -->
+    <!-- FIELD PENYUSUTAN (Tampil saat grup penyusutan dipilih) -->
     <div id="dyn-depreciation-wrap" class="hidden" style="background:#F8FAFC; border:1px dashed #CBD5E1; padding:12px; border-radius:12px; margin-bottom:14px;">
       <div style="font-size:11px; font-weight:700; color:var(--muted); margin-bottom:8px;">PARAMETER PENYUSUTAN</div>
       <div style="display:flex; gap:10px;">
@@ -1197,10 +1214,14 @@ function openAssetSheet(existing){
           <input type="number" id="f-year" placeholder="Contoh: 2020" value="${isEdit?existing.purchaseYear||"":new Date().getFullYear()}">
         </div>
         <div class="field" style="flex:1; margin-bottom:0;">
-          <label>Umur (Tahun)</label>
-          <input type="number" id="f-life" placeholder="Contoh: 5" value="${isEdit?existing.usefulLife||"":""}">
+          <label>Umur Pakai (Tahun)</label>
+          <input type="number" id="f-life" placeholder="Otomatis" value="${isEdit?existing.usefulLife||"":""}">
         </div>
       </div>
+      <div style="margin-top:12px; padding-top:12px; border-top:1px dashed #CBD5E1; font-size:12.5px; font-weight:700; color:var(--primary-ink);" id="hint-dep-calc">
+         Estimasi Nilai Saat Ini: Rp 0
+      </div>
+      <div style="font-size:10px; color:var(--muted); margin-top:4px;">*Menggunakan metode penyusutan Garis Lurus (Straight-Line) dengan nilai sisa 10%.</div>
     </div>
     
     <div class="field">
@@ -1271,6 +1292,9 @@ function setupAssetFormLogic(existing, onSaveCallback) {
   const hintCalc = $("#hint-calc");
   const dynDepWrap = $("#dyn-depreciation-wrap");
   const lblAmount = $("#lbl-amount");
+  const fYear = $("#f-year");
+  const fLife = $("#f-life");
+  const fAmount = $("#f-amount");
 
   let selectedGroup = isEdit ? (existing.assetGroup || "investasi") : assetGroupTab;
   
@@ -1279,10 +1303,45 @@ function setupAssetFormLogic(existing, onSaveCallback) {
         if (selectedGroup === 'penyusutan') {
             dynDepWrap.classList.remove("hidden");
             if (lblAmount) lblAmount.textContent = "Harga Beli / Nilai Awal (Rp)";
+            calcDepreciationPreview();
         } else {
             dynDepWrap.classList.add("hidden");
             if (lblAmount) lblAmount.textContent = "Nilai Manual (Rp)";
         }
+     }
+  }
+
+  // Fungsi Kalkulasi Real-time untuk Penyusutan
+  function calcDepreciationPreview() {
+     if (selectedGroup !== 'penyusutan' || !fYear || !fLife || !fAmount) return;
+     
+     const base = unformatNumber(fAmount.value);
+     const year = Number(fYear.value) || new Date().getFullYear();
+     let life = Number(fLife.value);
+     
+     // Otomatis isi kolom umur pemakaian jika kosong dan pengguna sudah memilih kategori
+     if (!fLife.value && catSel.value) {
+         life = getDefaultUsefulLife(catSel.value);
+         fLife.value = life;
+     }
+
+     const currentYear = new Date().getFullYear();
+     const age = Math.max(0, currentYear - year);
+     const salvageValue = base * 0.10;
+     let val = base;
+
+     if (life > 0) {
+         if (age >= life) {
+             val = salvageValue;
+         } else {
+             const yearly = (base - salvageValue) / life;
+             val = base - (yearly * age);
+         }
+     }
+
+     const hintDep = $("#hint-dep-calc");
+     if (hintDep) {
+         hintDep.textContent = "Estimasi Nilai Saat Ini: " + rupiah(val);
      }
   }
 
@@ -1300,6 +1359,12 @@ function setupAssetFormLogic(existing, onSaveCallback) {
   function syncForm(){
     const cat = catSel.value;
     dynQtyWrap.classList.add("hidden"); dynAmountWrap.classList.remove("hidden");
+    
+    // Auto Update Umur Pemakaian saat Kategori diganti (jika grup penyusutan)
+    if (fLife && selectedGroup === 'penyusutan') {
+        fLife.value = getDefaultUsefulLife(cat);
+        calcDepreciationPreview();
+    }
     
     if(['emas','dinar','valas'].includes(cat)){
       dynQtyWrap.classList.remove("hidden"); dynAmountWrap.classList.add("hidden");
@@ -1333,6 +1398,11 @@ function setupAssetFormLogic(existing, onSaveCallback) {
   catSel.addEventListener("change", syncForm);
   fSubtype.addEventListener("change", calcPreview);
   fQty.addEventListener("input", calcPreview);
+  
+  if (fYear) fYear.addEventListener("input", calcDepreciationPreview);
+  if (fLife) fLife.addEventListener("input", calcDepreciationPreview);
+  if (fAmount) fAmount.addEventListener("input", calcDepreciationPreview);
+
   syncForm();
 
   attachNumFormatter('#f-amount');
@@ -1349,12 +1419,13 @@ function setupAssetFormLogic(existing, onSaveCallback) {
     const note = noteEl ? noteEl.value.trim() : "";
     
     let payload = { name, category, note };
-    // Jika sheet ini punya segment grup (Berarti sheet aset umum, bukan sheet aset target)
+    
+    // Konfigurasi khusus jika ini adalah sheet inventaris (bukan goal asset)
     if ($("#f-group-seg")) {
         payload.assetGroup = selectedGroup;
         if (selectedGroup === 'penyusutan') {
             payload.purchaseYear = Number($("#f-year").value) || new Date().getFullYear();
-            payload.usefulLife = Number($("#f-life").value) || 5; // Default 5 tahun agar tidak ekstrem
+            payload.usefulLife = Number($("#f-life").value) || getDefaultUsefulLife(category) || 5; 
         }
     }
 
