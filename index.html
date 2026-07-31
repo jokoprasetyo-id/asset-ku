@@ -72,7 +72,7 @@
   }
   .btn-google:active{transform:scale(.97);}
   .login-foot{margin-top:22px;font-size:12px;color:var(--muted);max-width:280px;}
-  
+
   #app{max-width:520px;margin:0 auto;padding-bottom:96px;min-height:100vh;}
   header.topbar{
     position:sticky;top:0;z-index:20;
@@ -121,12 +121,10 @@
   .chart-lbl { font-size: 10px; color: var(--muted); font-weight: 600; text-transform: uppercase; }
   .chart-val-tooltip { position:absolute; top:-26px; left:50%; transform:translateX(-50%); font-size:9.5px; background:var(--ink); color:#fff; padding:3px 6px; border-radius:6px; opacity:0; pointer-events:none; transition:opacity .2s, transform .2s; white-space:nowrap; z-index:10; font-family:'Sora',sans-serif; font-weight:600;}
   .chart-bar:hover .chart-val-tooltip { opacity: 1; transform:translateX(-50%) translateY(-2px); }
-  
-  .donut-chart { position: relative; width: 140px; height: 140px; margin: 0 auto; }
-  .donut-chart svg { transform: rotate(-90deg); width: 100%; height: 100%; border-radius: 50%; }
-  .donut-legend { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 16px; }
-  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 600; color: var(--ink); }
-  .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex: 0 0 auto; }
+
+  /* Update Donut Chart Styles for Lines */
+  .donut-chart-container { position: relative; width: 100%; height: 220px; display: flex; justify-content: center; align-items: center; margin: 10px 0; }
+  .donut-chart-svg { width: 100%; height: 100%; overflow: visible; }
   
   .liq-bar-wrap { height: 6px; background: var(--line); border-radius: 3px; display: flex; overflow: hidden; margin-top: 12px; }
   .liq-bar { height: 100%; transition: width 0.4s ease; }
@@ -334,6 +332,7 @@
           <div>Total Hutang<span class="val neg" id="sum-debt">Rp 0</span></div>
           <div>Piutang<span class="val" id="sum-receivable">Rp 0</span></div>
         </div>
+        <!-- Bar Likuiditas -->
         <div style="border-top:1px solid var(--line); padding-top:12px; margin-top:12px;">
            <div style="font-size:11px; color:var(--muted); font-weight:700; text-transform:uppercase; margin-bottom:6px; letter-spacing:0.04em;">Likuiditas Aset</div>
            <div class="liq-bar-wrap" id="liq-bar-wrap">
@@ -367,10 +366,11 @@
           <div class="gauge-sub" id="div-status">kategori aset</div>
         </div>
       </div>
-
+      
+      <!-- Card Dana Darurat Cepat -->
       <div class="card">
          <div class="card-label" style="justify-content:space-between;">
-            <span>🛡️ Dana Darurat</span>
+            <span>🛡️ Cek Dana Darurat</span>
             <button class="icon-btn" style="width:26px;height:26px;border:none;background:var(--primary-soft);color:var(--primary-ink);box-shadow:none;" id="btn-set-pengeluaran">
                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 20V10M18 20V4M6 20v-4"/></svg>
             </button>
@@ -384,18 +384,18 @@
          </div>
       </div>
 
-      <div class="card">
-        <div class="card-label">Distribusi Aset</div>
-        <div class="donut-chart" style="margin-top:20px;">
-           <svg viewBox="0 0 100 100" id="allocation-chart-svg"></svg>
-        </div>
-        <div class="donut-legend" id="allocation-legend"></div>
-      </div>
-
       <div class="card insight-card">
         <div class="card-label">💡 Insight Finansial</div>
         <div id="financial-insights" style="font-size:13px; line-height:1.65; opacity:0.95;">
           Sedang menganalisis data keuanganmu...
+        </div>
+      </div>
+
+      <!-- Card Distribusi Aset dengan Garis -->
+      <div class="card">
+        <div class="card-label">Distribusi Aset</div>
+        <div class="donut-chart-container">
+           <svg viewBox="0 0 240 240" class="donut-chart-svg" id="allocation-chart-svg"></svg>
         </div>
       </div>
 
@@ -571,12 +571,9 @@ function allCategories(){ return [...DEFAULT_CATEGORIES, ...customCategories]; }
 function catById(id){ return allCategories().find(c => c.id === id) || DEFAULT_CATEGORIES[DEFAULT_CATEGORIES.length-1]; }
 function catDot(cat){ return cat.gray ? "#CBD5E1" : `hsl(${cat.hue} 60% 55%)`; }
 
-// Utility function to determine default useful life based on category
 function getDefaultUsefulLife(categoryId) {
     const defaultLifeMap = {
-        'kendaraan': 10,
-        'properti': 20,
-        'elektronik': 5,
+        'kendaraan': 10, 'properti': 20, 'elektronik': 5,
         'tabungan': 0, 'saham': 0, 'reksadana': 0, 'emas': 0, 'dinar': 0, 'valas': 0, 'kripto': 0,
         'lainnya': 5
     };
@@ -593,7 +590,7 @@ let assetFilter = "all";
 let assetGroupTab = "investasi";
 let debtTab = "hutang";
 let expandedGoals = new Set(); 
-let monthlyExpenses = 0;
+let monthlyExpenses = 0; // State untuk pengeluaran bulanan
 
 let rates = {
   antam: 1350000, 
@@ -601,7 +598,7 @@ let rates = {
   dinarKR: 4400000,
   valas_usd: 15500,
   valas_sgd: 11500,
-  valas_aud: 10200 // Diubah dari EUR menjadi AUD
+  valas_aud: 10200
 };
 
 function rupiah(n){ return "Rp " + Math.round(Number(n) || 0).toLocaleString("id-ID"); }
@@ -644,8 +641,6 @@ function calcAssetValue(a){
   if(a.category === 'valas' && a.qty && a.subType){ return Number(a.qty) * (rates["valas_"+a.subType] || 0); }
   
   let baseValue = Number(a.amount || 0);
-
-  // LOGIKA PENYUSUTAN
   if (a.assetGroup === 'penyusutan' && a.purchaseYear && baseValue > 0) {
       const currentYear = new Date().getFullYear();
       const age = Math.max(0, currentYear - Number(a.purchaseYear));
@@ -712,7 +707,6 @@ $$(".nav-btn").forEach(b=>b.addEventListener("click", ()=>switchView(b.dataset.v
 
 $("#tab-hutang").addEventListener("click", ()=>{ debtTab="hutang"; $("#tab-hutang").classList.add("active"); $("#tab-piutang").classList.remove("active"); renderDebtList(); });
 $("#tab-piutang").addEventListener("click", ()=>{ debtTab="piutang"; $("#tab-piutang").classList.add("active"); $("#tab-hutang").classList.remove("active"); renderDebtList(); });
-
 $("#tab-investasi").addEventListener("click", ()=>{ assetGroupTab="investasi"; $("#tab-investasi").classList.add("active"); $("#tab-penyusutan").classList.remove("active"); renderAssetList(); });
 $("#tab-penyusutan").addEventListener("click", ()=>{ assetGroupTab="penyusutan"; $("#tab-penyusutan").classList.add("active"); $("#tab-investasi").classList.remove("active"); renderAssetList(); });
 
@@ -722,6 +716,7 @@ async function fetchRates(){
     const docSnap = await getDoc(doc(db, "users", u, "settings", "rates"));
     if (docSnap.exists()){ rates = { ...rates, ...docSnap.data() }; }
     
+    // Ambil setting pengeluaran bulanan untuk perhitungan dana darurat
     const profileSnap = await getDoc(doc(db, "users", u, "settings", "profile"));
     if (profileSnap.exists()) { monthlyExpenses = profileSnap.data().monthlyExpenses || 0; }
     
@@ -820,7 +815,8 @@ function renderAll(){
 }
 
 function computeStats(){
-  const totalAsset = goals.reduce((sum, g) => sum + (g.assets || []).reduce((s,a) => s + calcAssetValue(a), 0), 0);
+  const totalAsset = goals.reduce((sum, g) => sum + (g.assets || []).reduce((s,a) => s + calcAssetValue(a), 0), 0) + 
+                     assets.reduce((sum, a) => sum + calcAssetValue(a), 0);
   const totalDebt = debts.filter(d=>d.type!=="piutang").reduce((s,d)=>s+Number(d.amount||0),0);
   const totalReceivable = debts.filter(d=>d.type==="piutang").reduce((s,d)=>s+Number(d.amount||0),0);
   const netWorth = totalAsset + totalReceivable - totalDebt;
@@ -828,6 +824,7 @@ function computeStats(){
   
   const usedCats = new Set();
   goals.forEach(g => (g.assets||[]).forEach(a => usedCats.add(a.category)));
+  assets.forEach(a => usedCats.add(a.category));
 
   const totalInvest = assets.filter(a => a.assetGroup !== 'penyusutan').reduce((s,a) => s + calcAssetValue(a), 0);
   const totalDepresiasi = assets.filter(a => a.assetGroup === 'penyusutan').reduce((s,a) => s + calcAssetValue(a), 0);
@@ -886,6 +883,7 @@ function renderBeranda(){
   $("#lbl-liquid").textContent = `Lancar: ${Math.round(liqPct)}%`;
   $("#lbl-nonliquid").textContent = `Tidak Lancar: ${Math.round(nonLiqPct)}%`;
   
+  // Render Dashboard Dana Darurat Widget
   if (monthlyExpenses > 0) {
       const efMonths = s.totalLiquid / monthlyExpenses;
       $("#ef-month").textContent = (Math.round(efMonths * 10) / 10) + " Bulan";
@@ -905,68 +903,146 @@ function renderBeranda(){
       $("#ef-desc").innerHTML = "Ketahui ketahanan finansialmu.<br>Klik tombol pengaturan di atas.";
   }
   
-  renderAllocationChart(s.categoryTotals, totalLiqNonLiq);
-
+  renderAllocationChartWithLines(s.categoryTotals, totalLiqNonLiq);
   generateInsights(s);
   checkAndSaveHistory(s.netWorth);
 }
 
-function renderAllocationChart(catTotals, total) {
+function renderAllocationChartWithLines(catTotals, total) {
     const svg = $("#allocation-chart-svg");
-    const legend = $("#allocation-legend");
     if(total === 0) {
-        svg.innerHTML = `<circle cx="50" cy="50" r="40" fill="none" stroke="var(--line)" stroke-width="16"/>`;
-        legend.innerHTML = `<div style="grid-column:1/-1;text-align:center;color:var(--muted);font-size:11px;">Belum ada data aset</div>`;
+        svg.innerHTML = `
+           <circle cx="120" cy="120" r="50" fill="none" stroke="var(--line)" stroke-width="20"/>
+           <text x="120" y="125" text-anchor="middle" font-size="12" fill="var(--muted)" font-family="Inter">Belum ada data</text>
+        `;
         return;
     }
     
-    let paths = "";
-    let legendsHtml = "";
-    let cumulativePercent = 0;
+    let html = "";
+    let currentAngle = 0; // Starts from 0 (top because we rotate the group)
+    const cx = 120, cy = 120, radius = 55, strokeW = 26;
     
+    // Convert to array and sort largest first
     const sortedCats = Object.keys(catTotals)
         .map(k => ({ id: k, val: catTotals[k] }))
         .sort((a,b) => b.val - a.val)
         .filter(c => c.val > 0);
         
-    sortedCats.forEach(c => {
+    // Group small values into "Lainnya" if too many items
+    let finalCats = [];
+    let otherVal = 0;
+    if(sortedCats.length > 6) {
+        finalCats = sortedCats.slice(0, 5);
+        for(let i=5; i<sortedCats.length; i++) { otherVal += sortedCats[i].val; }
+        if(otherVal > 0) finalCats.push({ id: 'lainnya', val: otherVal, isGrouped: true });
+    } else {
+        finalCats = sortedCats;
+    }
+
+    // SVG coordinate math helper
+    const polarToCartesian = (centerX, centerY, r, angleInDegrees) => {
+      const angleInRadians = (angleInDegrees - 90) * Math.PI / 180.0;
+      return {
+        x: centerX + (r * Math.cos(angleInRadians)),
+        y: centerY + (r * Math.sin(angleInRadians))
+      };
+    }
+
+    let pathsHtml = `<g transform="rotate(0 120 120)">`; 
+    let labelsHtml = "";
+
+    finalCats.forEach(c => {
         const pct = c.val / total;
-        const dashArray = `${pct * 251.3} 251.3`;
-        const dashOffset = -cumulativePercent * 251.3;
-        const catInfo = catById(c.id);
-        const color = catInfo.gray ? "#CBD5E1" : `hsl(${catInfo.hue} 60% 55%)`;
+        const sliceAngle = pct * 360;
+        const midAngle = currentAngle + (sliceAngle / 2);
         
-        paths += `<circle cx="50" cy="50" r="40" fill="none" stroke="${color}" stroke-width="18" stroke-dasharray="${dashArray}" stroke-dashoffset="${dashOffset}" style="transition:all .3s ease;" />`;
+        const catInfo = c.isGrouped ? { name: "Gabungan Lainnya", hue: 0, gray: true } : catById(c.id);
+        const color = catInfo.gray ? "#94A3B8" : `hsl(${catInfo.hue} 65% 50%)`;
         
-        legendsHtml += `
-          <div class="legend-item">
-            <div class="legend-dot" style="background:${color}"></div>
-            <span style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${catInfo.name} (${Math.round(pct*100)}%)</span>
-          </div>
-        `;
+        // Draw Donut Slice (using stroke-dasharray trick on a circle for simplicity and animation compatibility)
+        const dashArray = `${pct * (2 * Math.PI * radius)} ${2 * Math.PI * radius}`;
+        const dashOffset = -((currentAngle / 360) * (2 * Math.PI * radius));
         
-        cumulativePercent += pct;
+        pathsHtml += `<circle cx="120" cy="120" r="${radius}" fill="none" stroke="${color}" stroke-width="${strokeW}" 
+                        stroke-dasharray="${dashArray}" stroke-dashoffset="${dashOffset}" 
+                        transform="rotate(-90 120 120)" style="transition:all 0.5s ease; cursor:pointer;">
+                        <title>${catInfo.name}: ${Math.round(pct*100)}%</title>
+                      </circle>`;
+
+        // Draw Line and Label ONLY if slice is big enough to be legible
+        if(pct > 0.03) {
+            // Points for polyline
+            const startPt = polarToCartesian(cx, cy, radius + (strokeW/2) + 2, midAngle);
+            const elbowPt = polarToCartesian(cx, cy, radius + strokeW + 15, midAngle);
+            
+            // Determine side (left or right)
+            const isRight = midAngle < 180;
+            const endX = isRight ? elbowPt.x + 15 : elbowPt.x - 15;
+            const textAnchor = isRight ? "start" : "end";
+            const textX = isRight ? endX + 4 : endX - 4;
+            
+            labelsHtml += `
+              <polyline points="${startPt.x},${startPt.y} ${elbowPt.x},${elbowPt.y} ${endX},${elbowPt.y}" 
+                        fill="none" stroke="${color}" stroke-width="1.5" opacity="0.6" />
+              <text x="${textX}" y="${elbowPt.y - 3}" text-anchor="${textAnchor}" fill="${color}" font-size="11.5" font-weight="700" font-family="Sora">${Math.round(pct*100)}%</text>
+              <text x="${textX}" y="${elbowPt.y + 10}" text-anchor="${textAnchor}" fill="var(--muted)" font-size="9" font-weight="600" font-family="Inter">${catInfo.name}</text>
+            `;
+        }
+        
+        currentAngle += sliceAngle;
     });
     
-    svg.innerHTML = paths;
-    legend.innerHTML = legendsHtml;
+    pathsHtml += `</g>`;
+    
+    // Add inner white circle to make it look clean
+    html = pathsHtml + labelsHtml;
+    svg.innerHTML = html;
 }
 
 function generateInsights(s) {
   let html = "";
+  
   if (s.netWorth === 0 && debts.length === 0) {
     html = "Selamat datang di Neraca! Mulailah dengan menambahkan target tabungan pertamamu untuk melacak perjalanan finansialmu.";
+    $("#financial-insights").innerHTML = html;
+    return;
+  } 
+
+  const debtTxt = s.debtRatio === 0 
+    ? "Bagus sekali, kamu <b>tidak memiliki beban hutang</b>!" 
+    : (s.debtRatio < 0.4 ? "Rasio hutangmu tergolong <b>sangat sehat</b> (di bawah 40%)." : "Hati-hati, rasio hutangmu <b>cukup tinggi</b>. Prioritaskan pelunasan pinjaman.");
+  
+  let topGoal = null; let highestProgress = -1;
+  goals.forEach(g => {
+     const collected = (g.assets||[]).reduce((sum,a)=>sum+calcAssetValue(a),0);
+     const pct = g.target > 0 ? (collected/g.target) : 0;
+     if(pct > highestProgress) { highestProgress = pct; topGoal = g; }
+  });
+  const goalTxt = topGoal && highestProgress > 0 
+    ? `Target <b style="color:var(--gold-soft);">${escapeHtml(topGoal.name)}</b> adalah fokus terbaikmu saat ini dengan progres <b>${Math.floor(highestProgress*100)}%</b>.` 
+    : "Tentukan target tabungan impianmu dan alokasikan aset di dalamnya.";
+
+  // ANALISIS DANA DARURAT DARI TARGET
+  const daruratGoal = goals.find(g => g.name.toLowerCase().includes("darurat"));
+  
+  let daruratTxt = "";
+  if (!daruratGoal) {
+      daruratTxt = `<div style="margin-top:8px; padding-top:8px; border-top:1px dashed rgba(255,255,255,0.2);">💡 <b>Tips:</b> Buat target tabungan bernama <b>"Dana Darurat"</b> untuk menganalisis seberapa lama kamu bisa bertahan di situasi tak terduga.</div>`;
+  } else if (monthlyExpenses === 0) {
+      daruratTxt = `<div style="margin-top:8px; padding-top:8px; border-top:1px dashed rgba(255,255,255,0.2);">⚠️ Target Dana Darurat ditemukan, tapi <b>Pengeluaran Bulanan</b> belum diatur (Cek Card di atas).</div>`;
   } else {
-    const debtTxt = s.debtRatio === 0 ? "Bagus sekali, kamu <b>tidak memiliki beban hutang</b>!" : (s.debtRatio < 0.4 ? "Rasio hutangmu tergolong <b>sangat sehat</b> (di bawah 40%)." : "Hati-hati, rasio hutangmu <b>cukup tinggi</b>. Prioritaskan pelunasan pinjaman.");
-    let topGoal = null; let highestProgress = -1;
-    goals.forEach(g => {
-       const collected = (g.assets||[]).reduce((sum,a)=>sum+calcAssetValue(a),0);
-       const pct = g.target > 0 ? (collected/g.target) : 0;
-       if(pct > highestProgress) { highestProgress = pct; topGoal = g; }
-    });
-    const goalTxt = topGoal && highestProgress > 0 ? `Target <b style="color:var(--gold-soft);">${escapeHtml(topGoal.name)}</b> adalah fokus terbaikmu saat ini dengan progres <b>${Math.floor(highestProgress*100)}%</b>.` : "Tentukan target tabungan impianmu dan alokasikan aset di dalamnya.";
-    html = `<div style="margin-bottom:8px;">${debtTxt}</div><div>${goalTxt}</div>`;
+      const terkumpul = (daruratGoal.assets || []).reduce((sum, a) => sum + calcAssetValue(a), 0);
+      const bulanBertahan = (terkumpul / monthlyExpenses).toFixed(1);
+      
+      let statusDarurat = bulanBertahan >= 6 ? "Sangat Aman 🟢" : (bulanBertahan >= 3 ? "Cukup Aman 🟡" : "Kritis 🔴");
+      
+      daruratTxt = `
+      <div style="margin-top:8px; padding-top:8px; border-top:1px dashed rgba(255,255,255,0.2);">
+        🛡️ <b>Ketahanan Darurat:</b> Saldo pada target "${escapeHtml(daruratGoal.name)}" cukup untuk menghidupi kamu selama <b>${bulanBertahan} Bulan</b> ke depan (${statusDarurat}).
+      </div>`;
   }
+
+  html = `<div style="margin-bottom:8px;">${debtTxt}</div><div>${goalTxt}</div>${daruratTxt}`;
   $("#financial-insights").innerHTML = html;
 }
 
@@ -1063,7 +1139,6 @@ function renderDebtList(){
   const items = debts.filter(d => (debtTab==="hutang") ? d.type!=="piutang" : d.type==="piutang").sort((a,b)=>Number(b.amount||0)-Number(a.amount||0));
   $("#debt-empty-title").textContent = debtTab==="hutang" ? "Belum ada hutang tercatat" : "Belum ada piutang tercatat";
   
-  // Mengkalkulasi dan mengupdate total nilai
   const totalTabValue = items.reduce((sum, d) => sum + Number(d.amount || 0), 0);
   $("#debt-type-label").textContent = debtTab === "hutang" ? "Daftar Hutang" : "Daftar Piutang";
   $("#debt-total-value").textContent = rupiah(totalTabValue);
@@ -1125,7 +1200,6 @@ function renderGoals(){
   empty.classList.add("hidden");
   summaryCard.classList.remove("hidden");
   
-  // Mengkalkulasi dan mengupdate total target dana 
   const totalTargetAll = goals.reduce((sum, g) => sum + Number(g.target || 0), 0);
   const totalCollectedAll = goals.reduce((sum, g) => sum + (g.assets || []).reduce((s, a) => s + calcAssetValue(a), 0), 0);
   $("#goal-summary").innerHTML = `<span style="font-weight:600; color:var(--muted); font-size:11px;">Terkumpul</span> <span style="margin:0 6px; color:var(--line);">|</span> <span style="font-weight:700; color:var(--primary-ink); font-family:'Sora',sans-serif;">${rupiah(totalCollectedAll)}</span> <span style="color:var(--muted); font-size:12px; font-weight:600;">/ ${rupiah(totalTargetAll)}</span>`;
@@ -1352,7 +1426,6 @@ function openAssetSheet(existing){
       <input type="text" inputmode="numeric" id="f-amount" placeholder="0" value="${isEdit?formatNumberWithDot(existing.amount):""}">
     </div>
 
-    <!-- FIELD PENYUSUTAN (Hanya muncul jika grup penyusutan) -->
     <div id="dyn-depreciation-wrap" class="hidden" style="background:#F8FAFC; border:1px dashed #CBD5E1; padding:12px; border-radius:12px; margin-bottom:14px;">
       <div style="font-size:11px; font-weight:700; color:var(--muted); margin-bottom:8px;">PARAMETER PENYUSUTAN</div>
       <div style="display:flex; gap:10px;">
@@ -1507,7 +1580,6 @@ function setupAssetFormLogic(existing, onSaveCallback) {
     const cat = catSel.value;
     dynQtyWrap.classList.add("hidden"); dynAmountWrap.classList.remove("hidden");
     
-    // Auto Update Umur Pemakaian saat Kategori diganti (jika grup penyusutan)
     if (selectedGroup === 'penyusutan') {
         calcDepreciationPreview();
     }
@@ -1523,7 +1595,6 @@ function setupAssetFormLogic(existing, onSaveCallback) {
         lblQty.textContent = "Jumlah (Keping)";
       } else if (cat === 'valas'){
         fSubtypeWrap.classList.remove("hidden");
-        // Update Options Valas: Hanya USD, SGD, AUD
         fSubtype.innerHTML = `<option value="usd">USD</option><option value="sgd">SGD</option><option value="aud">AUD</option>`;
         lblQty.textContent = "Nominal";
       }
@@ -1764,7 +1835,7 @@ $("#btn-manage-rates").addEventListener("click", ()=>{
           const r = data.rates;
           $("#r-usd").value = formatNumberWithDot(Math.round(r.IDR));
           $("#r-sgd").value = formatNumberWithDot(Math.round(r.IDR / r.SGD));
-          $("#r-aud").value = formatNumberWithDot(Math.round(r.IDR / r.AUD)); // Update API calculation to AUD
+          $("#r-aud").value = formatNumberWithDot(Math.round(r.IDR / r.AUD));
           toast("Kurs Valas berhasil diperbarui dari internet!");
       } catch (e) {
           toast("Gagal mengupdate kurs otomatis");
