@@ -349,7 +349,7 @@
       </div>
 
       <div class="row2">
-        <div class="card gauge-wrap">
+        <div class="card gauge-wrap" style="cursor:pointer;" onclick="openHealthSheet()">
           <svg width="88" height="88" viewBox="0 0 88 88">
             <circle cx="44" cy="44" r="38" fill="none" stroke="#EEF2F4" stroke-width="8"/>
             <circle id="health-arc" cx="44" cy="44" r="38" fill="none" stroke="var(--primary)" stroke-width="8" stroke-linecap="round" transform="rotate(-90 44 44)" stroke-dasharray="238.7" stroke-dashoffset="238.7"/>
@@ -823,20 +823,16 @@ function renderAll(){
 }
 
 function computeStats(){
-  // Total Asset is just from the assets tab now.
   const totalAsset = assets.reduce((sum, a) => sum + calcAssetValue(a), 0);
-  // Total Tabungan is from the goals (Target tab)
   const totalTarget = goals.reduce((sum, g) => sum + (g.assets || []).reduce((s,a) => s + calcAssetValue(a), 0), 0);
   
   const totalDebt = debts.filter(d=>d.type!=="piutang").reduce((s,d)=>s+Number(d.amount||0),0);
   const totalReceivable = debts.filter(d=>d.type==="piutang").reduce((s,d)=>s+Number(d.amount||0),0);
   
-  // Kekayaan Bersih = Tabungan (Target) + Piutang - Hutang (Sesuai instruksi)
   const netWorth = totalTarget + totalReceivable - totalDebt;
   
-  // Adjusted debtRatio: against totalTarget for safety check if they only use Tabungan as their networth metric.
   const totalAssetsForAllCalculations = totalAsset + totalTarget;
-  const debtRatio = totalAssetsForAllCalculations > 0 ? Math.min(totalDebt/totalAssetsForAllCalculations,1.5) : (totalDebt>0?1.5:0);
+  const debtRatio = totalAssetsForAllCalculations > 0 ? (totalDebt/totalAssetsForAllCalculations) : (totalDebt>0?1:0);
   
   const usedCats = new Set();
   goals.forEach(g => (g.assets||[]).forEach(a => usedCats.add(a.category)));
@@ -853,9 +849,10 @@ function computeStats(){
   const liquidItems = [];
   const nonLiquidItems = [];
   
-  const processAsset = (a, source) => {
+  // FIX 1: Only process 'assets' for Liquidity bar & list
+  assets.forEach(a => {
       const val = calcAssetValue(a);
-      const itemData = { ...a, calcVal: val, source };
+      const itemData = { ...a, calcVal: val, source: 'Aset' };
       if(liquidCats.includes(a.category)) {
           totalLiquid += val;
           liquidItems.push(itemData);
@@ -864,12 +861,46 @@ function computeStats(){
           nonLiquidItems.push(itemData);
       }
       categoryTotals[a.category] = (categoryTotals[a.category] || 0) + val;
+  });
+
+  // Keep collecting categoryTotals for the pie chart from goals
+  goals.forEach(g => (g.assets || []).forEach(a => {
+      const val = calcAssetValue(a);
+      categoryTotals[a.category] = (categoryTotals[a.category] || 0) + val;
+  }));
+
+  // FIX 3: Emergency Fund Calculation specifically from 'Darurat' goal
+  const daruratGoal = goals.find(g => g.name.toLowerCase().includes("darurat"));
+  let efTotal = 0;
+  if (daruratGoal) {
+      efTotal = (daruratGoal.assets || []).reduce((sum, a) => sum + calcAssetValue(a), 0);
+  }
+  const efMonths = monthlyExpenses > 0 ? (efTotal / monthlyExpenses) : 0;
+
+  // FIX 2: Correct Health Score Calculation
+  // 1. Debt Score (Max 40)
+  let scoreDebt = 40;
+  if (debtRatio >= 0.5) scoreDebt = 0;
+  else if (debtRatio > 0) scoreDebt = 40 - (debtRatio / 0.5 * 40);
+
+  // 2. EF Score (Max 30)
+  let scoreEF = Math.min(efMonths / 6, 1) * 30;
+
+  // 3. Diversification Score (Max 15)
+  let scoreDiv = Math.min(usedCats.size / 4, 1) * 15;
+
+  // 4. Quality Ratio Score (Max 15)
+  let scoreQual = assetQualityRatio * 15;
+
+  let healthScore = Math.round(scoreDebt + scoreEF + scoreDiv + scoreQual);
+  healthScore = Math.max(0, Math.min(100, healthScore));
+
+  return { 
+      totalAsset, totalTarget, totalDebt, totalReceivable, netWorth, debtRatio, 
+      diversification: usedCats.size, assetQualityRatio, totalLiquid, totalNonLiquid, 
+      categoryTotals, liquidItems, nonLiquidItems, efTotal, efMonths,
+      healthScore, scoreBreakdown: { debt: scoreDebt, ef: scoreEF, div: scoreDiv, qual: scoreQual }
   };
-  
-  assets.forEach(a => processAsset(a, 'Aset'));
-  goals.forEach(g => (g.assets || []).forEach(a => processAsset(a, `Target: ${g.name}`)));
-  
-  return { totalAsset, totalTarget, totalDebt, totalReceivable, netWorth, debtRatio, diversification: usedCats.size, assetQualityRatio, totalLiquid, totalNonLiquid, categoryTotals, liquidItems, nonLiquidItems };
 }
 
 function renderBeranda(){
@@ -879,24 +910,18 @@ function renderBeranda(){
   $("#sum-debt").textContent = rupiah(s.totalDebt);
   $("#sum-receivable").textContent = rupiah(s.totalReceivable);
 
-  let debtScore = Math.max(0, 100 - (s.debtRatio * 100)) * 0.6;
-  let divScore = Math.min(s.diversification, 6) / 6 * 20;
-  let qualityScore = s.assetQualityRatio * 20;
-  
-  let health = Math.round(debtScore + divScore + qualityScore);
-  health = Math.max(0, Math.min(100, health));
-  
+  let health = s.healthScore;
   const CIRC = 238.7; const healthOffset = CIRC - (CIRC * health/100);
   $("#health-arc").style.strokeDashoffset = healthOffset;
-  $("#health-arc").style.stroke = health>=70 ? "var(--primary)" : (health>=45 ? "var(--gold)" : "var(--debt)");
+  $("#health-arc").style.stroke = health>=75 ? "var(--primary)" : (health>=50 ? "var(--gold)" : "var(--debt)");
   $("#health-score-text").textContent = health;
-  $("#health-status").textContent = assets.length===0 && debts.length===0 && goals.length===0 ? "Belum ada data" : (health>=70?"Sehat":(health>=45?"Perlu Perhatian":"Berisiko Tinggi"));
+  $("#health-status").textContent = (assets.length===0 && debts.length===0 && goals.length===0) ? "Belum ada data" : (health>=75?"Sangat Sehat":(health>=50?"Cukup Sehat":"Perlu Perbaikan"));
 
   const divPct = Math.min(s.diversification/6,1)*100;
   const divOffset = CIRC - (CIRC*divPct/100);
   $("#div-arc").style.strokeDashoffset = divOffset;
   $("#div-count-text").textContent = s.diversification;
-  $("#div-status").textContent = s.diversification===0?"kategori aset":(s.diversification>=5?"Sangat Baik":s.diversification>=3?"Cukup Baik":"Kurang Beragam");
+  $("#div-status").textContent = s.diversification===0?"kategori aset":(s.diversification>=4?"Sangat Baik":s.diversification>=2?"Cukup Baik":"Kurang Beragam");
 
   const totalLiqNonLiq = s.totalLiquid + s.totalNonLiquid;
   const liqPct = totalLiqNonLiq > 0 ? (s.totalLiquid / totalLiqNonLiq * 100) : 0;
@@ -909,7 +934,7 @@ function renderBeranda(){
   
   // Render Dashboard Dana Darurat Widget
   if (monthlyExpenses > 0) {
-      const efMonths = s.totalLiquid / monthlyExpenses;
+      const efMonths = s.efMonths;
       $("#ef-month").textContent = (Math.round(efMonths * 10) / 10) + " Bulan";
       if (efMonths >= 6) {
           $("#ef-emoji").textContent = "🤩"; $("#ef-emoji").style.background = "#D1FAE5";
@@ -917,14 +942,17 @@ function renderBeranda(){
       } else if (efMonths >= 3) {
           $("#ef-emoji").textContent = "🙂"; $("#ef-emoji").style.background = "#FEF3C7";
           $("#ef-desc").textContent = "Cukup baik, targetkan hingga 6 bulan.";
-      } else {
+      } else if (efMonths > 0) {
           $("#ef-emoji").textContent = "⚠️"; $("#ef-emoji").style.background = "#FEE2E2";
           $("#ef-desc").textContent = "Rawan. Segera kumpulkan dana darurat!";
+      } else {
+          $("#ef-emoji").textContent = "🚨"; $("#ef-emoji").style.background = "#FEE2E2";
+          $("#ef-desc").textContent = "Belum ada tabungan Darurat tercatat!";
       }
   } else {
       $("#ef-emoji").textContent = "❓"; $("#ef-emoji").style.background = "#F1F5F9";
       $("#ef-month").textContent = "Belum diatur";
-      $("#ef-desc").innerHTML = "Ketahui ketahanan finansialmu.<br>Klik tombol pengaturan di atas.";
+      $("#ef-desc").innerHTML = "Ketahui ketahanan finansialmu.<br>Klik ikon pengaturan di atas.";
   }
   
   renderAllocationChartWithLines(s.categoryTotals, totalLiqNonLiq);
@@ -1042,18 +1070,14 @@ function generateInsights(s) {
   
   let daruratTxt = "";
   if (!daruratGoal) {
-      daruratTxt = `<div style="margin-top:8px; padding-top:8px; border-top:1px dashed rgba(255,255,255,0.2);">💡 <b>Tips:</b> Buat target tabungan bernama <b>"Dana Darurat"</b> untuk menganalisis seberapa lama kamu bisa bertahan di situasi tak terduga.</div>`;
+      daruratTxt = `<div style="margin-top:8px; padding-top:8px; border-top:1px dashed rgba(255,255,255,0.2);">💡 <b>Tips:</b> Buat target tabungan bernama <b>"Darurat"</b> untuk menganalisis seberapa lama kamu bisa bertahan di situasi tak terduga.</div>`;
   } else if (monthlyExpenses === 0) {
       daruratTxt = `<div style="margin-top:8px; padding-top:8px; border-top:1px dashed rgba(255,255,255,0.2);">⚠️ Target Dana Darurat ditemukan, tapi <b>Pengeluaran Bulanan</b> belum diatur (Cek Card di atas).</div>`;
   } else {
-      const terkumpul = (daruratGoal.assets || []).reduce((sum, a) => sum + calcAssetValue(a), 0);
-      const bulanBertahan = (terkumpul / monthlyExpenses).toFixed(1);
-      
-      let statusDarurat = bulanBertahan >= 6 ? "Sangat Aman 🟢" : (bulanBertahan >= 3 ? "Cukup Aman 🟡" : "Kritis 🔴");
-      
+      let statusDarurat = s.efMonths >= 6 ? "Sangat Aman 🟢" : (s.efMonths >= 3 ? "Cukup Aman 🟡" : "Kritis 🔴");
       daruratTxt = `
       <div style="margin-top:8px; padding-top:8px; border-top:1px dashed rgba(255,255,255,0.2);">
-        🛡️ <b>Ketahanan Darurat:</b> Saldo pada target "${escapeHtml(daruratGoal.name)}" cukup untuk menghidupi kamu selama <b>${bulanBertahan} Bulan</b> ke depan (${statusDarurat}).
+        🛡️ <b>Ketahanan Darurat:</b> Saldo pada target "${escapeHtml(daruratGoal.name)}" cukup untuk menghidupi kamu selama <b>${s.efMonths.toFixed(1)} Bulan</b> ke depan (${statusDarurat}).
       </div>`;
   }
 
@@ -1107,7 +1131,65 @@ function renderAssetFilters(){
   });
 }
 
-// Fungsi Interaktif Menampilkan Sheet Likuiditas
+// Menampilkan Rincian Skor Kesehatan
+window.openHealthSheet = function() {
+    const s = computeStats();
+    const b = s.scoreBreakdown;
+    
+    const formatScore = (val, max) => `<span style="font-weight:700; color:var(--ink);">${Math.round(val)}</span><span style="color:var(--muted); font-size:11px;">/${max}</span>`;
+
+    openSheet(`
+        <div class="sheet-close-bar"></div>
+        <h3>Rincian Skor Kesehatan</h3>
+        <div style="font-size:36px; font-weight:800; font-family:'Sora',sans-serif; text-align:center; color:var(--primary-ink); margin:10px 0 20px;">
+            ${s.healthScore}
+        </div>
+
+        <div class="list-item" style="padding:14px 0; border-bottom:1px solid var(--line);">
+            <div class="li-main">
+                <div class="li-title" style="font-size:14px;">⚖️ Rasio Hutang</div>
+                <div class="li-sub" style="font-size:11.5px; line-height:1.4; margin-top:4px;">
+                    Hutang berbanding total aset. Idealnya 0%.<br>Saat ini: <b>${Math.round(s.debtRatio*100)}%</b>
+                </div>
+            </div>
+            <div style="font-family:'Sora',sans-serif; text-align:right;">${formatScore(b.debt, 40)}</div>
+        </div>
+
+        <div class="list-item" style="padding:14px 0; border-bottom:1px solid var(--line);">
+            <div class="li-main">
+                <div class="li-title" style="font-size:14px;">🛡️ Dana Darurat</div>
+                <div class="li-sub" style="font-size:11.5px; line-height:1.4; margin-top:4px;">
+                    Kecukupan bulan hidup dari Target "Darurat". Idealnya 6 bln.<br>Saat ini: <b>${s.efMonths.toFixed(1)} Bulan</b>
+                </div>
+            </div>
+            <div style="font-family:'Sora',sans-serif; text-align:right;">${formatScore(b.ef, 30)}</div>
+        </div>
+
+        <div class="list-item" style="padding:14px 0; border-bottom:1px solid var(--line);">
+            <div class="li-main">
+                <div class="li-title" style="font-size:14px;">🥧 Diversifikasi</div>
+                <div class="li-sub" style="font-size:11.5px; line-height:1.4; margin-top:4px;">
+                    Variasi kategori aset. Idealnya min 4 kategori.<br>Saat ini: <b>${s.diversification} Kategori</b>
+                </div>
+            </div>
+            <div style="font-family:'Sora',sans-serif; text-align:right;">${formatScore(b.div, 15)}</div>
+        </div>
+
+        <div class="list-item" style="padding:14px 0; border-bottom:none;">
+            <div class="li-main">
+                <div class="li-title" style="font-size:14px;">📈 Rasio Aset Investasi</div>
+                <div class="li-sub" style="font-size:11.5px; line-height:1.4; margin-top:4px;">
+                    Aset yang berkembang vs aset menyusut.<br>Saat ini: <b>${Math.round(s.assetQualityRatio*100)}% Investasi</b>
+                </div>
+            </div>
+            <div style="font-family:'Sora',sans-serif; text-align:right;">${formatScore(b.qual, 15)}</div>
+        </div>
+
+        <button class="btn-primary" onclick="closeSheet()" style="margin-top:20px;">Tutup</button>
+    `);
+};
+
+// Menampilkan Sheet Likuiditas
 window.openLiquiditySheet = function() {
     const s = computeStats();
 
@@ -1131,7 +1213,7 @@ window.openLiquiditySheet = function() {
         <div class="sheet-close-bar"></div>
         <h3>Rincian Likuiditas</h3>
         <p style="font-size:12.5px; color:var(--muted); margin-top:-8px; margin-bottom:16px;">
-            Aset lancar mudah dicairkan menjadi uang tunai, sedangkan aset tidak lancar butuh waktu lebih lama.
+            Aset lancar mudah dicairkan menjadi uang tunai, sedangkan aset tidak lancar butuh waktu lebih lama. <b>Hanya dihitung dari tab Aset.</b>
         </p>
 
         <div style="margin-bottom:20px;">
@@ -1858,7 +1940,7 @@ $("#btn-manage-rates").addEventListener("click", ()=>{
     <div class="sheet-close-bar"></div>
     <h3>Pengaturan Harga (IDR)</h3>
     <p style="font-size:12px; color:var(--muted); margin-top:-10px; margin-bottom:18px;">
-      Ubah harga acuan di bawah ini. Semua aset Emas, Dinar, dan Valas yang tercatat akan otomatis terupdate mengikuti harga ini.
+      Uubah harga acuan di bawah ini. Semua aset Emas, Dinar, dan Valas yang tercatat akan otomatis terupdate mengikuti harga ini.
     </p>
     <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
       <div class="field">
@@ -2017,7 +2099,7 @@ function openPengeluaranSheet() {
       <div class="sheet-close-bar"></div>
       <h3>Atur Pengeluaran Bulanan</h3>
       <p style="font-size:12.5px; color:var(--muted); margin-top:-8px; margin-bottom:16px; line-height:1.5;">
-         Masukkan estimasi rata-rata pengeluaranmu dalam sebulan. Data ini digunakan untuk menganalisis kecukupan <b>Dana Darurat</b> berdasarkan rasio total aset lancar.
+          Masukkan estimasi rata-rata pengeluaranmu dalam sebulan. Data ini digunakan untuk menganalisis kecukupan <b>Dana Darurat</b> berdasarkan target yang Anda buat.
       </p>
       <div class="field">
         <label>Pengeluaran Bulanan (Rp)</label>
