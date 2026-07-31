@@ -122,7 +122,6 @@
   .chart-val-tooltip { position:absolute; top:-26px; left:50%; transform:translateX(-50%); font-size:9.5px; background:var(--ink); color:#fff; padding:3px 6px; border-radius:6px; opacity:0; pointer-events:none; transition:opacity .2s, transform .2s; white-space:nowrap; z-index:10; font-family:'Sora',sans-serif; font-weight:600;}
   .chart-bar:hover .chart-val-tooltip { opacity: 1; transform:translateX(-50%) translateY(-2px); }
 
-  /* Update Donut Chart Styles for Lines */
   .donut-chart-container { position: relative; width: 100%; height: 220px; display: flex; justify-content: center; align-items: center; margin: 10px 0; }
   .donut-chart-svg { width: 100%; height: 100%; overflow: visible; }
   
@@ -815,18 +814,28 @@ function renderAll(){
 }
 
 function computeStats(){
-  const totalAsset = goals.reduce((sum, g) => sum + (g.assets || []).reduce((s,a) => s + calcAssetValue(a), 0), 0) + 
-                     assets.reduce((sum, a) => sum + calcAssetValue(a), 0);
+  // 1. Total Aset di Tab Aset (Semua grup Investasi + Penyusutan di luar target)
+  const totalAsset = assets.reduce((sum, a) => sum + calcAssetValue(a), 0);
+
+  // 2. Total Terkumpul di Tab Target
+  const totalTarget = goals.reduce((sum, g) => sum + (g.assets || []).reduce((s,a) => s + calcAssetValue(a), 0), 0);
+
   const totalDebt = debts.filter(d=>d.type!=="piutang").reduce((s,d)=>s+Number(d.amount||0),0);
   const totalReceivable = debts.filter(d=>d.type==="piutang").reduce((s,d)=>s+Number(d.amount||0),0);
-  const netWorth = totalAsset + totalReceivable - totalDebt;
-  const debtRatio = totalAsset > 0 ? Math.min(totalDebt/totalAsset,1.5) : (totalDebt>0?1.5:0);
+  
+  // Kekayaan Bersih = Tab Target + Piutang - Hutang (Sesuai modifikasi yang diminta)
+  const netWorth = totalTarget + totalReceivable - totalDebt;
+
+  // Rasio Hutang diukur dari Net Worth & Target (Asumsi keamanan finansial)
+  const totalAssetsForAllCalculations = totalAsset + totalTarget; // Gabungan keduanya hanya untuk metrik rasio/kesehatan
+  const debtRatio = totalAssetsForAllCalculations > 0 ? Math.min(totalDebt/totalAssetsForAllCalculations, 1.5) : (totalDebt>0?1.5:0);
   
   const usedCats = new Set();
   goals.forEach(g => (g.assets||[]).forEach(a => usedCats.add(a.category)));
   assets.forEach(a => usedCats.add(a.category));
 
-  const totalInvest = assets.filter(a => a.assetGroup !== 'penyusutan').reduce((s,a) => s + calcAssetValue(a), 0);
+  // Kualitas aset (mengukur persentase yang bisa berkembang)
+  const totalInvest = assets.filter(a => a.assetGroup !== 'penyusutan').reduce((s,a) => s + calcAssetValue(a), 0) + totalTarget;
   const totalDepresiasi = assets.filter(a => a.assetGroup === 'penyusutan').reduce((s,a) => s + calcAssetValue(a), 0);
   const assetQualityRatio = (totalInvest + totalDepresiasi) > 0 ? (totalInvest / (totalInvest + totalDepresiasi)) : 1;
   
@@ -845,7 +854,7 @@ function computeStats(){
   assets.forEach(processAsset);
   goals.forEach(g => (g.assets || []).forEach(processAsset));
   
-  return { totalAsset, totalDebt, totalReceivable, netWorth, debtRatio, diversification: usedCats.size, assetQualityRatio, totalLiquid, totalNonLiquid, categoryTotals };
+  return { totalAsset, totalTarget, totalDebt, totalReceivable, netWorth, debtRatio, diversification: usedCats.size, assetQualityRatio, totalLiquid, totalNonLiquid, categoryTotals };
 }
 
 function renderBeranda(){
@@ -883,19 +892,31 @@ function renderBeranda(){
   $("#lbl-liquid").textContent = `Lancar: ${Math.round(liqPct)}%`;
   $("#lbl-nonliquid").textContent = `Tidak Lancar: ${Math.round(nonLiqPct)}%`;
   
-  // Render Dashboard Dana Darurat Widget
+  // Render Dashboard Dana Darurat Widget dengan kata kunci "Darurat"
+  const daruratGoal = goals.find(g => g.name.toLowerCase().includes("darurat"));
+  let danaDaruratAmount = 0;
+  if (daruratGoal) {
+      danaDaruratAmount = (daruratGoal.assets || []).reduce((sum, a) => sum + calcAssetValue(a), 0);
+  }
+
   if (monthlyExpenses > 0) {
-      const efMonths = s.totalLiquid / monthlyExpenses;
-      $("#ef-month").textContent = (Math.round(efMonths * 10) / 10) + " Bulan";
-      if (efMonths >= 6) {
-          $("#ef-emoji").textContent = "🤩"; $("#ef-emoji").style.background = "#D1FAE5";
-          $("#ef-desc").textContent = "Sangat aman! Dana daruratmu ideal.";
-      } else if (efMonths >= 3) {
-          $("#ef-emoji").textContent = "🙂"; $("#ef-emoji").style.background = "#FEF3C7";
-          $("#ef-desc").textContent = "Cukup baik, targetkan hingga 6 bulan.";
+      if (daruratGoal) {
+          const efMonths = danaDaruratAmount / monthlyExpenses;
+          $("#ef-month").textContent = (Math.round(efMonths * 10) / 10) + " Bulan";
+          if (efMonths >= 6) {
+              $("#ef-emoji").textContent = "🤩"; $("#ef-emoji").style.background = "#D1FAE5";
+              $("#ef-desc").textContent = "Sangat aman! Dana daruratmu ideal.";
+          } else if (efMonths >= 3) {
+              $("#ef-emoji").textContent = "🙂"; $("#ef-emoji").style.background = "#FEF3C7";
+              $("#ef-desc").textContent = "Cukup baik, targetkan hingga 6 bulan.";
+          } else {
+              $("#ef-emoji").textContent = "⚠️"; $("#ef-emoji").style.background = "#FEE2E2";
+              $("#ef-desc").textContent = "Rawan. Segera kumpulkan dana darurat!";
+          }
       } else {
-          $("#ef-emoji").textContent = "⚠️"; $("#ef-emoji").style.background = "#FEE2E2";
-          $("#ef-desc").textContent = "Rawan. Segera kumpulkan dana darurat!";
+          $("#ef-emoji").textContent = "⚠️"; $("#ef-emoji").style.background = "#FEF3C7";
+          $("#ef-month").textContent = "Target Belum Ada";
+          $("#ef-desc").innerHTML = "Buat target tabungan dengan nama <b>Darurat</b>.";
       }
   } else {
       $("#ef-emoji").textContent = "❓"; $("#ef-emoji").style.background = "#F1F5F9";
@@ -1949,7 +1970,7 @@ function openPengeluaranSheet() {
       <div class="sheet-close-bar"></div>
       <h3>Atur Pengeluaran Bulanan</h3>
       <p style="font-size:12.5px; color:var(--muted); margin-top:-8px; margin-bottom:16px; line-height:1.5;">
-         Masukkan estimasi rata-rata pengeluaranmu dalam sebulan. Data ini digunakan untuk menganalisis kecukupan <b>Dana Darurat</b> berdasarkan rasio total aset lancar.
+          Masukkan estimasi rata-rata pengeluaranmu dalam sebulan. Data ini digunakan untuk menganalisis kecukupan <b>Dana Darurat</b> berdasarkan rasio total aset lancar.
       </p>
       <div class="field">
         <label>Pengeluaran Bulanan (Rp)</label>
