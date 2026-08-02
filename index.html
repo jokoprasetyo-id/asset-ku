@@ -135,7 +135,7 @@
 
   .empty{text-align:center;padding:34px 14px;color:var(--muted);font-size:13.5px;line-height:1.5;}
   .empty b{display:block;color:var(--ink);font-size:15px;margin-bottom:6px;font-weight:700;}
-  
+
   .list-item{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);}
   .list-item:last-child{border-bottom:none;}
   .dot{width:10px;height:10px;border-radius:50%;flex:0 0 auto;}
@@ -156,7 +156,7 @@
     background:var(--surface);border:1px solid var(--line);color:var(--muted);cursor:pointer;
   }
   .chip.active{background:var(--primary);border-color:var(--primary);color:#fff;}
-  
+
   .goal-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; cursor:pointer; user-select:none; }
   .goal-title-wrap { flex:1; min-width:0; }
   .goal-title { font-size: 18px; font-weight: 700; color: var(--ink); margin: 0 0 4px; font-family: 'Sora', sans-serif;}
@@ -212,21 +212,21 @@
   .nav-inner{
     max-width:480px;width:100%; background:var(--surface); border-radius:20px;
     box-shadow:var(--shadow); display:flex;align-items:center;justify-content:space-between;
-    padding:8px 10px;
+    padding:6px 6px;
   }
   .nav-btn{
     flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;
-    background:none;border:none;color:var(--muted);font-size:10.5px;font-weight:600;
-    padding:6px 2px;cursor:pointer;border-radius:12px;
+    background:none;border:none;color:var(--muted);font-size:10px;font-weight:600;
+    padding:6px 0;cursor:pointer;border-radius:12px;
   }
   .nav-btn.active{color:var(--primary-ink);}
   .nav-btn svg{width:20px;height:20px;}
   .fab{
-    width:50px;height:50px;border-radius:16px;background:var(--primary);
+    width:46px;height:46px;border-radius:14px;background:var(--primary);
     display:flex;align-items:center;justify-content:center;color:#fff;border:none;
-    box-shadow:0 6px 16px -4px rgba(20,99,86,.55);cursor:pointer;margin:0 4px;flex:0 0 auto;
+    box-shadow:0 6px 16px -4px rgba(20,99,86,.55);cursor:pointer;margin:0 2px;flex:0 0 auto;
   }
-  .fab svg{width:22px;height:22px;}
+  .fab svg{width:20px;height:20px;}
   
   .overlay{
     position:fixed;inset:0;background:rgba(15,23,42,.42);z-index:50;
@@ -271,6 +271,46 @@
   .lainnya-row .ic{width:34px;height:34px;border-radius:10px;background:var(--primary-soft);color:var(--primary-ink);display:flex;align-items:center;justify-content:center;flex:0 0 auto;}
   .lainnya-row .lbl{font-size:14px;font-weight:600;flex:1;}
   
+  .cal-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; padding:0 8px; }
+  .cal-header button { width:36px; height:36px; border:none; background:var(--surface); border:radius:10px; border-radius:10px; cursor:pointer; box-shadow:var(--shadow); display:flex; align-items:center; justify-content:center; color:var(--ink); font-size:16px; font-weight:700;}
+  .cal-header button:active { background:var(--bg); }
+  .cal-month-year { font-size:16px; font-weight:700; font-family:'Sora',sans-serif; }
+  
+  .cal-grid { display:grid; grid-template-columns:repeat(7, 1fr); gap:6px; text-align:center; }
+  .cal-day-lbl { font-size:11px; font-weight:700; color:var(--muted); margin-bottom:8px; }
+  .cal-cell { aspect-ratio:1; display:flex; flex-direction:column; align-items:center; justify-content:center; font-size:14px; font-weight:600; border-radius:12px; cursor:pointer; position:relative; transition:all .2s; border:1px solid transparent;}
+  .cal-cell:hover:not(.empty-cell) { border-color:var(--line); }
+  .cal-cell.active { border-color:var(--primary); color:var(--primary-ink); font-weight:800; }
+  .cal-cell.active::before { content:''; position:absolute; inset:0; border-radius:12px; border:2px solid var(--primary); pointer-events:none; }
+  .cal-cell.muted { color:var(--muted); opacity:0.4; }
+  .cal-cell.empty-cell { cursor:default; }
+  
+  .cal-dot-wrap { display:flex; gap:3px; margin-top:3px; height:5px; align-items:center; justify-content:center;}
+  .cal-dot { width:5px; height:5px; border-radius:50%; }
+  .cal-dot.tagihan { background:var(--blue); }
+  .cal-dot.maintenance { background:var(--gold); }
+  .cal-dot.lainnya { background:var(--muted); }
+
+  .agenda-item { display:flex; align-items:flex-start; gap:12px; padding:12px 14px; border:1px solid var(--line); border-radius:14px; margin-bottom:10px; background:var(--surface); transition:background .2s;}
+  .agenda-item.done { opacity:0.6; }
+  .agenda-item.done .agenda-title { text-decoration:line-through; color:var(--muted); }
+  .checkbox-custom { width:22px; height:22px; border-radius:6px; border:2px solid var(--line); display:flex; align-items:center; justify-content:center; cursor:pointer; margin-top:2px; flex:0 0 auto; transition:all .2s; background:var(--surface);}
+  .checkbox-custom.checked { background:var(--primary); border-color:var(--primary); color:#fff; }
+  .agenda-main { flex:1; min-width:0; }
+  .agenda-title { font-size:14.5px; font-weight:600; margin-bottom:4px; color:var(--ink); }
+  .agenda-sub { font-size:11.5px; color:var(--muted); display:flex; align-items:center; gap:6px; font-weight:500;}
+  .agenda-sub-dot { width:6px; height:6px; border-radius:50%; }
+  .agenda-amt { font-size:13.5px; font-weight:700; font-family:'Sora',sans-serif; margin-top:6px; color:var(--ink); }
+  
+  .maintenance-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .maintenance-card { background:var(--surface); border:1px solid var(--line); padding:16px; border-radius:16px; position:relative; }
+  .maintenance-icon { width:40px; height:40px; border-radius:12px; background:var(--primary-soft); color:var(--primary-ink); display:flex; align-items:center; justify-content:center; font-size:20px; margin-bottom:12px; }
+  .maintenance-title { font-size:14px; font-weight:700; color:var(--ink); margin-bottom:4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .maintenance-date { font-size:11.5px; color:var(--muted); font-weight:500; }
+  .maintenance-badge { position:absolute; top:12px; right:12px; font-size:10px; font-weight:700; padding:3px 6px; border-radius:6px; }
+  .maintenance-badge.urgent { background:var(--debt-soft); color:var(--debt); }
+  .maintenance-badge.safe { background:#ECFDF5; color:#10B981; }
+
   #toast{
     position:fixed;bottom:100px;left:50%;transform:translateX(-50%);
     background:var(--ink);color:#fff;padding:10px 18px;border-radius:12px;font-size:13px;font-weight:600;
@@ -296,7 +336,7 @@
     <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M4 8l8-5 8 5M4 8l3 9M4 8l-1 2m17-2l-3 9m3-9l1 2M7 17h10"/></svg>
   </div>
   <h1>Neraca</h1>
-  <p>Catat aset, tabungan, dan hutangmu di satu tempat. Tersinkron otomatis aman di cloud.</p>
+  <p>Catat aset, tabungan, agenda tagihan dan maintenance di satu tempat. Aman di cloud.</p>
   <button class="btn-google" id="btn-google-login">
     <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.9 32.6 29.4 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.1 8 3l6-6C34.5 5.5 29.5 3.5 24 3.5 12.7 3.5 3.5 12.7 3.5 24S12.7 44.5 24 44.5c11 0 20.4-8.9 20.4-20.5 0-1.4-.1-2.3-.3-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.5 16 18.9 13 24 13c3.1 0 5.8 1.1 8 3l6-6C34.5 5.5 29.5 3.5 24 3.5c-7.7 0-14.4 4.3-17.7 11.2z"/><path fill="#4CAF50" d="M24 44.5c5.4 0 10.3-1.9 14-5.7l-6.5-5.4c-2 1.5-4.6 2.5-7.5 2.5-5.3 0-9.8-3.4-11.4-8.1l-6.6 5.1C9.5 39.9 16.2 44.5 24 44.5z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.7 2-2 3.7-3.7 5l6.5 5.4C41.5 35.4 44.5 30.2 44.5 24c0-1.4-.1-2.3-.3-3.5z"/></svg>
     Masuk dengan Google
@@ -332,7 +372,7 @@
           <div>Total Hutang<span class="val neg" id="sum-debt">Rp 0</span></div>
           <div>Piutang<span class="val" id="sum-receivable">Rp 0</span></div>
         </div>
-        <!-- Bar Likuiditas (Sekarang Interaktif) -->
+        
         <div style="border-top:1px solid var(--line); padding-top:12px; margin-top:12px; cursor:pointer;" onclick="openLiquiditySheet()">
            <div style="font-size:11px; color:var(--muted); font-weight:700; text-transform:uppercase; margin-bottom:6px; letter-spacing:0.04em; display:flex; justify-content:space-between; align-items:center;">
               <span>Likuiditas Aset</span>
@@ -370,6 +410,19 @@
         </div>
       </div>
       
+      <!-- Agenda Terdekat di Dashboard -->
+      <div class="card">
+         <div class="card-label" style="justify-content:space-between;">
+            <span>📅 Agenda Terdekat</span>
+            <button class="icon-btn" style="width:auto; height:26px; border:none; background:none; color:var(--blue); font-size:11.5px; font-weight:700; box-shadow:none; padding:0;" onclick="switchView('kalender')">
+               Lihat Kalender ›
+            </button>
+         </div>
+         <div id="dash-agenda-list" style="margin-top:12px;">
+            <!-- Agenda List Rendered by JS -->
+         </div>
+      </div>
+
       <!-- Card Dana Darurat Cepat -->
       <div class="card">
          <div class="card-label" style="justify-content:space-between;">
@@ -394,7 +447,6 @@
         </div>
       </div>
 
-      <!-- Card Distribusi Aset dengan Garis -->
       <div class="card">
         <div class="card-label">Distribusi Seluruh Aset</div>
         <div class="donut-chart-container">
@@ -405,15 +457,12 @@
 
       <div class="card">
         <div class="card-label">Tren Kekayaan (6 Bulan)</div>
-        <div class="chart-container" id="history-chart">
-           <!-- Grafik Bar di-render oleh JS -->
-        </div>
+        <div class="chart-container" id="history-chart"></div>
       </div>
     </section>
 
     <!-- VIEW: ASET -->
     <section class="view hidden" id="view-aset">
-      <!-- Card Summary Total Aset dipindah ke sini -->
       <div class="card" style="padding:6px 18px; margin-bottom: 14px;" id="asset-summary-card">
         <div class="card-label" style="justify-content:space-between; margin-bottom:8px; margin-top:8px; border-bottom: 1px solid var(--line); padding-bottom:8px;">
            <span>Total Seluruh Aset</span>
@@ -441,7 +490,6 @@
 
     <!-- VIEW: TARGET -->
     <section class="view hidden" id="view-target">
-      <!-- Card Summary Target -->
       <div class="card" style="padding:6px 18px; margin-bottom: 14px;" id="goal-summary-card">
         <div class="card-label" style="justify-content:space-between; margin-bottom:8px; margin-top:8px; border-bottom: 1px solid var(--line); padding-bottom:8px;">
            <span>Total Terkumpul & Target</span>
@@ -476,6 +524,76 @@
       </div>
     </section>
 
+    <!-- VIEW: KALENDER -->
+    <section class="view hidden" id="view-kalender">
+       <div class="card" style="padding:16px;">
+          <div class="cal-header">
+             <button id="cal-prev">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+             </button>
+             <div class="cal-month-year" id="cal-month-year">Bulan Tahun</div>
+             <button id="cal-next">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+             </button>
+          </div>
+          <div class="cal-grid">
+             <div class="cal-day-lbl">M</div>
+             <div class="cal-day-lbl">S</div>
+             <div class="cal-day-lbl">S</div>
+             <div class="cal-day-lbl">R</div>
+             <div class="cal-day-lbl">K</div>
+             <div class="cal-day-lbl">J</div>
+             <div class="cal-day-lbl">S</div>
+          </div>
+          <div class="cal-grid" id="cal-days-container">
+             <!-- Days rendered here -->
+          </div>
+          
+          <div style="margin-top:20px; padding-top:14px; border-top:1px dashed var(--line); display:flex; align-items:center; justify-content:center; gap:16px;">
+             <div style="display:flex; align-items:center; gap:6px; font-size:10px; font-weight:600; color:var(--muted);">
+                <div class="cal-dot tagihan"></div> Tagihan / Cicilan
+             </div>
+             <div style="display:flex; align-items:center; gap:6px; font-size:10px; font-weight:600; color:var(--muted);">
+                <div class="cal-dot maintenance"></div> Servis / Maintenance
+             </div>
+          </div>
+       </div>
+
+       <div id="agenda-section">
+          <div class="card-label" style="margin-bottom:12px; margin-top:8px;">Jadwal pada <span id="agenda-date-lbl" style="margin-left:4px; color:var(--ink);">Tanggal</span></div>
+          <div id="agenda-list"></div>
+          <div class="empty hidden" id="agenda-empty" style="padding:20px 0;">
+             <b>Tidak ada agenda</b>
+             Pilih tanggal lain atau tambahkan jadwal baru.
+          </div>
+       </div>
+    </section>
+
+    <!-- VIEW: MAINTENANCE -->
+    <section class="view hidden" id="view-maintenance">
+      <div class="card-label" style="justify-content:space-between; margin-bottom:8px;">
+         <span>Manajemen Maintenance</span>
+      </div>
+      <div class="seg" style="margin-bottom:12px;">
+        <button class="active" id="tab-maint-kendaraan">Kendaraan</button>
+        <button id="tab-maint-rumah">Rumah & Lainnya</button>
+      </div>
+
+      <button class="btn-add-dashed" id="btn-add-maintenance" style="margin-bottom:14px;">
+         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+         Tambah Item Maintenance
+      </button>
+
+      <div class="maintenance-grid" id="maintenance-list">
+         <!-- Items Rendered Here -->
+      </div>
+      
+      <div class="empty hidden" id="maintenance-empty" style="padding:20px 0;">
+         <b>Belum ada item untuk dirawat</b>
+         Tambahkan kendaraan atau properti yang butuh perawatan rutin.
+      </div>
+    </section>
+
     <!-- VIEW: LAINNYA -->
     <section class="view hidden" id="view-lainnya">
       <div class="card" style="display:flex;align-items:center;gap:12px;">
@@ -487,6 +605,13 @@
       </div>
       
       <div class="card">
+        <div class="lainnya-row" onclick="switchView('maintenance')">
+          <div class="ic" style="background:#FEE2E2;color:#EF4444;">
+             <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+          </div>
+          <div class="lbl">Jadwal Maintenance Kendaraan & Rumah</div>
+          <span>›</span>
+        </div>
         <div class="lainnya-row" id="btn-manage-rates">
           <div class="ic" style="background:var(--gold-soft);color:var(--gold);">
             <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
@@ -494,7 +619,7 @@
           <div class="lbl">Pengaturan Harga (Emas & Valas)</div>
           <span>›</span>
         </div>
-        <div class="lainnya-row" id="btn-manage-categories">
+        <div class="lainnya-row" id="btn-manage-categories" style="border-bottom:none;">
           <div class="ic">
             <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41 11 3.83A2 2 0 0 0 9.59 3.24H4a1 1 0 0 0-1 1v5.59a2 2 0 0 0 .59 1.41l9.58 9.59a2 2 0 0 0 2.83 0l4.59-4.59a2 2 0 0 0 0-2.83z"/><circle cx="7.5" cy="7.5" r="1.2" fill="currentColor" stroke="none"/></svg>
           </div>
@@ -518,22 +643,26 @@
 <nav class="bottomnav hidden" id="bottomnav">
   <div class="nav-inner">
     <button class="nav-btn active" data-view="beranda">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V9.5"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V9.5"/></svg>
       Beranda
     </button>
     <button class="nav-btn" data-view="aset">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M3 11h18M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M3 11h18M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
       Aset
     </button>
+    <button class="nav-btn" data-view="kalender">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      Kalender
+    </button>
     <button class="fab" id="btn-fab">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
     </button>
     <button class="nav-btn" data-view="target">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
       Target
     </button>
     <button class="nav-btn" data-view="hutang">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2H7a2 2 0 0 0-2 2v16l7-4 7 4V4a2 2 0 0 0-2-2z"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2H7a2 2 0 0 0-2 2v16l7-4 7 4V4a2 2 0 0 0-2-2z"/></svg>
       Hutang
     </button>
   </div>
@@ -559,6 +688,7 @@ const firebaseConfig = {
 
 let auth, db, currentUser = null;
 let unsubAssets = null, unsubDebts = null, unsubCats = null, unsubGoals = null, unsubHistory = null;
+let unsubSchedules = null, unsubMaintenances = null;
 
 const $ = (sel) => document.querySelector(sel);
 const $$ = (sel) => Array.from(document.querySelectorAll(sel));
@@ -594,13 +724,20 @@ let assets = [];
 let debts = [];
 let goals = [];
 let historyData = [];
+let schedules = [];
+let maintenances = [];
+
 let lastSavedNetWorth = null;
 let lastSavedMonth = null;
 let assetFilter = "all";
 let assetGroupTab = "investasi";
 let debtTab = "hutang";
+let maintTab = "kendaraan"; 
 let expandedGoals = new Set(); 
 let monthlyExpenses = 0;
+
+let calCurrentDate = new Date();
+let calSelectedDate = new Date();
 
 let rates = {
   antam: 1350000, 
@@ -627,9 +764,12 @@ function attachNumFormatter(selector) {
     this.value = raw ? new Intl.NumberFormat('id-ID').format(raw) : '';
   });
 }
+function toYYYYMMDD(d) {
+    return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, '0') + "-" + String(d.getDate()).padStart(2, '0');
+}
 
 document.addEventListener('click', (e) => {
-  const target = e.target.closest('button, .nav-btn, .chip, .list-item, .lainnya-row, .goal-header, .seg button');
+  const target = e.target.closest('button, .nav-btn, .chip, .list-item, .lainnya-row, .goal-header, .seg button, .cal-cell');
   if (target && navigator.vibrate) navigator.vibrate(15);
   
   if(e.target.closest("#btn-set-pengeluaran")) {
@@ -708,10 +848,17 @@ function fallbackAvatar(name){
 $("#btn-logout").addEventListener("click", () => signOut(auth));
 $("#btn-open-lainnya-avatar").addEventListener("click", () => switchView("lainnya"));
 
-function switchView(name){
+window.switchView = function(name){
   $$(".view").forEach(v=>v.classList.add("hidden"));
   $("#view-"+name).classList.remove("hidden");
+  
+  // Clean up nav actives, FAB is not active
   $$(".nav-btn").forEach(b=>b.classList.toggle("active", b.dataset.view===name));
+  
+  if (name === 'kalender') {
+      renderCalendarGrid();
+      renderAgendaList();
+  }
 }
 $$(".nav-btn").forEach(b=>b.addEventListener("click", ()=>switchView(b.dataset.view)));
 
@@ -719,6 +866,8 @@ $("#tab-hutang").addEventListener("click", ()=>{ debtTab="hutang"; $("#tab-hutan
 $("#tab-piutang").addEventListener("click", ()=>{ debtTab="piutang"; $("#tab-piutang").classList.add("active"); $("#tab-hutang").classList.remove("active"); renderDebtList(); });
 $("#tab-investasi").addEventListener("click", ()=>{ assetGroupTab="investasi"; $("#tab-investasi").classList.add("active"); $("#tab-penyusutan").classList.remove("active"); renderAssetList(); });
 $("#tab-penyusutan").addEventListener("click", ()=>{ assetGroupTab="penyusutan"; $("#tab-penyusutan").classList.add("active"); $("#tab-investasi").classList.remove("active"); renderAssetList(); });
+$("#tab-maint-kendaraan").addEventListener("click", ()=>{ maintTab="kendaraan"; $("#tab-maint-kendaraan").classList.add("active"); $("#tab-maint-rumah").classList.remove("active"); renderMaintenanceList(); });
+$("#tab-maint-rumah").addEventListener("click", ()=>{ maintTab="rumah"; $("#tab-maint-rumah").classList.add("active"); $("#tab-maint-kendaraan").classList.remove("active"); renderMaintenanceList(); });
 
 async function fetchRates(){
   const u = uid(); if(!u) return;
@@ -726,7 +875,6 @@ async function fetchRates(){
     const docSnap = await getDoc(doc(db, "users", u, "settings", "rates"));
     if (docSnap.exists()){ rates = { ...rates, ...docSnap.data() }; }
     
-    // Ambil setting pengeluaran bulanan untuk perhitungan dana darurat
     const profileSnap = await getDoc(doc(db, "users", u, "settings", "profile"));
     if (profileSnap.exists()) { monthlyExpenses = profileSnap.data().monthlyExpenses || 0; }
     
@@ -753,8 +901,17 @@ function attachListeners(){
   });
 
   unsubHistory = onSnapshot(query(collection(db, "users", u, "history")), (snap) => {
-    historyData = snap.docs.map(d => d.data());
-    renderHistoryChart();
+    historyData = snap.docs.map(d => d.data()); renderHistoryChart();
+  });
+  
+  unsubSchedules = onSnapshot(query(collection(db, "users", u, "schedules")), (snap) => {
+    schedules = snap.docs.map(d => ({ id: d.id, ...d.data() })); 
+    renderCalendarGrid(); renderAgendaList(); renderDashAgenda();
+  });
+
+  unsubMaintenances = onSnapshot(query(collection(db, "users", u, "maintenances")), (snap) => {
+    maintenances = snap.docs.map(d => ({ id: d.id, ...d.data() })); 
+    renderCalendarGrid(); renderAgendaList(); renderMaintenanceList(); renderDashAgenda();
   });
 }
 
@@ -762,7 +919,8 @@ function detachListeners(){
   if (unsubAssets) unsubAssets(); if (unsubDebts) unsubDebts();
   if (unsubCats) unsubCats(); if (unsubGoals) unsubGoals();
   if (unsubHistory) unsubHistory();
-  assets = []; debts = []; goals = []; customCategories = []; historyData = [];
+  if (unsubSchedules) unsubSchedules(); if (unsubMaintenances) unsubMaintenances();
+  assets = []; debts = []; goals = []; customCategories = []; historyData = []; schedules = []; maintenances = [];
 }
 
 async function saveAsset(data, id){
@@ -788,6 +946,23 @@ async function saveGoal(data, id){
   else { payload.createdAt = serverTimestamp(); await addDoc(collection(db, "users", u, "goals"), payload); }
 }
 async function removeGoal(id){ const u = uid(); if(!u) return; await deleteDoc(doc(db, "users", u, "goals", id)); }
+
+async function saveSchedule(data, id){
+  const u = uid(); if(!u) return;
+  const payload = { ...data, updatedAt: serverTimestamp() };
+  if (id) await updateDoc(doc(db, "users", u, "schedules", id), payload);
+  else { payload.createdAt = serverTimestamp(); await addDoc(collection(db, "users", u, "schedules"), payload); }
+}
+async function removeSchedule(id){ const u = uid(); if(!u) return; await deleteDoc(doc(db, "users", u, "schedules", id)); }
+
+async function saveMaintenance(data, id){
+  const u = uid(); if(!u) return;
+  const payload = { ...data, updatedAt: serverTimestamp() };
+  if (id) await updateDoc(doc(db, "users", u, "maintenances", id), payload);
+  else { payload.createdAt = serverTimestamp(); await addDoc(collection(db, "users", u, "maintenances"), payload); }
+}
+async function removeMaintenance(id){ const u = uid(); if(!u) return; await deleteDoc(doc(db, "users", u, "maintenances", id)); }
+
 
 async function saveGoalAsset(goalId, assetData, assetId = null) {
   const u = uid(); if(!u) return;
@@ -851,7 +1026,6 @@ function computeStats(){
   const liquidItems = [];
   const nonLiquidItems = [];
   
-  // FIX 1: Only process 'assets' for Liquidity bar & list
   assets.forEach(a => {
       const val = calcAssetValue(a);
       const itemData = { ...a, calcVal: val, source: 'Aset' };
@@ -865,13 +1039,11 @@ function computeStats(){
       categoryTotals[a.category] = (categoryTotals[a.category] || 0) + val;
   });
 
-  // Keep collecting categoryTotals for the pie chart from goals
   goals.forEach(g => (g.assets || []).forEach(a => {
       const val = calcAssetValue(a);
       categoryTotals[a.category] = (categoryTotals[a.category] || 0) + val;
   }));
 
-  // FIX 3: Emergency Fund Calculation specifically from 'Darurat' goal
   const daruratGoal = goals.find(g => g.name.toLowerCase().includes("darurat"));
   let efTotal = 0;
   if (daruratGoal) {
@@ -879,19 +1051,11 @@ function computeStats(){
   }
   const efMonths = monthlyExpenses > 0 ? (efTotal / monthlyExpenses) : 0;
 
-  // FIX 2: Correct Health Score Calculation
-  // 1. Debt Score (Max 40)
   let scoreDebt = 40;
   if (debtRatio >= 0.5) scoreDebt = 0;
   else if (debtRatio > 0) scoreDebt = 40 - (debtRatio / 0.5 * 40);
-
-  // 2. EF Score (Max 30)
   let scoreEF = Math.min(efMonths / 6, 1) * 30;
-
-  // 3. Diversification Score (Max 15)
   let scoreDiv = Math.min(usedCats.size / 4, 1) * 15;
-
-  // 4. Quality Ratio Score (Max 15)
   let scoreQual = assetQualityRatio * 15;
 
   let healthScore = Math.round(scoreDebt + scoreEF + scoreDiv + scoreQual);
@@ -934,7 +1098,6 @@ function renderBeranda(){
   $("#lbl-liquid").textContent = `Lancar: ${Math.round(liqPct)}%`;
   $("#lbl-nonliquid").textContent = `Tidak Lancar: ${Math.round(nonLiqPct)}%`;
   
-  // Render Dashboard Dana Darurat Widget
   if (monthlyExpenses > 0) {
       const efMonths = s.efMonths;
       $("#ef-month").textContent = (Math.round(efMonths * 10) / 10) + " Bulan";
@@ -960,6 +1123,7 @@ function renderBeranda(){
   renderAllocationChart(s.categoryTotals, totalLiqNonLiq);
   generateInsights(s);
   checkAndSaveHistory(s.netWorth);
+  renderDashAgenda();
 }
 
 function renderAllocationChart(catTotals, total) {
@@ -1004,8 +1168,8 @@ function renderAllocationChart(catTotals, total) {
         svgHtml += `<circle cx="${cx}" cy="${cy}" r="${radius}" fill="none" stroke="${color}" stroke-width="${strokeW}" 
                         stroke-dasharray="${dashArray}" stroke-dashoffset="${dashOffset}" 
                         transform="rotate(-90 ${cx} ${cy})" style="transition:all 0.5s ease; cursor:pointer;">
-                        <title>${catInfo.name}: ${Math.round(pct*100)}%</title>
-                      </circle>`;
+                      <title>${catInfo.name}: ${Math.round(pct*100)}%</title>
+                    </circle>`;
 
         legendHtml += `
             <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
@@ -1046,7 +1210,6 @@ function generateInsights(s) {
     ? `Target <b style="color:var(--gold-soft);">${escapeHtml(topGoal.name)}</b> adalah fokus terbaikmu saat ini dengan progres <b>${Math.floor(highestProgress*100)}%</b>.` 
     : "Tentukan target tabungan impianmu dan alokasikan aset di dalamnya.";
 
-  // ANALISIS DANA DARURAT DARI TARGET
   const daruratGoal = goals.find(g => g.name.toLowerCase().includes("darurat"));
   
   let daruratTxt = "";
@@ -1102,6 +1265,71 @@ function renderHistoryChart() {
   }).join("");
 }
 
+function renderDashAgenda() {
+    const listEl = $("#dash-agenda-list");
+    const todayStr = toYYYYMMDD(new Date());
+    
+    // Get next 7 days items
+    let items = [];
+    schedules.forEach(s => {
+        if (!s.isDone && s.date >= todayStr) {
+            items.push({ ...s, kind: 'schedule' });
+        }
+    });
+    maintenances.forEach(m => {
+        if (m.nextDate && m.nextDate >= todayStr) {
+            items.push({ ...m, date: m.nextDate, kind: 'maintenance' });
+        }
+    });
+    
+    items.sort((a,b) => a.date.localeCompare(b.date));
+    items = items.slice(0, 3);
+    
+    if (items.length === 0) {
+        listEl.innerHTML = `<div style="text-align:center; padding:16px; font-size:12px; color:var(--muted); background:#F8FAFC; border:1px dashed var(--line); border-radius:12px;">Hore! Tidak ada tagihan atau maintenance dalam 7 hari ke depan.</div>`;
+        return;
+    }
+    
+    listEl.innerHTML = items.map(item => {
+        const dObj = new Date(item.date);
+        const dateStr = item.date === todayStr ? "Hari Ini" : dObj.toLocaleDateString('id-ID', {day:'numeric', month:'short'});
+        let icon = "🔔"; let typeColor = "var(--ink)";
+        
+        if (item.kind === 'schedule' && item.category === 'tagihan') { icon = "💳"; typeColor = "var(--blue)"; }
+        else if (item.kind === 'maintenance' || item.category === 'maintenance') { icon = "🔧"; typeColor = "var(--gold)"; }
+        
+        return `
+            <div style="display:flex; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid var(--line);">
+                <div style="width:34px; height:34px; border-radius:10px; background:var(--bg); display:flex; align-items:center; justify-content:center; font-size:16px;">${icon}</div>
+                <div style="flex:1; min-width:0;">
+                    <div style="font-size:13.5px; font-weight:600; color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(item.title || item.name)}</div>
+                    <div style="font-size:11px; color:var(--muted); margin-top:2px; display:flex; align-items:center; gap:4px;">
+                        <span style="font-weight:700; color:${item.date===todayStr ? 'var(--debt)' : 'var(--muted)'};">${dateStr}</span>
+                        ${item.amount ? ` • ${rupiah(item.amount)}` : ''}
+                    </div>
+                </div>
+                <button class="checkbox-custom" onclick="toggleAgendaDash('${item.kind}', '${item.id}', ${item.isDone}, '${item.date}')"></button>
+            </div>
+        `;
+    }).join("");
+    
+    // Clean up last border
+    if(listEl.lastElementChild) listEl.lastElementChild.style.borderBottom = "none";
+}
+
+window.toggleAgendaDash = async function(kind, id, currentStatus, currentDate) {
+    if (kind === 'schedule') {
+        const target = schedules.find(s => s.id === id);
+        if(target) await saveSchedule({ ...target, isDone: !currentStatus }, id);
+    } else {
+        const target = maintenances.find(m => m.id === id);
+        if(target) {
+            closeSheet();
+            openRescheduleSheet(target, currentDate);
+        }
+    }
+}
+
 function renderAssetFilters(){
   const used = allCategories().filter(c => assets.some(a=>a.category===c.id));
   const wrap = $("#asset-filter-chips");
@@ -1112,7 +1340,6 @@ function renderAssetFilters(){
   });
 }
 
-// Menampilkan Rincian Skor Kesehatan
 window.openHealthSheet = function() {
     const s = computeStats();
     const b = s.scoreBreakdown;
@@ -1171,7 +1398,6 @@ window.openHealthSheet = function() {
     $("#btn-close-health").addEventListener("click", closeSheet);
 };
 
-// Menampilkan Sheet Likuiditas
 window.openLiquiditySheet = function() {
     const s = computeStats();
 
@@ -1459,6 +1685,262 @@ function renderGoals(){
   }).join("");
 }
 
+function getMonthDays(year, month) {
+    return new Date(year, month + 1, 0).getDate();
+}
+
+function renderCalendarGrid() {
+    const year = calCurrentDate.getFullYear();
+    const month = calCurrentDate.getMonth(); // 0-11
+    const firstDayIndex = new Date(year, month, 1).getDay(); // 0(Sun) - 6(Sat)
+    const daysInMonth = getMonthDays(year, month);
+    const prevMonthDays = getMonthDays(year, month - 1);
+    
+    // Formatting title
+    const monthNames = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
+    $("#cal-month-year").textContent = `${monthNames[month]} ${year}`;
+    
+    // Build events map by date "YYYY-MM-DD"
+    const eventsMap = {};
+    schedules.forEach(s => {
+        if(s.date) {
+            if(!eventsMap[s.date]) eventsMap[s.date] = [];
+            eventsMap[s.date].push({ kind: 'schedule', ...s });
+        }
+    });
+    maintenances.forEach(m => {
+        if(m.nextDate) {
+            if(!eventsMap[m.nextDate]) eventsMap[m.nextDate] = [];
+            eventsMap[m.nextDate].push({ kind: 'maintenance', ...m });
+        }
+    });
+
+    const grid = $("#cal-days-container");
+    let html = "";
+    
+    // Prev month overflow cells
+    for(let x = firstDayIndex; x > 0; x--) {
+        html += `<div class="cal-cell empty-cell muted">${prevMonthDays - x + 1}</div>`;
+    }
+    
+    // Current month cells
+    const todayStr = toYYYYMMDD(new Date());
+    const selStr = toYYYYMMDD(calSelectedDate);
+    
+    for(let i = 1; i <= daysInMonth; i++) {
+        const dStr = year + "-" + String(month+1).padStart(2,'0') + "-" + String(i).padStart(2,'0');
+        const isActive = dStr === selStr;
+        const isToday = dStr === todayStr;
+        
+        const dayEvents = eventsMap[dStr] || [];
+        let dotsHtml = "";
+        if(dayEvents.length > 0) {
+            // Group by category to avoid too many dots
+            let hasTagihan = false, hasMaintenance = false, hasLainnya = false;
+            dayEvents.forEach(e => {
+                if (e.kind === 'schedule') {
+                    if (e.category === 'tagihan') hasTagihan = true;
+                    else if (e.category === 'maintenance') hasMaintenance = true;
+                    else hasLainnya = true;
+                } else if (e.kind === 'maintenance') {
+                    hasMaintenance = true;
+                }
+            });
+            dotsHtml += `<div class="cal-dot-wrap">`;
+            if (hasTagihan) dotsHtml += `<div class="cal-dot tagihan"></div>`;
+            if (hasMaintenance) dotsHtml += `<div class="cal-dot maintenance"></div>`;
+            if (hasLainnya) dotsHtml += `<div class="cal-dot lainnya"></div>`;
+            dotsHtml += `</div>`;
+        } else {
+            dotsHtml = `<div class="cal-dot-wrap"></div>`; // Empty spacer
+        }
+
+        html += `
+            <div class="cal-cell ${isActive ? 'active' : ''} ${isToday && !isActive ? 'is-today' : ''}" data-date="${dStr}">
+                ${i}
+                ${dotsHtml}
+            </div>
+        `;
+    }
+    
+    // Next month overflow
+    const totalCells = firstDayIndex + daysInMonth;
+    let nextDays = 42 - totalCells; // Max 6 rows = 42 cells
+    if (nextDays >= 7) nextDays -= 7; // If full row empty, remove it
+    
+    for(let j = 1; j <= nextDays; j++) {
+        html += `<div class="cal-cell empty-cell muted">${j}</div>`;
+    }
+    
+    grid.innerHTML = html;
+    
+    grid.querySelectorAll(".cal-cell:not(.empty-cell)").forEach(cell => {
+        cell.addEventListener("click", () => {
+            const dateStr = cell.dataset.date;
+            calSelectedDate = new Date(dateStr);
+            renderCalendarGrid(); // Refresh grid to highlight
+            renderAgendaList();   // Show items for this day
+        });
+    });
+}
+
+$("#cal-prev").addEventListener("click", () => {
+    calCurrentDate.setMonth(calCurrentDate.getMonth() - 1);
+    renderCalendarGrid();
+});
+$("#cal-next").addEventListener("click", () => {
+    calCurrentDate.setMonth(calCurrentDate.getMonth() + 1);
+    renderCalendarGrid();
+});
+
+function renderAgendaList() {
+    const listEl = $("#agenda-list");
+    const emptyEl = $("#agenda-empty");
+    const dStr = toYYYYMMDD(calSelectedDate);
+    
+    // Formatting display string
+    const dayNames = ["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"];
+    const monthNames = ["Jan","Feb","Mar","Apr","Mei","Jun","Jul","Agu","Sep","Okt","Nov","Des"];
+    const dObj = new Date(calSelectedDate);
+    $("#agenda-date-lbl").textContent = `${dayNames[dObj.getDay()]}, ${dObj.getDate()} ${monthNames[dObj.getMonth()]}`;
+
+    let dayItems = [];
+    schedules.forEach(s => {
+        if(s.date === dStr) dayItems.push({ ...s, kind: 'schedule' });
+    });
+    maintenances.forEach(m => {
+        if(m.nextDate === dStr) dayItems.push({ ...m, kind: 'maintenance' });
+    });
+    
+    if (dayItems.length === 0) {
+        listEl.innerHTML = "";
+        emptyEl.classList.remove("hidden");
+        return;
+    }
+    emptyEl.classList.add("hidden");
+    
+    listEl.innerHTML = dayItems.map(item => {
+        const isDone = item.isDone;
+        let subText = "";
+        let dotColor = "var(--muted)";
+        
+        if (item.kind === 'schedule') {
+            if(item.category === 'tagihan') { subText = "Tagihan / Cicilan"; dotColor = "var(--blue)"; }
+            else if (item.category === 'maintenance') { subText = "Jadwal Servis"; dotColor = "var(--gold)"; }
+            else { subText = "Agenda Lainnya"; }
+        } else {
+            subText = `Maintenance ${item.type === 'kendaraan' ? 'Kendaraan' : 'Rumah'}`;
+            dotColor = "var(--gold)";
+        }
+        
+        return `
+        <div class="agenda-item ${isDone ? 'done' : ''}">
+            <button class="checkbox-custom ${isDone ? 'checked' : ''}" onclick="toggleAgendaItem('${item.kind}', '${item.id}', ${isDone})">
+                ${isDone ? `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>` : ''}
+            </button>
+            <div class="agenda-main">
+                <div class="agenda-title">${escapeHtml(item.title || item.name)}</div>
+                <div class="agenda-sub">
+                    <div class="agenda-sub-dot" style="background:${dotColor}"></div>
+                    ${subText}
+                </div>
+                ${item.amount ? `<div class="agenda-amt">${rupiah(item.amount)}</div>` : ''}
+            </div>
+            <div style="display:flex; gap:6px; margin-left:6px; flex:0 0 auto;">
+                <button class="icon-btn" style="width:28px;height:28px;border:none;background:var(--line);" onclick="openAgendaEditor('${item.kind}', '${item.id}')">${pencilIcon()}</button>
+                <button class="icon-btn" style="width:28px;height:28px;border:none;background:var(--debt-soft);color:var(--debt);" onclick="confirmDeleteAgenda('${item.kind}', '${item.id}')">${trashIcon()}</button>
+            </div>
+        </div>`;
+    }).join("");
+}
+
+window.toggleAgendaItem = async function(kind, id, currentStatus) {
+    if (kind === 'schedule') {
+        const target = schedules.find(s => s.id === id);
+        if(target) await saveSchedule({ ...target, isDone: !currentStatus }, id);
+    } else {
+        const target = maintenances.find(m => m.id === id);
+        if(target) {
+            // Unchecking maintenance is simple, just set isDone to false (though we don't really have an isDone for maintenance, we update the nextDate).
+            // Actually, for maintenance items, "Done" means we prompt for the next date!
+            openRescheduleSheet(target, toYYYYMMDD(calSelectedDate));
+        }
+    }
+}
+
+function openRescheduleSheet(item, dateStr) {
+    openSheet(`
+        <div class="sheet-close-bar"></div>
+        <h3>Tandai Selesai</h3>
+        <p style="font-size:13px; color:var(--muted); line-height:1.5;">Kamu telah menyelesaikan perawatan untuk <b>${escapeHtml(item.name)}</b>. Kapan jadwal servis/perawatan berikutnya?</p>
+        
+        <div class="field" style="margin-top:16px;">
+            <label>Jadwal Servis Berikutnya</label>
+            <input type="date" id="m-new-date" value="${dateStr}">
+        </div>
+        <button class="btn-primary" id="btn-reschedule" style="background:var(--gold);">Simpan Jadwal Baru</button>
+        <button class="btn-text-cancel" id="btn-reschedule-cancel">Batal</button>
+    `);
+    
+    $("#btn-reschedule-cancel").addEventListener("click", closeSheet);
+    $("#btn-reschedule").addEventListener("click", async () => {
+        const newDate = $("#m-new-date").value;
+        if (!newDate) { toast("Pilih tanggal berikutnya"); return; }
+        
+        $("#btn-reschedule").textContent = "Menyimpan...";
+        try {
+            await saveMaintenance({ ...item, nextDate: newDate }, item.id);
+            closeSheet();
+            toast("Jadwal servis diperbarui!");
+        } catch (e) {
+            toast("Gagal mengupdate jadwal");
+        }
+    });
+}
+
+function renderMaintenanceList() {
+    const listEl = $("#maintenance-list");
+    const emptyEl = $("#maintenance-empty");
+    
+    const items = maintenances.filter(m => m.type === maintTab).sort((a,b) => (a.nextDate||"").localeCompare(b.nextDate||""));
+    
+    if (items.length === 0) {
+        listEl.innerHTML = "";
+        emptyEl.classList.remove("hidden");
+        return;
+    }
+    emptyEl.classList.add("hidden");
+    
+    const todayStr = toYYYYMMDD(new Date());
+    
+    listEl.innerHTML = items.map(m => {
+        let badgeHtml = "";
+        let dateStr = "Belum diatur";
+        if (m.nextDate) {
+            const d = new Date(m.nextDate);
+            dateStr = d.toLocaleDateString("id-ID", { day:'numeric', month:'short', year:'numeric' });
+            
+            if (m.nextDate < todayStr) {
+                badgeHtml = `<div class="maintenance-badge urgent">Terlewat</div>`;
+            } else if (m.nextDate === todayStr) {
+                badgeHtml = `<div class="maintenance-badge urgent">Hari ini!</div>`;
+            }
+        }
+        
+        return `
+        <div class="maintenance-card" onclick="openMaintenanceSheet('${m.id}')" style="cursor:pointer;">
+            ${badgeHtml}
+            <div class="maintenance-icon">
+                ${m.type === 'kendaraan' ? '🚗' : '🏠'}
+            </div>
+            <div class="maintenance-title">${escapeHtml(m.name)}</div>
+            <div class="maintenance-date">Servis berikut: <b style="color:var(--ink);">${dateStr}</b></div>
+            ${m.note ? `<div style="font-size:10.5px; color:var(--muted); margin-top:6px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">📝 ${escapeHtml(m.note)}</div>` : ''}
+        </div>
+        `;
+    }).join("");
+}
+
 window.openGoalSheetBtn = function(id) { openGoalSheet(goals.find(g=>g.id===id)); };
 window.openGoalAssetSheet = function(id) { openGoalAssetForm(id); };
 window.confirmDeleteGoalAsset = function(goalId, assetId) { confirmDelete("goalAsset", assetId, goalId); };
@@ -1469,9 +1951,23 @@ window.editGoalAsset = function(goalId, assetId) {
         if(asset) openGoalAssetForm(goalId, asset);
     }
 };
+window.openAgendaEditor = function(kind, id) {
+    if (kind === 'schedule') {
+        const s = schedules.find(x => x.id === id);
+        if(s) openScheduleSheet(s);
+    } else {
+        const m = maintenances.find(x => x.id === id);
+        if(m) openMaintenanceSheet(id); // Using ID string
+    }
+};
+window.confirmDeleteAgenda = function(kind, id) {
+    confirmDelete(kind === 'schedule' ? 'schedule' : 'maintenance', id);
+};
 
-function pencilIcon(){ return `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>`; }
-function trashIcon(){ return `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0-1 14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L4 6h16z"/></svg>`; }
+$("#btn-add-maintenance").addEventListener("click", () => openMaintenanceSheet());
+
+function pencilIcon(){ return `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>`; }
+function trashIcon(){ return `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0-1 14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L4 6h16z"/></svg>`; }
 
 $("#btn-fab").addEventListener("click", ()=>{
   openSheet(`
@@ -1479,11 +1975,13 @@ $("#btn-fab").addEventListener("click", ()=>{
     <h3>Tambah Catatan</h3>
     <button class="btn-primary" id="qa-asset" style="margin-bottom:10px;">+ Tambah Aset Inventaris</button>
     <button class="btn-primary" id="qa-debt" style="background:var(--debt); margin-bottom:10px;">+ Tambah Hutang / Piutang</button>
-    <button class="btn-primary" id="qa-goal" style="background:var(--blue);">+ Buat Target Tabungan</button>
+    <button class="btn-primary" id="qa-schedule" style="background:var(--ink); margin-bottom:10px;">+ Tambah Jadwal & Agenda</button>
+    <button class="btn-primary" id="qa-goal" style="background:var(--blue); margin-bottom:10px;">+ Buat Target Tabungan</button>
     <button class="btn-text-cancel" id="qa-cancel" style="margin-top:8px;">Batal</button>
   `);
   $("#qa-asset").addEventListener("click", ()=>{ closeSheet(); openAssetSheet(); });
   $("#qa-debt").addEventListener("click", ()=>{ closeSheet(); openDebtSheet(); });
+  $("#qa-schedule").addEventListener("click", ()=>{ closeSheet(); openScheduleSheet(); });
   $("#qa-goal").addEventListener("click", ()=>{ closeSheet(); openGoalSheet(); });
   $("#qa-cancel").addEventListener("click", closeSheet);
 });
@@ -1510,9 +2008,144 @@ function confirmDelete(kind, id, extraId = null){
       else if (kind==="debt") await removeDebt(id);
       else if (kind==="goal") await removeGoal(id);
       else if (kind==="goalAsset") await removeGoalAsset(extraId, id);
+      else if (kind==="schedule") await removeSchedule(id);
+      else if (kind==="maintenance") await removeMaintenance(id);
       closeSheet(); toast("Berhasil dihapus");
     } catch(e){ console.error(e); toast("Gagal menghapus"); }
   });
+}
+
+function openScheduleSheet(existing = null) {
+    const isEdit = !!existing;
+    const cat = isEdit ? (existing.category || 'tagihan') : 'tagihan';
+    openSheet(`
+        <div class="sheet-close-bar"></div>
+        <h3>${isEdit ? "Edit Jadwal" : "Tambah Jadwal & Agenda"}</h3>
+        
+        <div class="field">
+            <label>Kategori</label>
+            <div class="seg" id="s-cat-seg">
+                <button type="button" data-c="tagihan" class="${cat === 'tagihan' ? 'active' : ''}">Tagihan</button>
+                <button type="button" data-c="maintenance" class="${cat === 'maintenance' ? 'active' : ''}">Servis</button>
+                <button type="button" data-c="lainnya" class="${cat === 'lainnya' ? 'active' : ''}">Lainnya</button>
+            </div>
+        </div>
+        
+        <div class="field">
+            <label>Judul Agenda</label>
+            <input type="text" id="s-title" placeholder="Contoh: Bayar Listrik Bulanan" value="${isEdit ? escapeHtml(existing.title || '') : ''}">
+        </div>
+        <div class="field">
+            <label>Tanggal</label>
+            <input type="date" id="s-date" value="${isEdit ? existing.date : toYYYYMMDD(calSelectedDate)}">
+        </div>
+        <div class="field" id="s-amount-wrap" class="${cat === 'lainnya' ? 'hidden' : ''}">
+            <label>Nominal (Opsional)</label>
+            <input type="text" inputmode="numeric" id="s-amount" placeholder="0" value="${isEdit && existing.amount ? formatNumberWithDot(existing.amount) : ''}">
+        </div>
+        
+        <button class="btn-primary" id="s-save" style="background:var(--ink);">${isEdit ? "Simpan Perubahan" : "Simpan Jadwal"}</button>
+        ${isEdit ? `<button class="btn-danger-outline" id="s-delete">Hapus Jadwal</button>` : ""}
+        <button class="btn-text-cancel" id="s-cancel">Batal</button>
+    `);
+    
+    let selCat = cat;
+    $("#s-cat-seg").querySelectorAll("button").forEach(b => {
+        b.addEventListener("click", () => {
+            selCat = b.dataset.c;
+            $("#s-cat-seg").querySelectorAll("button").forEach(x => x.classList.toggle("active", x === b));
+            
+            if(selCat === 'lainnya') $("#s-amount-wrap").classList.add("hidden");
+            else $("#s-amount-wrap").classList.remove("hidden");
+        });
+    });
+    
+    attachNumFormatter('#s-amount');
+    
+    $("#s-cancel").addEventListener("click", closeSheet);
+    if(isEdit) $("#s-delete").addEventListener("click", () => { closeSheet(); confirmDelete('schedule', existing.id); });
+    
+    $("#s-save").addEventListener("click", async () => {
+        const title = $("#s-title").value.trim();
+        const date = $("#s-date").value;
+        const amount = selCat !== 'lainnya' ? unformatNumber($("#s-amount").value) : null;
+        
+        if(!title) { toast("Judul agenda wajib diisi"); return; }
+        if(!date) { toast("Tanggal wajib dipilih"); return; }
+        
+        $("#s-save").textContent = "Menyimpan...";
+        try {
+            await saveSchedule({ title, date, category: selCat, amount, isDone: isEdit ? existing.isDone : false }, isEdit ? existing.id : null);
+            closeSheet();
+            toast("Jadwal berhasil disimpan");
+        } catch (e) {
+            toast("Gagal menyimpan jadwal");
+        }
+    });
+}
+
+function openMaintenanceSheet(existingId = null) {
+    const existing = existingId ? maintenances.find(m => m.id === existingId) : null;
+    const isEdit = !!existing;
+    const type = isEdit ? (existing.type || 'kendaraan') : maintTab;
+    openSheet(`
+        <div class="sheet-close-bar"></div>
+        <h3>${isEdit ? "Detail Maintenance" : "Tambah Item Maintenance"}</h3>
+        
+        <div class="field">
+            <label>Jenis Item</label>
+            <div class="seg" id="m-type-seg">
+                <button type="button" data-t="kendaraan" class="${type === 'kendaraan' ? 'active' : ''}">Kendaraan</button>
+                <button type="button" data-t="rumah" class="${type === 'rumah' ? 'active' : ''}">Rumah & Lainnya</button>
+            </div>
+        </div>
+        
+        <div class="field">
+            <label>Nama Item</label>
+            <input type="text" id="m-name" placeholder="Contoh: Mobil Keluarga / AC Kamar" value="${isEdit ? escapeHtml(existing.name || '') : ''}">
+        </div>
+        <div class="field">
+            <label>Tanggal Jadwal Servis</label>
+            <input type="date" id="m-date" value="${isEdit && existing.nextDate ? existing.nextDate : toYYYYMMDD(new Date())}">
+        </div>
+        <div class="field">
+            <label>Catatan Servis (Opsional)</label>
+            <input type="text" id="m-note" placeholder="Misal: Ganti Oli & Filter" value="${isEdit ? escapeHtml(existing.note || '') : ''}">
+        </div>
+        
+        <button class="btn-primary" id="m-save" style="background:var(--gold);">${isEdit ? "Simpan Perubahan" : "Simpan Item"}</button>
+        ${isEdit ? `<button class="btn-danger-outline" id="m-delete">Hapus Item</button>` : ""}
+        <button class="btn-text-cancel" id="m-cancel">Batal</button>
+    `);
+    
+    let selType = type;
+    $("#m-type-seg").querySelectorAll("button").forEach(b => {
+        b.addEventListener("click", () => {
+            selType = b.dataset.t;
+            $("#m-type-seg").querySelectorAll("button").forEach(x => x.classList.toggle("active", x === b));
+        });
+    });
+    
+    $("#m-cancel").addEventListener("click", closeSheet);
+    if(isEdit) $("#m-delete").addEventListener("click", () => { closeSheet(); confirmDelete('maintenance', existing.id); });
+    
+    $("#m-save").addEventListener("click", async () => {
+        const name = $("#m-name").value.trim();
+        const nextDate = $("#m-date").value;
+        const note = $("#m-note").value.trim();
+        
+        if(!name) { toast("Nama item wajib diisi"); return; }
+        if(!nextDate) { toast("Tanggal servis wajib dipilih"); return; }
+        
+        $("#m-save").textContent = "Menyimpan...";
+        try {
+            await saveMaintenance({ name, type: selType, nextDate, note }, isEdit ? existing.id : null);
+            closeSheet();
+            toast("Item maintenance berhasil disimpan");
+        } catch (e) {
+            toast("Gagal menyimpan item");
+        }
+    });
 }
 
 function categoryOptions(selected){
@@ -1923,7 +2556,7 @@ $("#btn-manage-rates").addEventListener("click", ()=>{
     <div class="sheet-close-bar"></div>
     <h3>Pengaturan Harga (IDR)</h3>
     <p style="font-size:12px; color:var(--muted); margin-top:-10px; margin-bottom:18px;">
-      Uubah harga acuan di bawah ini. Semua aset Emas, Dinar, dan Valas yang tercatat akan otomatis terupdate mengikuti harga ini.
+      Ubah harga acuan di bawah ini. Semua aset Emas, Dinar, dan Valas yang tercatat akan otomatis terupdate mengikuti harga ini.
     </p>
     <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
       <div class="field">
@@ -2015,7 +2648,7 @@ function openCategoryManager() {
       <div class="list-item" style="padding:8px 0;">
         <div class="dot" style="background:${catDot(c)}"></div>
         <div class="li-main"><div class="li-title">${c.icon||''} ${c.name}</div></div>
-        <button class="icon-btn" style="width:28px;height:28px;border:none;background:var(--debt-soft);color:var(--debt);" onclick="deleteCategory('${c.id}')">
+        <button class="icon-btn" style="width:28px;height:28px;border:none;background:var(--debt-soft);color:var(--debt);" onclick="openDeleteCategoryConfirm('${c.id}')">
           ${trashIcon()}
         </button>
       </div>
@@ -2067,14 +2700,23 @@ function openCategoryManager() {
   });
 }
 
-window.deleteCategory = async function(catId) {
-    if(!confirm("Hapus kategori ini? Catatan lama yang menggunakan kategori ini akan tetap memiliki nama kategori tersebut, namun warnanya menjadi abu-abu (Lainnya).")) return;
-    const u = uid(); if(!u) return;
-    try {
-        await deleteDoc(doc(db, "users", u, "categories", catId));
-        toast("Kategori dihapus");
-        openCategoryManager();
-    } catch(e) { toast("Gagal menghapus kategori"); }
+window.openDeleteCategoryConfirm = function(catId) {
+    openSheet(`
+        <div class="sheet-close-bar"></div>
+        <h3>Hapus kategori ini?</h3>
+        <p style="color:var(--muted);font-size:13.5px;margin-top:-8px;">Catatan lama yang menggunakan kategori ini akan tetap memiliki nama kategori tersebut, namun warnanya menjadi abu-abu (Lainnya).</p>
+        <button class="btn-danger-outline" id="cd-yes" style="margin-top:14px;">Ya, Hapus</button>
+        <button class="btn-text-cancel" id="cd-no">Batal</button>
+    `);
+    $("#cd-no").addEventListener("click", openCategoryManager);
+    $("#cd-yes").addEventListener("click", async () => {
+        const u = uid(); if(!u) return;
+        try {
+            await deleteDoc(doc(db, "users", u, "categories", catId));
+            toast("Kategori dihapus");
+            openCategoryManager();
+        } catch(e) { toast("Gagal menghapus kategori"); }
+    });
 }
 
 function openPengeluaranSheet() {
