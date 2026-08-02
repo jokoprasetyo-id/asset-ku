@@ -2,130 +2,133 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#146356">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>Neraca — Catatan Kekayaan</title>
+<title>Neraca — Catatan Kekayaan & Agenda</title>
 
-<!-- PWA Manifest -->
+<!-- PWA Manifest & Icons -->
 <link rel="manifest" href="manifest.json">
-<!-- PWA Apple Touch Icon -->
 <link rel="apple-touch-icon" href="Asetku.png">
 
+<!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
 <style>
-  :root{
-    --bg:#EEF2F4;
-    --surface:#FFFFFF;
-    --ink:#0F172A;
-    --muted:#64748B;
-    --line:#E3E8ED;
-    --primary:#146356;
-    --primary-ink:#0E4A40;
-    --primary-soft:#E3F1EC;
-    --debt:#B0483C;
-    --debt-soft:#FBEAE7;
-    --gold:#A9862E;
-    --gold-soft:#FBF3DE;
-    --blue:#0284C7;
-    --blue-soft:#E0F2FE;
-    --radius:18px;
+  :root {
+    --bg: #EEF2F4;
+    --surface: #FFFFFF;
+    --ink: #0F172A;
+    --muted: #64748B;
+    --line: #E3E8ED;
+    --primary: #146356;
+    --primary-ink: #0E4A40;
+    --primary-soft: #E3F1EC;
+    --debt: #B0483C;
+    --debt-soft: #FBEAE7;
+    --gold: #A9862E;
+    --gold-soft: #FBF3DE;
+    --blue: #0284C7;
+    --blue-soft: #E0F2FE;
+    --radius: 18px;
     --shadow: 0 1px 2px rgba(15,23,42,.04), 0 8px 24px -12px rgba(15,23,42,.12);
   }
-  *{box-sizing:border-box;}
-  html,body{height:100%;}
-  body{
-    margin:0;
-    background:var(--bg);
-    color:var(--ink);
-    font-family:'Inter',system-ui,sans-serif;
-    -webkit-font-smoothing:antialiased;
-    overscroll-behavior-y:none;
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Inter', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overscroll-behavior-y: none;
   }
-  h1,h2,h3,.num,.brand, .sora{font-family:'Sora',system-ui,sans-serif;}
-  button{font-family:inherit;}
-  .hidden{display:none !important;}
-  a{color:inherit;}
+  h1, h2, h3, .num, .brand, .sora { font-family: 'Sora', system-ui, sans-serif; }
+  button { font-family: inherit; }
+  .hidden { display: none !important; }
+  a { color: inherit; text-decoration: none; }
+  ::-webkit-scrollbar { width: 0; height: 0; }
 
-  #screen-login{
-    min-height:100vh;
-    display:flex; flex-direction:column; align-items:center; justify-content:center;
-    padding:32px 24px; text-align:center;
+  #screen-login {
+    min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 32px 24px; text-align: center;
     background: radial-gradient(1200px 500px at 50% -10%, #DCEDE7 0%, transparent 60%), var(--bg);
   }
-  .brand-mark{
-    width:56px;height:56px;border-radius:16px;
-    background:var(--primary); display:flex;align-items:center;justify-content:center;
-    margin-bottom:18px; box-shadow:var(--shadow);
+  .brand-mark {
+    width: 56px; height: 56px; border-radius: 16px;
+    background: var(--primary); display: flex; align-items: center; justify-content: center;
+    margin-bottom: 18px; box-shadow: var(--shadow);
   }
-  .brand-mark svg{width:28px;height:28px;}
-  #screen-login h1{font-size:26px;font-weight:700;margin:0 0 6px;letter-spacing:-.02em;}
-  #screen-login p{color:var(--muted);font-size:14.5px;max-width:320px;margin:0 0 28px;line-height:1.55;}
-  .btn-google{
-    display:flex;align-items:center;gap:10px; background:var(--surface);
-    border:1px solid var(--line); padding:13px 22px; border-radius:14px;
-    font-size:15px;font-weight:600; cursor:pointer; box-shadow:var(--shadow);
-    transition:transform .15s ease, box-shadow .15s ease;
+  .brand-mark svg { width: 28px; height: 28px; }
+  #screen-login h1 { font-size: 26px; font-weight: 700; margin: 0 0 6px; letter-spacing: -.02em; }
+  #screen-login p { color: var(--muted); font-size: 14.5px; max-width: 320px; margin: 0 0 28px; line-height: 1.55; }
+  .btn-google {
+    display: flex; align-items: center; gap: 10px; background: var(--surface);
+    border: 1px solid var(--line); padding: 13px 22px; border-radius: 14px;
+    font-size: 15px; font-weight: 600; cursor: pointer; box-shadow: var(--shadow);
+    transition: transform .15s ease, box-shadow .15s ease;
   }
-  .btn-google:active{transform:scale(.97);}
-  .login-foot{margin-top:22px;font-size:12px;color:var(--muted);max-width:280px;}
+  .btn-google:active { transform: scale(.97); }
+  .login-foot { margin-top: 22px; font-size: 12px; color: var(--muted); max-width: 280px; }
 
-  #app{max-width:520px;margin:0 auto;padding-bottom:96px;min-height:100vh;}
-  header.topbar{
-    position:sticky;top:0;z-index:20;
-    background:linear-gradient(180deg, var(--bg) 70%, rgba(238,242,244,0));
-    padding:18px 18px 10px; display:flex;align-items:center;justify-content:space-between;
+  #app { max-width: 520px; margin: 0 auto; padding-bottom: 96px; min-height: 100vh; position: relative; }
+  header.topbar {
+    position: sticky; top: 0; z-index: 20;
+    background: linear-gradient(180deg, var(--bg) 70%, rgba(238,242,244,0));
+    padding: 18px 18px 10px; display: flex; align-items: center; justify-content: space-between;
   }
-  .topbar-left{display:flex;align-items:center;gap:10px;}
-  .topbar-left .brand-mark{width:36px;height:36px;border-radius:10px;margin:0;}
-  .topbar-left .brand-mark svg{width:18px;height:18px;}
-  .topbar-title{font-size:17px;font-weight:700;letter-spacing:-.01em;}
-  .topbar-sub{font-size:11.5px;color:var(--muted);margin-top:1px;}
-  .icon-btn{
-    width:38px;height:38px;border-radius:12px;border:1px solid var(--line);
-    background:var(--surface);display:flex;align-items:center;justify-content:center;
-    cursor:pointer;color:var(--muted);
+  .topbar-left { display: flex; align-items: center; gap: 10px; }
+  .topbar-left .brand-mark { width: 36px; height: 36px; border-radius: 10px; margin: 0; }
+  .topbar-left .brand-mark svg { width: 18px; height: 18px; }
+  .topbar-title { font-size: 17px; font-weight: 700; letter-spacing: -.01em; }
+  .topbar-sub { font-size: 11.5px; color: var(--muted); margin-top: 1px; }
+  .icon-btn {
+    width: 38px; height: 38px; border-radius: 12px; border: 1px solid var(--line);
+    background: var(--surface); display: flex; align-items: center; justify-content: center;
+    cursor: pointer; color: var(--muted);
   }
-  .avatar{width:38px;height:38px;border-radius:50%;object-fit:cover;border:1px solid var(--line);}
-  main{padding:4px 18px 18px;}
-  section.view{display:flex;flex-direction:column;gap:14px;animation:fadein .25s ease;}
-  @keyframes fadein{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
+  .avatar { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 1px solid var(--line); }
+  main { padding: 4px 18px 18px; }
+  section.view { display: flex; flex-direction: column; gap: 14px; animation: fadein .25s ease; }
+  @keyframes fadein { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
 
-  .card{
-    background:var(--surface); border-radius:var(--radius); padding:18px;
-    box-shadow:var(--shadow); border:1px solid rgba(15,23,42,.03);
+  .card {
+    background: var(--surface); border-radius: var(--radius); padding: 18px;
+    box-shadow: var(--shadow); border: 1px solid rgba(15,23,42,.03);
   }
-  .card-label{
-    font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
-    color:var(--muted); display:flex;align-items:center;gap:6px;
+  .card-label {
+    font-size: 11.5px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+    color: var(--muted); display: flex; align-items: center; gap: 6px;
   }
-  .hero-num{font-size:32px;font-weight:700;letter-spacing:-.02em;margin:6px 0 2px;}
-  .hero-rule{height:3px;width:46px;background:var(--gold);border-radius:3px;margin:4px 0 14px;}
-  .hero-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;border-top:1px solid var(--line);padding-top:14px;}
-  .hero-grid div{font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.04em;}
-  .hero-grid .val{display:block;font-size:14.5px;color:var(--ink);font-weight:700;margin-top:3px;text-transform:none;letter-spacing:0;font-family:'Sora',sans-serif;}
-  .val.pos{color:var(--primary-ink);} .val.neg{color:var(--debt);}
-  .row2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
-  
+  .hero-num { font-size: 32px; font-weight: 700; letter-spacing: -.02em; margin: 6px 0 2px; }
+  .hero-rule { height: 3px; width: 46px; background: var(--gold); border-radius: 3px; margin: 4px 0 14px; }
+  .hero-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; border-top: 1px solid var(--line); padding-top: 14px; }
+  .hero-grid div { font-size: 11px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .04em; }
+  .hero-grid .val { display: block; font-size: 14.5px; color: var(--ink); font-weight: 700; margin-top: 3px; text-transform: none; letter-spacing: 0; font-family: 'Sora', sans-serif; }
+  .val.pos { color: var(--primary-ink); } .val.neg { color: var(--debt); }
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+  /* Gaugue & Charts */
   .gauge-wrap { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px 10px; }
   .gauge-title { font-size: 13px; font-weight: 700; color: var(--ink); margin-top: 14px; text-align: center; }
   .gauge-sub { font-size: 11.5px; color: var(--muted); margin-top: 4px; text-align: center; line-height: 1.4; }
 
   .chart-container { display: flex; align-items: flex-end; justify-content: space-between; height: 120px; margin-top: 20px; gap: 4px; }
-  .chart-col { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; flex: 1; gap: 6px; height:100%; }
-  .chart-bar { width: 100%; max-width: 32px; background: var(--primary-soft); border-radius: 6px 6px 0 0; transition: height 0.6s cubic-bezier(0.4, 0, 0.2, 1); position:relative; min-height:4px;}
+  .chart-col { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; flex: 1; gap: 6px; height: 100%; }
+  .chart-bar { width: 100%; max-width: 32px; background: var(--primary-soft); border-radius: 6px 6px 0 0; transition: height 0.6s cubic-bezier(0.4, 0, 0.2, 1); position: relative; min-height: 4px; }
   .chart-bar.active { background: var(--primary); }
   .chart-lbl { font-size: 10px; color: var(--muted); font-weight: 600; text-transform: uppercase; }
-  .chart-val-tooltip { position:absolute; top:-26px; left:50%; transform:translateX(-50%); font-size:9.5px; background:var(--ink); color:#fff; padding:3px 6px; border-radius:6px; opacity:0; pointer-events:none; transition:opacity .2s, transform .2s; white-space:nowrap; z-index:10; font-family:'Sora',sans-serif; font-weight:600;}
-  .chart-bar:hover .chart-val-tooltip { opacity: 1; transform:translateX(-50%) translateY(-2px); }
+  .chart-val-tooltip { position: absolute; top: -26px; left: 50%; transform: translateX(-50%); font-size: 9.5px; background: var(--ink); color: #fff; padding: 3px 6px; border-radius: 6px; opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s; white-space: nowrap; z-index: 10; font-family: 'Sora', sans-serif; font-weight: 600; }
+  .chart-bar:hover .chart-val-tooltip { opacity: 1; transform: translateX(-50%) translateY(-2px); }
 
   .donut-chart-container { display: flex; align-items: center; gap: 20px; margin: 16px 0 10px; }
   .donut-chart-svg { width: 130px; height: 130px; flex: 0 0 auto; overflow: visible; }
   .donut-legend { flex: 1; min-width: 0; max-height: 140px; overflow-y: auto; padding-right: 4px; }
-  
+
   .liq-bar-wrap { height: 6px; background: var(--line); border-radius: 3px; display: flex; overflow: hidden; margin-top: 12px; }
   .liq-bar { height: 100%; transition: width 0.4s ease; }
   .liq-labels { display: flex; justify-content: space-between; font-size: 10.5px; font-weight: 600; margin-top: 6px; }
@@ -133,36 +136,36 @@
   .insight-card { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-ink) 100%); color: #fff; }
   .insight-card .card-label { color: rgba(255,255,255,0.7); border-bottom: 1px solid rgba(255,255,255,0.15); padding-bottom: 10px; margin-bottom: 12px; }
 
-  .empty{text-align:center;padding:34px 14px;color:var(--muted);font-size:13.5px;line-height:1.5;}
-  .empty b{display:block;color:var(--ink);font-size:15px;margin-bottom:6px;font-weight:700;}
+  .empty { text-align: center; padding: 34px 14px; color: var(--muted); font-size: 13.5px; line-height: 1.5; }
+  .empty b { display: block; color: var(--ink); font-size: 15px; margin-bottom: 6px; font-weight: 700; }
 
-  .list-item{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);}
-  .list-item:last-child{border-bottom:none;}
-  .dot{width:10px;height:10px;border-radius:50%;flex:0 0 auto;}
-  .li-main{flex:1;min-width:0;}
-  .li-title{font-size:14.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-  .li-sub{font-size:11.5px;color:var(--muted);margin-top:2px;line-height:1.3;}
-  .li-amt{font-size:14px;font-weight:700;font-family:'Sora',sans-serif;white-space:nowrap;}
-  .li-actions{display:flex;gap:6px;margin-left:6px;}
-  .li-actions button{
-    width:28px;height:28px;border-radius:8px;border:none;background:transparent;color:var(--muted);
-    display:flex;align-items:center;justify-content:center;cursor:pointer;
+  .list-item { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--line); }
+  .list-item:last-child { border-bottom: none; }
+  .dot { width: 10px; height: 10px; border-radius: 50%; flex: 0 0 auto; }
+  .li-main { flex: 1; min-width: 0; }
+  .li-title { font-size: 14.5px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .li-sub { font-size: 11.5px; color: var(--muted); margin-top: 2px; line-height: 1.3; }
+  .li-amt { font-size: 14px; font-weight: 700; font-family: 'Sora', sans-serif; white-space: nowrap; }
+  .li-actions { display: flex; gap: 6px; margin-left: 6px; }
+  .li-actions button {
+    width: 28px; height: 28px; border-radius: 8px; border: none; background: transparent; color: var(--muted);
+    display: flex; align-items: center; justify-content: center; cursor: pointer;
   }
-  .li-actions button:active{background:var(--line);}
+  .li-actions button:active { background: var(--line); }
 
-  .chip-row{display:flex;gap:8px;overflow-x:auto;padding-bottom:2px;}
-  .chip{
-    flex:0 0 auto;padding:7px 13px;border-radius:999px;font-size:12.5px;font-weight:600;
-    background:var(--surface);border:1px solid var(--line);color:var(--muted);cursor:pointer;
+  .chip-row { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 2px; }
+  .chip {
+    flex: 0 0 auto; padding: 7px 13px; border-radius: 999px; font-size: 12.5px; font-weight: 600;
+    background: var(--surface); border: 1px solid var(--line); color: var(--muted); cursor: pointer;
   }
-  .chip.active{background:var(--primary);border-color:var(--primary);color:#fff;}
+  .chip.active { background: var(--primary); border-color: var(--primary); color: #fff; }
 
-  .goal-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; cursor:pointer; user-select:none; }
-  .goal-title-wrap { flex:1; min-width:0; }
+  .goal-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; cursor: pointer; user-select: none; }
+  .goal-title-wrap { flex: 1; min-width: 0; }
   .goal-title { font-size: 18px; font-weight: 700; color: var(--ink); margin: 0 0 4px; font-family: 'Sora', sans-serif;}
-  .goal-target-lbl { font-size: 10px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; display:flex; align-items:center; justify-content:space-between;}
+  .goal-target-lbl { font-size: 10px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; display: flex; align-items: center; justify-content: space-between;}
   .goal-target-val { font-size: 15px; font-weight: 700; color: var(--ink); font-family: 'Sora', sans-serif; }
-  
+
   .goal-progress-track { height: 6px; background: var(--line); border-radius: 3px; margin: 8px 0; overflow: hidden; }
   .goal-progress-fill { height: 100%; background: #38BDF8; border-radius: 3px; transition: width 0.3s ease; }
   .goal-stats { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
@@ -179,10 +182,10 @@
   .goal-reco-val { font-size: 12px; font-weight: 700; color: #0284C7; font-family: 'Sora', sans-serif; }
 
   .goal-assets-section { border-top: 1px dashed var(--line); padding-top: 16px; }
-  .goal-assets-head { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 12px; display:flex; justify-content:space-between; align-items:center;}
+  .goal-assets-head { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center;}
   
   .goal-asset-item { display: flex; align-items: center; gap: 12px; padding: 12px; border: 1px solid var(--line); border-radius: 12px; margin-bottom: 8px; }
-  .goal-asset-icon { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex: 0 0 auto; color:#fff; font-size:14px; font-weight:bold;}
+  .goal-asset-icon { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex: 0 0 auto; color: #fff; font-size: 14px; font-weight: bold;}
   .goal-asset-info { flex: 1; min-width: 0; }
   .goal-asset-name { font-size: 13.5px; font-weight: 600; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .goal-asset-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
@@ -197,134 +200,127 @@
   .goal-asset-btn.del { background: var(--debt-soft); color: var(--debt); }
   .goal-asset-btn.del:active { background: #F8B4B4; }
 
-  .btn-add-dashed { width: 100%; padding: 12px; border: 1px dashed #94A3B8; border-radius: 12px; background: #F8FAFC; color: var(--muted); font-size: 13px; font-weight: 600; cursor: pointer; display:flex; align-items:center; justify-content:center; gap:6px; transition:all .2s;}
+  .btn-add-dashed { width: 100%; padding: 12px; border: 1px dashed #94A3B8; border-radius: 12px; background: #F8FAFC; color: var(--muted); font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: all .2s;}
   .btn-add-dashed:hover { background: #F1F5F9; border-color: var(--primary); color: var(--primary-ink); }
   
   .chevron { transition: transform 0.3s ease; }
   .collapsed .chevron { transform: rotate(-90deg); }
   .collapsed .goal-body { display: none; }
 
-  nav.bottomnav{
-    position:fixed;bottom:0;left:0;right:0;z-index:30; display:flex;justify-content:center;
-    padding:10px 14px calc(10px + env(safe-area-inset-bottom));
-    background:linear-gradient(0deg, var(--bg) 60%, rgba(238,242,244,0));
+  nav.bottomnav {
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 30; display: flex; justify-content: center;
+    padding: 10px 14px calc(10px + env(safe-area-inset-bottom));
+    background: linear-gradient(0deg, var(--bg) 60%, rgba(238,242,244,0));
   }
-  .nav-inner{
-    max-width:480px;width:100%; background:var(--surface); border-radius:20px;
-    box-shadow:var(--shadow); display:flex;align-items:center;justify-content:space-between;
-    padding:6px 6px;
+  .nav-inner {
+    max-width: 480px; width: 100%; background: var(--surface); border-radius: 20px;
+    box-shadow: var(--shadow); display: flex; align-items: center; justify-content: space-around;
+    padding: 8px 10px;
   }
-  .nav-btn{
-    flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;
-    background:none;border:none;color:var(--muted);font-size:10px;font-weight:600;
-    padding:6px 0;cursor:pointer;border-radius:12px;
+  .nav-btn {
+    flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px;
+    background: none; border: none; color: var(--muted); font-size: 10.5px; font-weight: 600;
+    padding: 6px 2px; cursor: pointer; border-radius: 12px;
   }
-  .nav-btn.active{color:var(--primary-ink);}
-  .nav-btn svg{width:20px;height:20px;}
-  .fab{
-    width:46px;height:46px;border-radius:14px;background:var(--primary);
-    display:flex;align-items:center;justify-content:center;color:#fff;border:none;
-    box-shadow:0 6px 16px -4px rgba(20,99,86,.55);cursor:pointer;margin:0 2px;flex:0 0 auto;
-  }
-  .fab svg{width:20px;height:20px;}
+  .nav-btn.active { color: var(--primary-ink); }
+  .nav-btn svg { width: 22px; height: 22px; }
   
-  .overlay{
-    position:fixed;inset:0;background:rgba(15,23,42,.42);z-index:50;
-    display:flex;align-items:flex-end;justify-content:center; animation:fadein2 .15s ease;
+  .fab {
+    position: fixed; bottom: 90px; right: max(16px, calc(50vw - 240px)); z-index: 40;
+    width: 56px; height: 56px; border-radius: 20px; background: var(--primary);
+    display: flex; align-items: center; justify-content: center; color: #fff; border: none;
+    box-shadow: 0 8px 24px -6px rgba(20,99,86,.6); cursor: pointer; transition: transform .2s, box-shadow .2s;
   }
-  @keyframes fadein2{from{opacity:0;}to{opacity:1;}}
-  .sheet{
-    background:var(--surface);width:100%;max-width:520px;
-    border-radius:22px 22px 0 0;padding:20px 20px calc(20px + env(safe-area-inset-bottom));
-    max-height:88vh;overflow-y:auto; animation:slideup .2s ease;
-  }
-  @keyframes slideup{from{transform:translateY(20px);opacity:.6;}to{transform:translateY(0);opacity:1;}}
-  .sheet h3{margin:0 0 16px;font-size:17px;font-weight:700;}
-  .field{margin-bottom:14px;}
-  .field label{display:block;font-size:12px;font-weight:700;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.04em;}
-  .field input, .field select, .field textarea{
-    width:100%;padding:12px 13px;border-radius:12px;border:1px solid var(--line);
-    background:#F8FAFB;font-size:14.5px;font-family:inherit;color:var(--ink);
-  }
-  .field input:focus, .field select:focus{outline:2px solid var(--primary-soft);border-color:var(--primary);}
-  .field-hint{font-size:11.5px; color:var(--muted); margin-top:6px;}
-  .seg{display:flex;background:#F1F4F6;border-radius:12px;padding:4px;gap:4px;}
-  .seg button{flex:1;padding:9px 0;border:none;background:none;border-radius:9px;font-size:13px;font-weight:700;color:var(--muted);cursor:pointer;}
-  .seg button.active{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.08);}
-  
-  .btn-primary{
-    width:100%;padding:14px;border:none;border-radius:14px;background:var(--primary);color:#fff;
-    font-size:15px;font-weight:700;cursor:pointer;margin-top:4px;
-  }
-  .btn-danger-outline{
-    width:100%;padding:12px;border:1px solid var(--debt);color:var(--debt);background:var(--debt-soft);
-    border-radius:14px;font-weight:700;font-size:14px;cursor:pointer;margin-top:8px;
-  }
-  .btn-text-cancel{
-    width:100%;text-align:center;padding:10px;background:none;border:none;color:var(--muted);
-    font-size:13.5px;font-weight:600;cursor:pointer;
-  }
-  .sheet-close-bar{width:36px;height:4px;background:var(--line);border-radius:3px;margin:0 auto 14px;}
+  .fab:active { transform: scale(0.92); box-shadow: 0 4px 12px -4px rgba(20,99,86,.4); }
+  .fab svg { width: 26px; height: 26px; }
 
-  .lainnya-row{display:flex;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid var(--line);cursor:pointer;}
-  .lainnya-row:last-child{border-bottom:none;}
-  .lainnya-row .ic{width:34px;height:34px;border-radius:10px;background:var(--primary-soft);color:var(--primary-ink);display:flex;align-items:center;justify-content:center;flex:0 0 auto;}
-  .lainnya-row .lbl{font-size:14px;font-weight:600;flex:1;}
+  .cal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+  .cal-header button { background: var(--bg); border: none; width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--ink); cursor: pointer; }
+  .cal-header button:active { background: var(--line); }
+  .cal-month-year { font-size: 15px; font-weight: 700; font-family: 'Sora', sans-serif; }
   
-  .cal-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; padding:0 8px; }
-  .cal-header button { width:36px; height:36px; border:none; background:var(--surface); border:radius:10px; border-radius:10px; cursor:pointer; box-shadow:var(--shadow); display:flex; align-items:center; justify-content:center; color:var(--ink); font-size:16px; font-weight:700;}
-  .cal-header button:active { background:var(--bg); }
-  .cal-month-year { font-size:16px; font-weight:700; font-family:'Sora',sans-serif; }
+  .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center; }
+  .cal-day-lbl { font-size: 11px; font-weight: 700; color: var(--muted); margin-bottom: 8px; }
+  .cal-day { aspect-ratio: 1; border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; cursor: pointer; color: var(--ink); position: relative; }
+  .cal-day:hover { background: #F8FAFC; }
+  .cal-day.muted { color: #CBD5E1; font-weight: 500; }
+  .cal-day.today { color: var(--primary); font-weight: 800; background: var(--primary-soft); }
+  .cal-day.active { background: var(--ink); color: #fff; box-shadow: 0 4px 12px rgba(15,23,42,0.2); }
+  .cal-day.active.today { background: var(--primary); color: #fff; }
   
-  .cal-grid { display:grid; grid-template-columns:repeat(7, 1fr); gap:6px; text-align:center; }
-  .cal-day-lbl { font-size:11px; font-weight:700; color:var(--muted); margin-bottom:8px; }
-  .cal-cell { aspect-ratio:1; display:flex; flex-direction:column; align-items:center; justify-content:center; font-size:14px; font-weight:600; border-radius:12px; cursor:pointer; position:relative; transition:all .2s; border:1px solid transparent;}
-  .cal-cell:hover:not(.empty-cell) { border-color:var(--line); }
-  .cal-cell.active { border-color:var(--primary); color:var(--primary-ink); font-weight:800; }
-  .cal-cell.active::before { content:''; position:absolute; inset:0; border-radius:12px; border:2px solid var(--primary); pointer-events:none; }
-  .cal-cell.muted { color:var(--muted); opacity:0.4; }
-  .cal-cell.empty-cell { cursor:default; }
-  
-  .cal-dot-wrap { display:flex; gap:3px; margin-top:3px; height:5px; align-items:center; justify-content:center;}
-  .cal-dot { width:5px; height:5px; border-radius:50%; }
-  .cal-dot.tagihan { background:var(--blue); }
-  .cal-dot.maintenance { background:var(--gold); }
-  .cal-dot.lainnya { background:var(--muted); }
+  .cal-dots-wrap { display: flex; gap: 2px; position: absolute; bottom: 4px; }
+  .cal-dot { width: 4px; height: 4px; border-radius: 50%; }
+  .cal-dot.tagihan { background: var(--blue); }
+  .cal-dot.maintenance { background: var(--gold); }
+  .cal-dot.lainnya { background: var(--muted); }
 
-  .agenda-item { display:flex; align-items:flex-start; gap:12px; padding:12px 14px; border:1px solid var(--line); border-radius:14px; margin-bottom:10px; background:var(--surface); transition:background .2s;}
-  .agenda-item.done { opacity:0.6; }
-  .agenda-item.done .agenda-title { text-decoration:line-through; color:var(--muted); }
-  .checkbox-custom { width:22px; height:22px; border-radius:6px; border:2px solid var(--line); display:flex; align-items:center; justify-content:center; cursor:pointer; margin-top:2px; flex:0 0 auto; transition:all .2s; background:var(--surface);}
-  .checkbox-custom.checked { background:var(--primary); border-color:var(--primary); color:#fff; }
-  .agenda-main { flex:1; min-width:0; }
-  .agenda-title { font-size:14.5px; font-weight:600; margin-bottom:4px; color:var(--ink); }
-  .agenda-sub { font-size:11.5px; color:var(--muted); display:flex; align-items:center; gap:6px; font-weight:500;}
-  .agenda-sub-dot { width:6px; height:6px; border-radius:50%; }
-  .agenda-amt { font-size:13.5px; font-weight:700; font-family:'Sora',sans-serif; margin-top:6px; color:var(--ink); }
-  
-  .maintenance-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
-  .maintenance-card { background:var(--surface); border:1px solid var(--line); padding:16px; border-radius:16px; position:relative; }
-  .maintenance-icon { width:40px; height:40px; border-radius:12px; background:var(--primary-soft); color:var(--primary-ink); display:flex; align-items:center; justify-content:center; font-size:20px; margin-bottom:12px; }
-  .maintenance-title { font-size:14px; font-weight:700; color:var(--ink); margin-bottom:4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  .maintenance-date { font-size:11.5px; color:var(--muted); font-weight:500; }
-  .maintenance-badge { position:absolute; top:12px; right:12px; font-size:10px; font-weight:700; padding:3px 6px; border-radius:6px; }
-  .maintenance-badge.urgent { background:var(--debt-soft); color:var(--debt); }
-  .maintenance-badge.safe { background:#ECFDF5; color:#10B981; }
+  .agenda-item { display: flex; gap: 12px; padding: 14px; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; margin-bottom: 10px; transition: opacity .3s; }
+  .agenda-item.done { opacity: 0.6; }
+  .agenda-item.done .agenda-title { text-decoration: line-through; color: var(--muted); }
+  .checkbox-custom { width: 24px; height: 24px; border-radius: 8px; border: 2px solid var(--line); display: flex; align-items: center; justify-content: center; cursor: pointer; background: var(--surface); color: transparent; flex: 0 0 auto; transition: all .2s; }
+  .checkbox-custom.checked { background: var(--primary); border-color: var(--primary); color: #fff; }
+  .agenda-main { flex: 1; min-width: 0; }
+  .agenda-title { font-size: 14.5px; font-weight: 600; color: var(--ink); margin-bottom: 4px; line-height: 1.4; }
+  .agenda-sub { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 6px; }
+  .agenda-amt { font-size: 14.5px; font-weight: 700; font-family: 'Sora', sans-serif; text-align: right; margin-top: 2px; }
 
-  #toast{
-    position:fixed;bottom:100px;left:50%;transform:translateX(-50%);
-    background:var(--ink);color:#fff;padding:10px 18px;border-radius:12px;font-size:13px;font-weight:600;
-    z-index:80;opacity:0;pointer-events:none;transition:opacity .2s ease, transform .2s ease;
-    box-shadow:var(--shadow); white-space:nowrap;
+  .overlay {
+    position: fixed; inset: 0; background: rgba(15,23,42,.42); z-index: 50;
+    display: flex; align-items: flex-end; justify-content: center; animation: fadein2 .15s ease;
   }
-  #toast.show{opacity:1;transform:translateX(-50%) translateY(-4px);}
-
-  #loading-overlay{
-    position:fixed;inset:0;background:var(--bg);z-index:100;display:flex;align-items:center;justify-content:center;
+  @keyframes fadein2 { from { opacity: 0; } to { opacity: 1; } }
+  .sheet {
+    background: var(--surface); width: 100%; max-width: 520px;
+    border-radius: 22px 22px 0 0; padding: 20px 20px calc(20px + env(safe-area-inset-bottom));
+    max-height: 88vh; overflow-y: auto; animation: slideup .2s ease;
   }
-  .spinner{width:28px;height:28px;border-radius:50%;border:3px solid var(--line);border-top-color:var(--primary);animation:spin .7s linear infinite;}
-  @keyframes spin{to{transform:rotate(360deg);}}
-  ::-webkit-scrollbar{width:0;height:0;}
+  @keyframes slideup { from { transform: translateY(20px); opacity: .6; } to { transform: translateY(0); opacity: 1; } }
+  .sheet h3 { margin: 0 0 16px; font-size: 17px; font-weight: 700; }
+  .field { margin-bottom: 14px; }
+  .field label { display: block; font-size: 12px; font-weight: 700; color: var(--muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: .04em; }
+  .field input, .field select, .field textarea {
+    width: 100%; padding: 12px 13px; border-radius: 12px; border: 1px solid var(--line);
+    background: #F8FAFB; font-size: 14.5px; font-family: inherit; color: var(--ink);
+  }
+  .field input:focus, .field select:focus { outline: 2px solid var(--primary-soft); border-color: var(--primary); }
+  .field-hint { font-size: 11.5px; color: var(--muted); margin-top: 6px; }
+  
+  .seg { display: flex; background: #F1F4F6; border-radius: 12px; padding: 4px; gap: 4px; }
+  .seg button { flex: 1; padding: 9px 0; border: none; background: none; border-radius: 9px; font-size: 13px; font-weight: 700; color: var(--muted); cursor: pointer; }
+  .seg button.active { background: var(--surface); color: var(--ink); box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+  
+  .btn-primary {
+    width: 100%; padding: 14px; border: none; border-radius: 14px; background: var(--primary); color: #fff;
+    font-size: 15px; font-weight: 700; cursor: pointer; margin-top: 4px;
+  }
+  .btn-danger-outline {
+    width: 100%; padding: 12px; border: 1px solid var(--debt); color: var(--debt); background: var(--debt-soft);
+    border-radius: 14px; font-weight: 700; font-size: 14px; cursor: pointer; margin-top: 8px;
+  }
+  .btn-text-cancel {
+    width: 100%; text-align: center; padding: 10px; background: none; border: none; color: var(--muted);
+    font-size: 13.5px; font-weight: 600; cursor: pointer; margin-top: 8px;
+  }
+  .sheet-close-bar { width: 36px; height: 4px; background: var(--line); border-radius: 3px; margin: 0 auto 14px; }
+
+  .lainnya-row { display: flex; align-items: center; gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--line); cursor: pointer; }
+  .lainnya-row:last-child { border-bottom: none; }
+  .lainnya-row .ic { width: 34px; height: 34px; border-radius: 10px; background: var(--primary-soft); color: var(--primary-ink); display: flex; align-items: center; justify-content: center; flex: 0 0 auto; }
+  .lainnya-row .lbl { font-size: 14px; font-weight: 600; flex: 1; }
+  
+  #toast {
+    position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%);
+    background: var(--ink); color: #fff; padding: 10px 18px; border-radius: 12px; font-size: 13px; font-weight: 600;
+    z-index: 80; opacity: 0; pointer-events: none; transition: opacity .2s ease, transform .2s ease;
+    box-shadow: var(--shadow); white-space: nowrap;
+  }
+  #toast.show { opacity: 1; transform: translateX(-50%) translateY(-4px); }
+
+  #loading-overlay {
+    position: fixed; inset: 0; background: var(--bg); z-index: 100; display: flex; align-items: center; justify-content: center;
+  }
+  .spinner { width: 28px; height: 28px; border-radius: 50%; border: 3px solid var(--line); border-top-color: var(--primary); animation: spin .7s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
 </style>
 </head>
 <body>
@@ -336,7 +332,7 @@
     <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M4 8l8-5 8 5M4 8l3 9M4 8l-1 2m17-2l-3 9m3-9l1 2M7 17h10"/></svg>
   </div>
   <h1>Neraca</h1>
-  <p>Catat aset, tabungan, agenda tagihan dan maintenance di satu tempat. Aman di cloud.</p>
+  <p>Catat aset, tabungan, agenda, dan hutangmu di satu tempat. Tersinkron otomatis aman di cloud.</p>
   <button class="btn-google" id="btn-google-login">
     <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.9 32.6 29.4 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.1 8 3l6-6C34.5 5.5 29.5 3.5 24 3.5 12.7 3.5 3.5 12.7 3.5 24S12.7 44.5 24 44.5c11 0 20.4-8.9 20.4-20.5 0-1.4-.1-2.3-.3-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.5 16 18.9 13 24 13c3.1 0 5.8 1.1 8 3l6-6C34.5 5.5 29.5 3.5 24 3.5c-7.7 0-14.4 4.3-17.7 11.2z"/><path fill="#4CAF50" d="M24 44.5c5.4 0 10.3-1.9 14-5.7l-6.5-5.4c-2 1.5-4.6 2.5-7.5 2.5-5.3 0-9.8-3.4-11.4-8.1l-6.6 5.1C9.5 39.9 16.2 44.5 24 44.5z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.7 2-2 3.7-3.7 5l6.5 5.4C41.5 35.4 44.5 30.2 44.5 24c0-1.4-.1-2.3-.3-3.5z"/></svg>
     Masuk dengan Google
@@ -372,7 +368,6 @@
           <div>Total Hutang<span class="val neg" id="sum-debt">Rp 0</span></div>
           <div>Piutang<span class="val" id="sum-receivable">Rp 0</span></div>
         </div>
-        
         <div style="border-top:1px solid var(--line); padding-top:12px; margin-top:12px; cursor:pointer;" onclick="openLiquiditySheet()">
            <div style="font-size:11px; color:var(--muted); font-weight:700; text-transform:uppercase; margin-bottom:6px; letter-spacing:0.04em; display:flex; justify-content:space-between; align-items:center;">
               <span>Likuiditas Aset</span>
@@ -410,20 +405,20 @@
         </div>
       </div>
       
-      <!-- Agenda Terdekat di Dashboard -->
+      <!-- Card Dashboard Agenda -->
       <div class="card">
-         <div class="card-label" style="justify-content:space-between;">
-            <span>📅 Agenda Terdekat</span>
-            <button class="icon-btn" style="width:auto; height:26px; border:none; background:none; color:var(--blue); font-size:11.5px; font-weight:700; box-shadow:none; padding:0;" onclick="switchView('kalender')">
-               Lihat Kalender ›
+         <div class="card-label" style="justify-content:space-between; margin-bottom:12px;">
+            <span>🗓️ Agenda Terdekat (7 Hari)</span>
+            <button class="icon-btn" style="width:26px;height:26px;border:none;background:var(--primary-soft);color:var(--primary-ink);box-shadow:none;" onclick="openScheduleSheet()">
+               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
             </button>
          </div>
-         <div id="dash-agenda-list" style="margin-top:12px;">
-            <!-- Agenda List Rendered by JS -->
+         <div id="dash-agenda-list">
+             <!-- Diisi oleh JS -->
+             <div class="empty" style="padding:10px 0;">Memuat jadwal...</div>
          </div>
       </div>
 
-      <!-- Card Dana Darurat Cepat -->
       <div class="card">
          <div class="card-label" style="justify-content:space-between;">
             <span>🛡️ Cek Dana Darurat</span>
@@ -469,7 +464,6 @@
            <span id="grand-total-asset" style="font-weight:700; color:var(--primary-ink); font-family:'Sora',sans-serif;">Rp 0</span>
         </div>
       </div>
-
       <div class="seg" style="margin-bottom:2px;">
         <button class="active" id="tab-investasi">Investasi (Berkembang)</button>
         <button id="tab-penyusutan">Penyusutan / Tetap</button>
@@ -483,9 +477,58 @@
         <div id="asset-list"></div>
         <div class="empty hidden" id="asset-empty">
           <b>Belum ada aset tercatat</b>
-          Tambahkan aset pertamamu lewat tombol + di bawah.
+          Tambahkan aset pertamamu lewat tombol + mengambang di bawah.
         </div>
       </div>
+    </section>
+
+    <!-- VIEW: KALENDER -->
+    <section class="view hidden" id="view-kalender">
+       <div class="card" style="padding:16px;">
+          <div class="cal-header">
+             <button id="cal-prev">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+             </button>
+             <div class="cal-month-year" id="cal-month-year">Bulan Tahun</div>
+             <button id="cal-next">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+             </button>
+          </div>
+          <div class="cal-grid">
+             <div class="cal-day-lbl">M</div><div class="cal-day-lbl">S</div>
+             <div class="cal-day-lbl">S</div><div class="cal-day-lbl">R</div>
+             <div class="cal-day-lbl">K</div><div class="cal-day-lbl">J</div><div class="cal-day-lbl">S</div>
+          </div>
+          <div class="cal-grid" id="cal-days-container">
+             <!-- Days rendered here via JS -->
+          </div>
+          
+          <div id="cal-monthly-summary" style="display:flex; justify-content:space-between; margin-top:16px; padding-top:14px; border-top:1px dashed var(--line); font-size:12px;">
+             <div>Total Tagihan Bulan Ini:<br><b id="cal-sum-total" style="color:var(--ink); font-size:15px; font-family:'Sora',sans-serif;">Rp 0</b></div>
+             <div style="text-align:right;">Sisa Belum Dibayar:<br><b id="cal-sum-rem" style="color:var(--debt); font-size:15px; font-family:'Sora',sans-serif;">Rp 0</b></div>
+          </div>
+          
+          <div style="margin-top:16px; padding-top:14px; border-top:1px solid var(--line); display:flex; align-items:center; justify-content:center; gap:16px;">
+             <div style="display:flex; align-items:center; gap:6px; font-size:10px; font-weight:600; color:var(--muted);">
+                <div class="cal-dot tagihan"></div> Tagihan / Cicilan
+             </div>
+             <div style="display:flex; align-items:center; gap:6px; font-size:10px; font-weight:600; color:var(--muted);">
+                <div class="cal-dot maintenance"></div> Servis / Maintenance
+             </div>
+          </div>
+       </div>
+
+       <div>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; padding:0 4px;">
+             <div style="font-size:14px; font-weight:700; color:var(--ink);" id="agenda-date-lbl">Tanggal Terpilih</div>
+             <button style="background:none; border:none; color:var(--blue); font-size:12px; font-weight:700; cursor:pointer;" onclick="openScheduleSheet()">+ Tambah</button>
+          </div>
+          <div id="agenda-list"></div>
+          <div class="empty hidden" id="agenda-empty" style="padding-top:20px;">
+             <b>Tidak ada agenda</b>
+             Anda bisa bersantai pada hari ini.
+          </div>
+       </div>
     </section>
 
     <!-- VIEW: TARGET -->
@@ -496,7 +539,6 @@
            <span id="goal-summary">Rp 0 / Rp 0</span>
         </div>
       </div>
-
       <div id="goal-list"></div>
       <div class="empty hidden" id="goal-empty">
         <b>Belum ada target tabungan</b>
@@ -515,82 +557,11 @@
            <span id="debt-type-label">Daftar Hutang</span>
            <span id="debt-total-value" style="font-weight:700; color:var(--ink); font-family:'Sora',sans-serif;">Rp 0</span>
         </div>
-        
         <div id="debt-list"></div>
         <div class="empty hidden" id="debt-empty">
           <b id="debt-empty-title">Belum ada hutang tercatat</b>
-          Catat cicilan, pinjaman, atau uang yang kamu pinjamkan ke orang lain lewat tombol + di bawah.
+          Catat cicilan, pinjaman, atau uang yang kamu pinjamkan ke orang lain lewat tombol + mengambang di bawah.
         </div>
-      </div>
-    </section>
-
-    <!-- VIEW: KALENDER -->
-    <section class="view hidden" id="view-kalender">
-       <div class="card" style="padding:16px;">
-          <div class="cal-header">
-             <button id="cal-prev">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-             </button>
-             <div class="cal-month-year" id="cal-month-year">Bulan Tahun</div>
-             <button id="cal-next">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-             </button>
-          </div>
-          <div class="cal-grid">
-             <div class="cal-day-lbl">M</div>
-             <div class="cal-day-lbl">S</div>
-             <div class="cal-day-lbl">S</div>
-             <div class="cal-day-lbl">R</div>
-             <div class="cal-day-lbl">K</div>
-             <div class="cal-day-lbl">J</div>
-             <div class="cal-day-lbl">S</div>
-          </div>
-          <div class="cal-grid" id="cal-days-container">
-             <!-- Days rendered here -->
-          </div>
-          
-          <div style="margin-top:20px; padding-top:14px; border-top:1px dashed var(--line); display:flex; align-items:center; justify-content:center; gap:16px;">
-             <div style="display:flex; align-items:center; gap:6px; font-size:10px; font-weight:600; color:var(--muted);">
-                <div class="cal-dot tagihan"></div> Tagihan / Cicilan
-             </div>
-             <div style="display:flex; align-items:center; gap:6px; font-size:10px; font-weight:600; color:var(--muted);">
-                <div class="cal-dot maintenance"></div> Servis / Maintenance
-             </div>
-          </div>
-       </div>
-
-       <div id="agenda-section">
-          <div class="card-label" style="margin-bottom:12px; margin-top:8px;">Jadwal pada <span id="agenda-date-lbl" style="margin-left:4px; color:var(--ink);">Tanggal</span></div>
-          <div id="agenda-list"></div>
-          <div class="empty hidden" id="agenda-empty" style="padding:20px 0;">
-             <b>Tidak ada agenda</b>
-             Pilih tanggal lain atau tambahkan jadwal baru.
-          </div>
-       </div>
-    </section>
-
-    <!-- VIEW: MAINTENANCE -->
-    <section class="view hidden" id="view-maintenance">
-      <div class="card-label" style="justify-content:space-between; margin-bottom:8px;">
-         <span>Manajemen Maintenance</span>
-      </div>
-      <div class="seg" style="margin-bottom:12px;">
-        <button class="active" id="tab-maint-kendaraan">Kendaraan</button>
-        <button id="tab-maint-rumah">Rumah & Lainnya</button>
-      </div>
-
-      <button class="btn-add-dashed" id="btn-add-maintenance" style="margin-bottom:14px;">
-         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
-         Tambah Item Maintenance
-      </button>
-
-      <div class="maintenance-grid" id="maintenance-list">
-         <!-- Items Rendered Here -->
-      </div>
-      
-      <div class="empty hidden" id="maintenance-empty" style="padding:20px 0;">
-         <b>Belum ada item untuk dirawat</b>
-         Tambahkan kendaraan atau properti yang butuh perawatan rutin.
       </div>
     </section>
 
@@ -605,13 +576,6 @@
       </div>
       
       <div class="card">
-        <div class="lainnya-row" onclick="switchView('maintenance')">
-          <div class="ic" style="background:#FEE2E2;color:#EF4444;">
-             <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
-          </div>
-          <div class="lbl">Jadwal Maintenance Kendaraan & Rumah</div>
-          <span>›</span>
-        </div>
         <div class="lainnya-row" id="btn-manage-rates">
           <div class="ic" style="background:var(--gold-soft);color:var(--gold);">
             <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
@@ -619,7 +583,7 @@
           <div class="lbl">Pengaturan Harga (Emas & Valas)</div>
           <span>›</span>
         </div>
-        <div class="lainnya-row" id="btn-manage-categories" style="border-bottom:none;">
+        <div class="lainnya-row" id="btn-manage-categories">
           <div class="ic">
             <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41 11 3.83A2 2 0 0 0 9.59 3.24H4a1 1 0 0 0-1 1v5.59a2 2 0 0 0 .59 1.41l9.58 9.59a2 2 0 0 0 2.83 0l4.59-4.59a2 2 0 0 0 0-2.83z"/><circle cx="7.5" cy="7.5" r="1.2" fill="currentColor" stroke="none"/></svg>
           </div>
@@ -640,29 +604,30 @@
   </main>
 </div>
 
+<button class="fab hidden" id="btn-fab">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+</button>
+
 <nav class="bottomnav hidden" id="bottomnav">
   <div class="nav-inner">
     <button class="nav-btn active" data-view="beranda">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V9.5"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V9.5"/></svg>
       Beranda
     </button>
     <button class="nav-btn" data-view="aset">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M3 11h18M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M3 11h18M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
       Aset
     </button>
     <button class="nav-btn" data-view="kalender">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
       Kalender
     </button>
-    <button class="fab" id="btn-fab">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
-    </button>
     <button class="nav-btn" data-view="target">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
       Target
     </button>
     <button class="nav-btn" data-view="hutang">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2H7a2 2 0 0 0-2 2v16l7-4 7 4V4a2 2 0 0 0-2-2z"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2H7a2 2 0 0 0-2 2v16l7-4 7 4V4a2 2 0 0 0-2-2z"/></svg>
       Hutang
     </button>
   </div>
@@ -682,13 +647,11 @@ const firebaseConfig = {
   projectId: "asset-ku",
   storageBucket: "asset-ku.firebasestorage.app",
   messagingSenderId: "1069465304934",
-  appId: "1:1069465304934:web:cb9dc624f2c1102a1752a7",
-  measurementId: "G-0LMRXDK9Q8"
+  appId: "1:1069465304934:web:cb9dc624f2c1102a1752a7"
 };
 
 let auth, db, currentUser = null;
-let unsubAssets = null, unsubDebts = null, unsubCats = null, unsubGoals = null, unsubHistory = null;
-let unsubSchedules = null, unsubMaintenances = null;
+let unsubAssets = null, unsubDebts = null, unsubCats = null, unsubGoals = null, unsubHistory = null, unsubSchedules = null;
 
 const $ = (sel) => document.querySelector(sel);
 const $$ = (sel) => Array.from(document.querySelectorAll(sel));
@@ -723,30 +686,20 @@ function getDefaultUsefulLife(categoryId) {
 let assets = [];
 let debts = [];
 let goals = [];
+let schedules = []; // For Calendar agendas and maintenance
 let historyData = [];
-let schedules = [];
-let maintenances = [];
-
 let lastSavedNetWorth = null;
 let lastSavedMonth = null;
 let assetFilter = "all";
 let assetGroupTab = "investasi";
 let debtTab = "hutang";
-let maintTab = "kendaraan"; 
 let expandedGoals = new Set(); 
 let monthlyExpenses = 0;
 
 let calCurrentDate = new Date();
 let calSelectedDate = new Date();
 
-let rates = {
-  antam: 1350000, 
-  galeri24: 1320000,
-  dinarKR: 4400000,
-  valas_usd: 15500,
-  valas_sgd: 11500,
-  valas_aud: 10200
-};
+let rates = { antam: 1350000, galeri24: 1320000, dinarKR: 4400000, valas_usd: 15500, valas_sgd: 11500, valas_aud: 10200 };
 
 function rupiah(n){ return "Rp " + Math.round(Number(n) || 0).toLocaleString("id-ID"); }
 function formatNumberWithDot(num) {
@@ -769,12 +722,9 @@ function toYYYYMMDD(d) {
 }
 
 document.addEventListener('click', (e) => {
-  const target = e.target.closest('button, .nav-btn, .chip, .list-item, .lainnya-row, .goal-header, .seg button, .cal-cell');
+  const target = e.target.closest('button, .nav-btn, .chip, .list-item, .lainnya-row, .goal-header, .seg button, .cal-day');
   if (target && navigator.vibrate) navigator.vibrate(15);
-  
-  if(e.target.closest("#btn-set-pengeluaran")) {
-      openPengeluaranSheet();
-  }
+  if(e.target.closest("#btn-set-pengeluaran")) openPengeluaranSheet();
 });
 
 function toast(msg){
@@ -784,6 +734,37 @@ function toast(msg){
 function uid(){ return currentUser ? currentUser.uid : null; }
 function escapeHtml(s){ return String(s??"").replace(/[&<>"']/g, m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m])); }
 function generateId(){ return Date.now().toString(36) + Math.random().toString(36).substr(2); }
+
+// --- STREAMING_CHUNK:Schedule and Repeating Logic ---
+function doesScheduleOccur(s, dateStr) {
+    if (!s.date) return false;
+    if (s.date === dateStr) return true;
+    if (dateStr < s.date) return false;
+    
+    if (s.repeat === 'daily') return true;
+    
+    const sD = new Date(s.date);
+    const cD = new Date(dateStr);
+    
+    if (s.repeat === 'weekly') return sD.getDay() === cD.getDay();
+    
+    if (s.repeat === 'monthly') {
+        if (sD.getDate() === cD.getDate()) return true;
+        const daysInCurrentMonth = new Date(cD.getFullYear(), cD.getMonth() + 1, 0).getDate();
+        if (sD.getDate() > daysInCurrentMonth && cD.getDate() === daysInCurrentMonth) return true;
+        return false;
+    }
+    
+    if (s.repeat === 'yearly') return sD.getDate() === cD.getDate() && sD.getMonth() === cD.getMonth();
+    return false;
+}
+
+function isScheduleDone(s, dateStr) {
+    if (s.repeat && s.repeat !== 'none') {
+        return (s.completedDates || []).includes(dateStr);
+    }
+    return !!s.isDone;
+}
 
 function calcAssetValue(a){
   if(a.category === 'emas' && a.qty && a.subType){ return Number(a.qty) * (rates[a.subType] || 0); }
@@ -818,19 +799,13 @@ function initFirebase(){
   });
 
   $("#btn-google-login").addEventListener("click", async () => {
-    try {
-      const provider = new GoogleAuthProvider();
-      await signInWithPopup(auth, provider);
-    } catch (e) {
-      console.error(e);
-      toast("Gagal masuk: " + (e.message));
-    }
+    try { await signInWithPopup(auth, new GoogleAuthProvider()); } catch (e) { toast("Gagal masuk"); }
   });
 }
 
-function showLogin(){ $("#screen-login").classList.remove("hidden"); $("#app").classList.add("hidden"); $("#bottomnav").classList.add("hidden"); }
+function showLogin(){ $("#screen-login").classList.remove("hidden"); $("#app").classList.add("hidden"); $("#bottomnav").classList.add("hidden"); $("#btn-fab").classList.add("hidden"); }
 function showApp(){
-  $("#screen-login").classList.add("hidden"); $("#app").classList.remove("hidden"); $("#bottomnav").classList.remove("hidden");
+  $("#screen-login").classList.add("hidden"); $("#app").classList.remove("hidden"); $("#bottomnav").classList.remove("hidden"); $("#btn-fab").classList.remove("hidden");
   const name = currentUser.displayName || "Pengguna";
   $("#greeting").textContent = "Halo, " + name.split(" ")[0];
   $("#period-label").textContent = new Date().toLocaleDateString("id-ID", { month: "long", year: "numeric" });
@@ -848,14 +823,12 @@ function fallbackAvatar(name){
 $("#btn-logout").addEventListener("click", () => signOut(auth));
 $("#btn-open-lainnya-avatar").addEventListener("click", () => switchView("lainnya"));
 
-window.switchView = function(name){
+function switchView(name){
   $$(".view").forEach(v=>v.classList.add("hidden"));
   $("#view-"+name).classList.remove("hidden");
-  
-  // Clean up nav actives, FAB is not active
   $$(".nav-btn").forEach(b=>b.classList.toggle("active", b.dataset.view===name));
   
-  if (name === 'kalender') {
+  if(name === "kalender") {
       renderCalendarGrid();
       renderAgendaList();
   }
@@ -866,8 +839,6 @@ $("#tab-hutang").addEventListener("click", ()=>{ debtTab="hutang"; $("#tab-hutan
 $("#tab-piutang").addEventListener("click", ()=>{ debtTab="piutang"; $("#tab-piutang").classList.add("active"); $("#tab-hutang").classList.remove("active"); renderDebtList(); });
 $("#tab-investasi").addEventListener("click", ()=>{ assetGroupTab="investasi"; $("#tab-investasi").classList.add("active"); $("#tab-penyusutan").classList.remove("active"); renderAssetList(); });
 $("#tab-penyusutan").addEventListener("click", ()=>{ assetGroupTab="penyusutan"; $("#tab-penyusutan").classList.add("active"); $("#tab-investasi").classList.remove("active"); renderAssetList(); });
-$("#tab-maint-kendaraan").addEventListener("click", ()=>{ maintTab="kendaraan"; $("#tab-maint-kendaraan").classList.add("active"); $("#tab-maint-rumah").classList.remove("active"); renderMaintenanceList(); });
-$("#tab-maint-rumah").addEventListener("click", ()=>{ maintTab="rumah"; $("#tab-maint-rumah").classList.add("active"); $("#tab-maint-kendaraan").classList.remove("active"); renderMaintenanceList(); });
 
 async function fetchRates(){
   const u = uid(); if(!u) return;
@@ -879,48 +850,24 @@ async function fetchRates(){
     if (profileSnap.exists()) { monthlyExpenses = profileSnap.data().monthlyExpenses || 0; }
     
     renderAll();
-  } catch(e){ console.error("Gagal memuat pengaturan", e); }
+  } catch(e){}
 }
 
 function attachListeners(){
   const u = uid(); if (!u) return;
-  unsubAssets = onSnapshot(query(collection(db, "users", u, "assets")), (snap) => {
-    assets = snap.docs.map(d => ({ id: d.id, ...d.data() })); renderAll();
-  }, (err) => { console.error(err); toast("Gagal memuat aset"); });
-
-  unsubDebts = onSnapshot(query(collection(db, "users", u, "debts")), (snap) => {
-    debts = snap.docs.map(d => ({ id: d.id, ...d.data() })); renderAll();
-  }, (err) => { console.error(err); toast("Gagal memuat hutang"); });
-
-  unsubGoals = onSnapshot(query(collection(db, "users", u, "goals")), (snap) => {
-    goals = snap.docs.map(d => ({ id: d.id, ...d.data() })); renderAll();
-  }, (err) => { console.error(err); toast("Gagal memuat target"); });
-
-  unsubCats = onSnapshot(query(collection(db, "users", u, "categories")), (snap) => {
-    customCategories = snap.docs.map(d => ({ id: d.id, ...d.data() })); renderAll();
-  });
-
-  unsubHistory = onSnapshot(query(collection(db, "users", u, "history")), (snap) => {
-    historyData = snap.docs.map(d => d.data()); renderHistoryChart();
-  });
-  
-  unsubSchedules = onSnapshot(query(collection(db, "users", u, "schedules")), (snap) => {
-    schedules = snap.docs.map(d => ({ id: d.id, ...d.data() })); 
-    renderCalendarGrid(); renderAgendaList(); renderDashAgenda();
-  });
-
-  unsubMaintenances = onSnapshot(query(collection(db, "users", u, "maintenances")), (snap) => {
-    maintenances = snap.docs.map(d => ({ id: d.id, ...d.data() })); 
-    renderCalendarGrid(); renderAgendaList(); renderMaintenanceList(); renderDashAgenda();
-  });
+  unsubAssets = onSnapshot(query(collection(db, "users", u, "assets")), (snap) => { assets = snap.docs.map(d => ({ id: d.id, ...d.data() })); renderAll(); });
+  unsubDebts = onSnapshot(query(collection(db, "users", u, "debts")), (snap) => { debts = snap.docs.map(d => ({ id: d.id, ...d.data() })); renderAll(); });
+  unsubGoals = onSnapshot(query(collection(db, "users", u, "goals")), (snap) => { goals = snap.docs.map(d => ({ id: d.id, ...d.data() })); renderAll(); });
+  unsubCats = onSnapshot(query(collection(db, "users", u, "categories")), (snap) => { customCategories = snap.docs.map(d => ({ id: d.id, ...d.data() })); renderAll(); });
+  unsubHistory = onSnapshot(query(collection(db, "users", u, "history")), (snap) => { historyData = snap.docs.map(d => d.data()); renderHistoryChart(); });
+  unsubSchedules = onSnapshot(query(collection(db, "users", u, "schedules")), (snap) => { schedules = snap.docs.map(d => ({ id: d.id, ...d.data() })); renderAll(); });
 }
 
 function detachListeners(){
   if (unsubAssets) unsubAssets(); if (unsubDebts) unsubDebts();
   if (unsubCats) unsubCats(); if (unsubGoals) unsubGoals();
-  if (unsubHistory) unsubHistory();
-  if (unsubSchedules) unsubSchedules(); if (unsubMaintenances) unsubMaintenances();
-  assets = []; debts = []; goals = []; customCategories = []; historyData = []; schedules = []; maintenances = [];
+  if (unsubHistory) unsubHistory(); if (unsubSchedules) unsubSchedules();
+  assets = []; debts = []; goals = []; customCategories = []; historyData = []; schedules = [];
 }
 
 async function saveAsset(data, id){
@@ -948,21 +895,12 @@ async function saveGoal(data, id){
 async function removeGoal(id){ const u = uid(); if(!u) return; await deleteDoc(doc(db, "users", u, "goals", id)); }
 
 async function saveSchedule(data, id){
-  const u = uid(); if(!u) return;
-  const payload = { ...data, updatedAt: serverTimestamp() };
-  if (id) await updateDoc(doc(db, "users", u, "schedules", id), payload);
-  else { payload.createdAt = serverTimestamp(); await addDoc(collection(db, "users", u, "schedules"), payload); }
+    const u = uid(); if(!u) return;
+    const payload = { ...data, updatedAt: serverTimestamp() };
+    if (id) await updateDoc(doc(db, "users", u, "schedules", id), payload);
+    else { payload.createdAt = serverTimestamp(); await addDoc(collection(db, "users", u, "schedules"), payload); }
 }
 async function removeSchedule(id){ const u = uid(); if(!u) return; await deleteDoc(doc(db, "users", u, "schedules", id)); }
-
-async function saveMaintenance(data, id){
-  const u = uid(); if(!u) return;
-  const payload = { ...data, updatedAt: serverTimestamp() };
-  if (id) await updateDoc(doc(db, "users", u, "maintenances", id), payload);
-  else { payload.createdAt = serverTimestamp(); await addDoc(collection(db, "users", u, "maintenances"), payload); }
-}
-async function removeMaintenance(id){ const u = uid(); if(!u) return; await deleteDoc(doc(db, "users", u, "maintenances", id)); }
-
 
 async function saveGoalAsset(goalId, assetData, assetId = null) {
   const u = uid(); if(!u) return;
@@ -970,11 +908,8 @@ async function saveGoalAsset(goalId, assetData, assetId = null) {
   const goalSnap = await getDoc(goalRef);
   if(goalSnap.exists()){
       let currentAssets = goalSnap.data().assets || [];
-      if(assetId){
-          currentAssets = currentAssets.map(a => a.id === assetId ? {...a, ...assetData} : a);
-      } else {
-          currentAssets.push({ id: generateId(), ...assetData });
-      }
+      if(assetId){ currentAssets = currentAssets.map(a => a.id === assetId ? {...a, ...assetData} : a); } 
+      else { currentAssets.push({ id: generateId(), ...assetData }); }
       await updateDoc(goalRef, { assets: currentAssets, updatedAt: serverTimestamp() });
   }
 }
@@ -997,17 +932,16 @@ async function updateRates(newRates){
 
 function renderAll(){
   renderBeranda(); renderAssetFilters(); renderAssetList(); renderDebtList(); renderGoals();
+  if(!$("#view-kalender").classList.contains("hidden")) { renderCalendarGrid(); renderAgendaList(); }
 }
 
 function computeStats(){
   const totalAsset = assets.reduce((sum, a) => sum + calcAssetValue(a), 0);
   const totalTarget = goals.reduce((sum, g) => sum + (g.assets || []).reduce((s,a) => s + calcAssetValue(a), 0), 0);
-  
   const totalDebt = debts.filter(d=>d.type!=="piutang").reduce((s,d)=>s+Number(d.amount||0),0);
   const totalReceivable = debts.filter(d=>d.type==="piutang").reduce((s,d)=>s+Number(d.amount||0),0);
   
   const netWorth = totalTarget + totalReceivable - totalDebt;
-  
   const totalAssetsForAllCalculations = totalAsset + totalTarget;
   const debtRatio = totalAssetsForAllCalculations > 0 ? (totalDebt/totalAssetsForAllCalculations) : (totalDebt>0?1:0);
   
@@ -1020,22 +954,15 @@ function computeStats(){
   const assetQualityRatio = (totalInvest + totalDepresiasi) > 0 ? (totalInvest / (totalInvest + totalDepresiasi)) : 1;
   
   const liquidCats = ['tabungan', 'saham', 'reksadana', 'emas', 'dinar', 'valas', 'kripto'];
-  let totalLiquid = 0;
-  let totalNonLiquid = 0;
+  let totalLiquid = 0, totalNonLiquid = 0;
   const categoryTotals = {};
-  const liquidItems = [];
-  const nonLiquidItems = [];
+  const liquidItems = [], nonLiquidItems = [];
   
   assets.forEach(a => {
       const val = calcAssetValue(a);
       const itemData = { ...a, calcVal: val, source: 'Aset' };
-      if(liquidCats.includes(a.category)) {
-          totalLiquid += val;
-          liquidItems.push(itemData);
-      } else {
-          totalNonLiquid += val;
-          nonLiquidItems.push(itemData);
-      }
+      if(liquidCats.includes(a.category)) { totalLiquid += val; liquidItems.push(itemData); } 
+      else { totalNonLiquid += val; nonLiquidItems.push(itemData); }
       categoryTotals[a.category] = (categoryTotals[a.category] || 0) + val;
   });
 
@@ -1046,20 +973,15 @@ function computeStats(){
 
   const daruratGoal = goals.find(g => g.name.toLowerCase().includes("darurat"));
   let efTotal = 0;
-  if (daruratGoal) {
-      efTotal = (daruratGoal.assets || []).reduce((sum, a) => sum + calcAssetValue(a), 0);
-  }
+  if (daruratGoal) efTotal = (daruratGoal.assets || []).reduce((sum, a) => sum + calcAssetValue(a), 0);
   const efMonths = monthlyExpenses > 0 ? (efTotal / monthlyExpenses) : 0;
 
   let scoreDebt = 40;
-  if (debtRatio >= 0.5) scoreDebt = 0;
-  else if (debtRatio > 0) scoreDebt = 40 - (debtRatio / 0.5 * 40);
+  if (debtRatio >= 0.5) scoreDebt = 0; else if (debtRatio > 0) scoreDebt = 40 - (debtRatio / 0.5 * 40);
   let scoreEF = Math.min(efMonths / 6, 1) * 30;
   let scoreDiv = Math.min(usedCats.size / 4, 1) * 15;
   let scoreQual = assetQualityRatio * 15;
-
-  let healthScore = Math.round(scoreDebt + scoreEF + scoreDiv + scoreQual);
-  healthScore = Math.max(0, Math.min(100, healthScore));
+  let healthScore = Math.max(0, Math.min(100, Math.round(scoreDebt + scoreEF + scoreDiv + scoreQual)));
 
   return { 
       totalAsset, totalTarget, totalDebt, totalReceivable, netWorth, debtRatio, 
@@ -1101,19 +1023,10 @@ function renderBeranda(){
   if (monthlyExpenses > 0) {
       const efMonths = s.efMonths;
       $("#ef-month").textContent = (Math.round(efMonths * 10) / 10) + " Bulan";
-      if (efMonths >= 6) {
-          $("#ef-emoji").textContent = "🤩"; $("#ef-emoji").style.background = "#D1FAE5";
-          $("#ef-desc").textContent = "Sangat aman! Dana daruratmu ideal.";
-      } else if (efMonths >= 3) {
-          $("#ef-emoji").textContent = "🙂"; $("#ef-emoji").style.background = "#FEF3C7";
-          $("#ef-desc").textContent = "Cukup baik, targetkan hingga 6 bulan.";
-      } else if (efMonths > 0) {
-          $("#ef-emoji").textContent = "⚠️"; $("#ef-emoji").style.background = "#FEE2E2";
-          $("#ef-desc").textContent = "Rawan. Segera kumpulkan dana darurat!";
-      } else {
-          $("#ef-emoji").textContent = "🚨"; $("#ef-emoji").style.background = "#FEE2E2";
-          $("#ef-desc").textContent = "Belum ada tabungan Darurat tercatat!";
-      }
+      if (efMonths >= 6) { $("#ef-emoji").textContent = "🤩"; $("#ef-emoji").style.background = "#D1FAE5"; $("#ef-desc").textContent = "Sangat aman! Dana daruratmu ideal."; } 
+      else if (efMonths >= 3) { $("#ef-emoji").textContent = "🙂"; $("#ef-emoji").style.background = "#FEF3C7"; $("#ef-desc").textContent = "Cukup baik, targetkan hingga 6 bulan."; } 
+      else if (efMonths > 0) { $("#ef-emoji").textContent = "⚠️"; $("#ef-emoji").style.background = "#FEE2E2"; $("#ef-desc").textContent = "Rawan. Segera kumpulkan dana darurat!"; } 
+      else { $("#ef-emoji").textContent = "🚨"; $("#ef-emoji").style.background = "#FEE2E2"; $("#ef-desc").textContent = "Belum ada tabungan Darurat tercatat!"; }
   } else {
       $("#ef-emoji").textContent = "❓"; $("#ef-emoji").style.background = "#F1F5F9";
       $("#ef-month").textContent = "Belum diatur";
@@ -1126,79 +1039,93 @@ function renderBeranda(){
   renderDashAgenda();
 }
 
-function renderAllocationChart(catTotals, total) {
-    const svg = $("#allocation-chart-svg");
-    const legend = $("#allocation-legend");
-    if(total === 0) {
-        svg.innerHTML = `<circle cx="50" cy="50" r="40" fill="none" stroke="var(--line)" stroke-width="16"/>`;
-        legend.innerHTML = `<div style="font-size:12px; color:var(--muted);">Belum ada data</div>`;
+function renderDashAgenda() {
+    const listEl = $("#dash-agenda-list");
+    if (!listEl) return;
+    const today = new Date();
+    
+    let items = [];
+    for(let i=0; i<7; i++) {
+        let dObj = new Date(today);
+        dObj.setDate(dObj.getDate() + i);
+        let dStr = toYYYYMMDD(dObj);
+        
+        schedules.forEach(s => {
+            if (doesScheduleOccur(s, dStr) && !isScheduleDone(s, dStr)) {
+                items.push({ ...s, instanceDate: dStr });
+            }
+        });
+    }
+    
+    items.sort((a,b) => a.instanceDate.localeCompare(b.instanceDate));
+    items = items.slice(0, 3);
+    
+    if (items.length === 0) {
+        listEl.innerHTML = `<div style="text-align:center; padding:16px; font-size:12px; color:var(--muted); background:#F8FAFC; border:1px dashed var(--line); border-radius:12px;">Hore! Tidak ada tagihan atau agenda mendesak dalam 7 hari ke depan.</div>`;
         return;
     }
     
-    let svgHtml = "";
-    let legendHtml = "";
-    let currentPct = 0;
-    const radius = 40;
-    const circ = 2 * Math.PI * radius;
-    const cx = 50, cy = 50, strokeW = 16;
-    
-    const sortedCats = Object.keys(catTotals)
-        .map(k => ({ id: k, val: catTotals[k] }))
-        .sort((a,b) => b.val - a.val)
-        .filter(c => c.val > 0);
+    const todayStr = toYYYYMMDD(today);
+    listEl.innerHTML = items.map(item => {
+        const dObj = new Date(item.instanceDate);
+        const dateStr = item.instanceDate === todayStr ? "Hari Ini" : dObj.toLocaleDateString('id-ID', {day:'numeric', month:'short'});
+        let icon = "🔔"; let typeColor = "var(--ink)";
         
-    let finalCats = [];
-    let otherVal = 0;
-    if(sortedCats.length > 5) {
-        finalCats = sortedCats.slice(0, 4);
-        for(let i=4; i<sortedCats.length; i++) { otherVal += sortedCats[i].val; }
-        if(otherVal > 0) finalCats.push({ id: 'lainnya', val: otherVal, isGrouped: true });
-    } else {
-        finalCats = sortedCats;
-    }
-
-    finalCats.forEach(c => {
-        const pct = c.val / total;
-        const catInfo = c.isGrouped ? { name: "Gabungan Lainnya", hue: 0, gray: true } : catById(c.id);
-        const color = catInfo.gray ? "#94A3B8" : `hsl(${catInfo.hue} 65% 50%)`;
+        if (item.category === 'tagihan') { icon = "💳"; typeColor = "var(--blue)"; }
+        else if (item.category === 'maintenance') { icon = "🔧"; typeColor = "var(--gold)"; }
         
-        const dashArray = `${pct * circ} ${circ}`;
-        const dashOffset = -(currentPct * circ);
-        
-        svgHtml += `<circle cx="${cx}" cy="${cy}" r="${radius}" fill="none" stroke="${color}" stroke-width="${strokeW}" 
-                        stroke-dasharray="${dashArray}" stroke-dashoffset="${dashOffset}" 
-                        transform="rotate(-90 ${cx} ${cy})" style="transition:all 0.5s ease; cursor:pointer;">
-                      <title>${catInfo.name}: ${Math.round(pct*100)}%</title>
-                    </circle>`;
-
-        legendHtml += `
-            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
-                <div style="display:flex; align-items:center; gap:8px; overflow:hidden;">
-                    <div style="width:10px; height:10px; border-radius:3px; background:${color}; flex:0 0 auto;"></div>
-                    <div style="font-size:12px; font-weight:600; color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="${catInfo.name}">${catInfo.name}</div>
+        return `
+            <div style="display:flex; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid var(--line);">
+                <div style="width:34px; height:34px; border-radius:10px; background:var(--bg); display:flex; align-items:center; justify-content:center; font-size:16px;">${icon}</div>
+                <div style="flex:1; min-width:0;">
+                    <div style="font-size:13.5px; font-weight:600; color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(item.title)}</div>
+                    <div style="font-size:11px; color:var(--muted); margin-top:2px; display:flex; align-items:center; gap:4px;">
+                        <span style="font-weight:700; color:${item.instanceDate===todayStr ? 'var(--debt)' : 'var(--muted)'};">${dateStr}</span>
+                        ${item.amount ? ` • ${rupiah(item.amount)}` : ''}
+                    </div>
                 </div>
-                <div style="font-size:11.5px; font-weight:700; color:var(--muted); font-family:'Sora',sans-serif; margin-left:4px;">${Math.round(pct*100)}%</div>
+                <button class="checkbox-custom" onclick="toggleAgendaItem('${item.id}', false, '${item.instanceDate}')"></button>
             </div>
         `;
-        currentPct += pct;
-    });
-    
-    svg.innerHTML = svgHtml;
-    legend.innerHTML = legendHtml;
+    }).join("");
+    if(listEl.lastElementChild) listEl.lastElementChild.style.borderBottom = "none";
+}
+
+function renderAllocationChart(catTotals, total) {
+  const svg = $("#allocation-chart-svg"); const legend = $("#allocation-legend");
+  if(total === 0) {
+      svg.innerHTML = `<circle cx="50" cy="50" r="40" fill="none" stroke="var(--line)" stroke-width="16"/>`;
+      legend.innerHTML = `<div style="font-size:12px; color:var(--muted);">Belum ada data</div>`;
+      return;
+  }
+  
+  let svgHtml = ""; let legendHtml = ""; let currentPct = 0;
+  const radius = 40, circ = 2 * Math.PI * radius, cx = 50, cy = 50, strokeW = 16;
+  const sortedCats = Object.keys(catTotals).map(k => ({ id: k, val: catTotals[k] })).sort((a,b) => b.val - a.val).filter(c => c.val > 0);
+      
+  let finalCats = []; let otherVal = 0;
+  if(sortedCats.length > 5) {
+      finalCats = sortedCats.slice(0, 4);
+      for(let i=4; i<sortedCats.length; i++) { otherVal += sortedCats[i].val; }
+      if(otherVal > 0) finalCats.push({ id: 'lainnya', val: otherVal, isGrouped: true });
+  } else { finalCats = sortedCats; }
+
+  finalCats.forEach(c => {
+      const pct = c.val / total;
+      const catInfo = c.isGrouped ? { name: "Gabungan Lainnya", hue: 0, gray: true } : catById(c.id);
+      const color = catInfo.gray ? "#94A3B8" : `hsl(${catInfo.hue} 65% 50%)`;
+      const dashArray = `${pct * circ} ${circ}`, dashOffset = -(currentPct * circ);
+      
+      svgHtml += `<circle cx="${cx}" cy="${cy}" r="${radius}" fill="none" stroke="${color}" stroke-width="${strokeW}" stroke-dasharray="${dashArray}" stroke-dashoffset="${dashOffset}" transform="rotate(-90 ${cx} ${cy})" style="transition:all 0.5s ease; cursor:pointer;"><title>${catInfo.name}: ${Math.round(pct*100)}%</title></circle>`;
+      legendHtml += `<div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;"><div style="display:flex; align-items:center; gap:8px; overflow:hidden;"><div style="width:10px; height:10px; border-radius:3px; background:${color}; flex:0 0 auto;"></div><div style="font-size:12px; font-weight:600; color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="${catInfo.name}">${catInfo.name}</div></div><div style="font-size:11.5px; font-weight:700; color:var(--muted); font-family:'Sora',sans-serif; margin-left:4px;">${Math.round(pct*100)}%</div></div>`;
+      currentPct += pct;
+  });
+  svg.innerHTML = svgHtml; legend.innerHTML = legendHtml;
 }
 
 function generateInsights(s) {
-  let html = "";
-  
-  if (s.netWorth === 0 && debts.length === 0 && goals.length === 0) {
-    html = "Selamat datang di Neraca! Mulailah dengan menambahkan target tabungan pertamamu untuk melacak perjalanan finansialmu.";
-    $("#financial-insights").innerHTML = html;
-    return;
-  } 
-
-  const debtTxt = s.debtRatio === 0 
-    ? "Bagus sekali, kamu <b>tidak memiliki beban hutang</b>!" 
-    : (s.debtRatio < 0.4 ? "Rasio hutangmu tergolong <b>sangat sehat</b> (di bawah 40%)." : "Hati-hati, rasio hutangmu <b>cukup tinggi</b>. Prioritaskan pelunasan pinjaman.");
+  if (s.netWorth === 0 && debts.length === 0 && goals.length === 0) { $("#financial-insights").innerHTML = "Selamat datang di Neraca! Mulailah dengan menambahkan target tabungan pertamamu untuk melacak perjalanan finansialmu."; return; } 
+  const debtTxt = s.debtRatio === 0 ? "Bagus sekali, kamu <b>tidak memiliki beban hutang</b>!" : (s.debtRatio < 0.4 ? "Rasio hutangmu tergolong <b>sangat sehat</b> (di bawah 40%)." : "Hati-hati, rasio hutangmu <b>cukup tinggi</b>. Prioritaskan pelunasan pinjaman.");
   
   let topGoal = null; let highestProgress = -1;
   goals.forEach(g => {
@@ -1206,43 +1133,29 @@ function generateInsights(s) {
      const pct = g.target > 0 ? (collected/g.target) : 0;
      if(pct > highestProgress) { highestProgress = pct; topGoal = g; }
   });
-  const goalTxt = topGoal && highestProgress > 0 
-    ? `Target <b style="color:var(--gold-soft);">${escapeHtml(topGoal.name)}</b> adalah fokus terbaikmu saat ini dengan progres <b>${Math.floor(highestProgress*100)}%</b>.` 
-    : "Tentukan target tabungan impianmu dan alokasikan aset di dalamnya.";
+  const goalTxt = topGoal && highestProgress > 0 ? `Target <b style="color:var(--gold-soft);">${escapeHtml(topGoal.name)}</b> adalah fokus terbaikmu saat ini dengan progres <b>${Math.floor(highestProgress*100)}%</b>.` : "Tentukan target tabungan impianmu dan alokasikan aset di dalamnya.";
 
   const daruratGoal = goals.find(g => g.name.toLowerCase().includes("darurat"));
-  
   let daruratTxt = "";
-  if (!daruratGoal) {
-      daruratTxt = `<div style="margin-top:8px; padding-top:8px; border-top:1px dashed rgba(255,255,255,0.2);">💡 <b>Tips:</b> Buat target tabungan bernama <b>"Darurat"</b> untuk menganalisis seberapa lama kamu bisa bertahan di situasi tak terduga.</div>`;
-  } else if (monthlyExpenses === 0) {
-      daruratTxt = `<div style="margin-top:8px; padding-top:8px; border-top:1px dashed rgba(255,255,255,0.2);">⚠️ Target Dana Darurat ditemukan, tapi <b>Pengeluaran Bulanan</b> belum diatur (Cek Card di atas).</div>`;
-  } else {
+  if (!daruratGoal) { daruratTxt = `<div style="margin-top:8px; padding-top:8px; border-top:1px dashed rgba(255,255,255,0.2);">💡 <b>Tips:</b> Buat target tabungan bernama <b>"Darurat"</b> untuk menganalisis seberapa lama kamu bisa bertahan di situasi tak terduga.</div>`; } 
+  else if (monthlyExpenses === 0) { daruratTxt = `<div style="margin-top:8px; padding-top:8px; border-top:1px dashed rgba(255,255,255,0.2);">⚠️ Target Dana Darurat ditemukan, tapi <b>Pengeluaran Bulanan</b> belum diatur (Cek Card di atas).</div>`; } 
+  else {
       let statusDarurat = s.efMonths >= 6 ? "Sangat Aman 🟢" : (s.efMonths >= 3 ? "Cukup Aman 🟡" : "Kritis 🔴");
-      daruratTxt = `
-      <div style="margin-top:8px; padding-top:8px; border-top:1px dashed rgba(255,255,255,0.2);">
-        🛡️ <b>Ketahanan Darurat:</b> Saldo pada target "${escapeHtml(daruratGoal.name)}" cukup untuk menghidupi kamu selama <b>${s.efMonths.toFixed(1)} Bulan</b> ke depan (${statusDarurat}).
-      </div>`;
+      daruratTxt = `<div style="margin-top:8px; padding-top:8px; border-top:1px dashed rgba(255,255,255,0.2);">🛡️ <b>Ketahanan Darurat:</b> Saldo pada target "${escapeHtml(daruratGoal.name)}" cukup untuk menghidupi kamu selama <b>${s.efMonths.toFixed(1)} Bulan</b> ke depan (${statusDarurat}).</div>`;
   }
-
-  html = `<div style="margin-bottom:8px;">${debtTxt}</div><div>${goalTxt}</div>${daruratTxt}`;
-  $("#financial-insights").innerHTML = html;
+  $("#financial-insights").innerHTML = `<div style="margin-bottom:8px;">${debtTxt}</div><div>${goalTxt}</div>${daruratTxt}`;
 }
 
 async function checkAndSaveHistory(netWorth) {
   const u = uid(); if(!u) return;
-  const d = new Date();
-  const monthStr = d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2, '0');
+  const d = new Date(); const monthStr = d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2, '0');
   if (lastSavedNetWorth === netWorth && lastSavedMonth === monthStr) return;
   lastSavedNetWorth = netWorth; lastSavedMonth = monthStr;
-  try {
-     await setDoc(doc(db, "users", u, "history", monthStr), { netWorth, month: monthStr, timestamp: serverTimestamp() }, { merge: true });
-  } catch(e) { console.error("History save error", e); }
+  try { await setDoc(doc(db, "users", u, "history", monthStr), { netWorth, month: monthStr, timestamp: serverTimestamp() }, { merge: true }); } catch(e) {}
 }
 
 function renderHistoryChart() {
-  const months = [];
-  const d = new Date();
+  const months = []; const d = new Date();
   for(let i=5; i>=0; i--) {
     const past = new Date(d.getFullYear(), d.getMonth() - i, 1);
     months.push({ label: past.toLocaleDateString('id-ID', {month:'short'}), val: past.getFullYear() + "-" + String(past.getMonth()+1).padStart(2, '0') });
@@ -1254,145 +1167,269 @@ function renderHistoryChart() {
   const maxVal = Math.max(...chartData.map(d=>d.value), 1); 
   $("#history-chart").innerHTML = chartData.map(d => {
     const pct = d.value === 0 && !d.isCurrent ? 0 : Math.max(d.value / maxVal * 100, 4); 
-    return `
-      <div class="chart-col">
-        <div class="chart-bar ${d.isCurrent ? 'active' : ''}" style="height:${pct}%;">
-          <div class="chart-val-tooltip">${rupiah(d.value)}</div>
-        </div>
-        <div class="chart-lbl" style="color:${d.isCurrent ? 'var(--ink)' : ''}">${d.label}</div>
-      </div>
-    `;
+    return `<div class="chart-col"><div class="chart-bar ${d.isCurrent ? 'active' : ''}" style="height:${pct}%;"><div class="chart-val-tooltip">${rupiah(d.value)}</div></div><div class="chart-lbl" style="color:${d.isCurrent ? 'var(--ink)' : ''}">${d.label}</div></div>`;
   }).join("");
 }
 
-function renderDashAgenda() {
-    const listEl = $("#dash-agenda-list");
-    const todayStr = toYYYYMMDD(new Date());
+function getMonthDays(year, month) { return new Date(year, month + 1, 0).getDate(); }
+
+function renderCalendarGrid() {
+    const year = calCurrentDate.getFullYear();
+    const month = calCurrentDate.getMonth(); // 0-11
+    const firstDayIndex = new Date(year, month, 1).getDay(); // 0(Sun) - 6(Sat)
+    const daysInMonth = getMonthDays(year, month);
+    const prevMonthDays = getMonthDays(year, month - 1);
     
-    // Get next 7 days items
-    let items = [];
-    schedules.forEach(s => {
-        if (!s.isDone && s.date >= todayStr) {
-            items.push({ ...s, kind: 'schedule' });
-        }
-    });
-    maintenances.forEach(m => {
-        if (m.nextDate && m.nextDate >= todayStr) {
-            items.push({ ...m, date: m.nextDate, kind: 'maintenance' });
-        }
-    });
+    const monthNames = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
+    $("#cal-month-year").textContent = `${monthNames[month]} ${year}`;
     
-    items.sort((a,b) => a.date.localeCompare(b.date));
-    items = items.slice(0, 3);
+    let monthlyTotal = 0;
+    let monthlyPaid = 0;
     
-    if (items.length === 0) {
-        listEl.innerHTML = `<div style="text-align:center; padding:16px; font-size:12px; color:var(--muted); background:#F8FAFC; border:1px dashed var(--line); border-radius:12px;">Hore! Tidak ada tagihan atau maintenance dalam 7 hari ke depan.</div>`;
-        return;
+    const eventsMap = {};
+    for(let i = 1; i <= daysInMonth; i++) {
+        const dStr = year + "-" + String(month+1).padStart(2,'0') + "-" + String(i).padStart(2,'0');
+        eventsMap[dStr] = [];
+        
+        schedules.forEach(s => {
+            if(doesScheduleOccur(s, dStr)) {
+                eventsMap[dStr].push(s);
+                if (s.amount) {
+                    monthlyTotal += Number(s.amount);
+                    if (isScheduleDone(s, dStr)) monthlyPaid += Number(s.amount);
+                }
+            }
+        });
     }
     
-    listEl.innerHTML = items.map(item => {
-        const dObj = new Date(item.date);
-        const dateStr = item.date === todayStr ? "Hari Ini" : dObj.toLocaleDateString('id-ID', {day:'numeric', month:'short'});
-        let icon = "🔔"; let typeColor = "var(--ink)";
-        
-        if (item.kind === 'schedule' && item.category === 'tagihan') { icon = "💳"; typeColor = "var(--blue)"; }
-        else if (item.kind === 'maintenance' || item.category === 'maintenance') { icon = "🔧"; typeColor = "var(--gold)"; }
-        
-        return `
-            <div style="display:flex; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid var(--line);">
-                <div style="width:34px; height:34px; border-radius:10px; background:var(--bg); display:flex; align-items:center; justify-content:center; font-size:16px;">${icon}</div>
-                <div style="flex:1; min-width:0;">
-                    <div style="font-size:13.5px; font-weight:600; color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(item.title || item.name)}</div>
-                    <div style="font-size:11px; color:var(--muted); margin-top:2px; display:flex; align-items:center; gap:4px;">
-                        <span style="font-weight:700; color:${item.date===todayStr ? 'var(--debt)' : 'var(--muted)'};">${dateStr}</span>
-                        ${item.amount ? ` • ${rupiah(item.amount)}` : ''}
-                    </div>
-                </div>
-                <button class="checkbox-custom" onclick="toggleAgendaDash('${item.kind}', '${item.id}', ${item.isDone}, '${item.date}')"></button>
-            </div>
-        `;
-    }).join("");
+    if ($("#cal-sum-total")) {
+        $("#cal-sum-total").textContent = rupiah(monthlyTotal);
+        $("#cal-sum-rem").textContent = rupiah(Math.max(0, monthlyTotal - monthlyPaid));
+    }
+
+    const grid = $("#cal-days-container");
+    let html = "";
     
-    // Clean up last border
-    if(listEl.lastElementChild) listEl.lastElementChild.style.borderBottom = "none";
+    // Prev month overflow cells
+    for(let x = firstDayIndex; x > 0; x--) {
+        html += `<div class="cal-day muted">${prevMonthDays - x + 1}</div>`;
+    }
+    
+    const todayStr = toYYYYMMDD(new Date());
+    const selStr = toYYYYMMDD(calSelectedDate);
+
+    for(let i = 1; i <= daysInMonth; i++) {
+        const dStr = year + "-" + String(month+1).padStart(2,'0') + "-" + String(i).padStart(2,'0');
+        const isActive = dStr === selStr;
+        const isToday = dStr === todayStr;
+        
+        const dayEvents = eventsMap[dStr] || [];
+        let dotsHtml = "";
+        if(dayEvents.length > 0) {
+            dotsHtml = `<div class="cal-dots-wrap">` + dayEvents.slice(0,3).map(e => {
+                let catClass = 'lainnya';
+                if(e.category === 'tagihan') catClass = 'tagihan';
+                if(e.category === 'maintenance') catClass = 'maintenance';
+                return `<div class="cal-dot ${catClass}"></div>`;
+            }).join("") + `</div>`;
+        }
+
+        let cls = "cal-day";
+        if(isActive) cls += " active";
+        if(isToday) cls += " today";
+
+        html += `<div class="${cls}" data-date="${dStr}">${i}${dotsHtml}</div>`;
+    }
+    
+    const totalCells = firstDayIndex + daysInMonth;
+    const nextDays = Math.ceil(totalCells / 7) * 7 - totalCells;
+    for(let j = 1; j <= nextDays; j++) {
+        html += `<div class="cal-day muted">${j}</div>`;
+    }
+    
+    grid.innerHTML = html;
+    
+    grid.querySelectorAll('.cal-day[data-date]').forEach(el => {
+        el.addEventListener('click', () => {
+            calSelectedDate = new Date(el.dataset.date);
+            renderCalendarGrid();
+            renderAgendaList();
+        });
+    });
 }
 
-window.toggleAgendaDash = async function(kind, id, currentStatus, currentDate) {
-    if (kind === 'schedule') {
-        const target = schedules.find(s => s.id === id);
-        if(target) await saveSchedule({ ...target, isDone: !currentStatus }, id);
-    } else {
-        const target = maintenances.find(m => m.id === id);
-        if(target) {
-            closeSheet();
-            openRescheduleSheet(target, currentDate);
-        }
+$("#cal-prev").addEventListener("click", () => { calCurrentDate.setMonth(calCurrentDate.getMonth() - 1); renderCalendarGrid(); });
+$("#cal-next").addEventListener("click", () => { calCurrentDate.setMonth(calCurrentDate.getMonth() + 1); renderCalendarGrid(); });
+
+function renderAgendaList() {
+    const listEl = $("#agenda-list");
+    const emptyEl = $("#agenda-empty");
+    const dStr = toYYYYMMDD(calSelectedDate);
+    
+    const dayNames = ["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"];
+    const monthNames = ["Jan","Feb","Mar","Apr","Mei","Jun","Jul","Agu","Sep","Okt","Nov","Des"];
+    const dObj = new Date(calSelectedDate);
+    $("#agenda-date-lbl").textContent = `${dayNames[dObj.getDay()]}, ${dObj.getDate()} ${monthNames[dObj.getMonth()]}`;
+
+    let dayItems = [];
+    schedules.forEach(s => {
+        if(doesScheduleOccur(s, dStr)) dayItems.push({ ...s, instanceDate: dStr });
+    });
+    
+    if (dayItems.length === 0) {
+        listEl.innerHTML = "";
+        emptyEl.classList.remove("hidden");
+        return;
     }
+    emptyEl.classList.add("hidden");
+    
+    listEl.innerHTML = dayItems.map(item => {
+        const isDone = isScheduleDone(item, item.instanceDate);
+        let subText = "";
+        
+        if (item.category === 'tagihan') subText = "💳 Tagihan";
+        else if (item.category === 'maintenance') subText = "🔧 Servis/Maintenance";
+        else subText = "📌 Lainnya";
+        
+        return `
+        <div class="agenda-item ${isDone ? 'done' : ''}">
+            <button class="checkbox-custom ${isDone ? 'checked' : ''}" onclick="toggleAgendaItem('${item.id}', ${isDone}, '${item.instanceDate}')">
+                ${isDone ? `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>` : ''}
+            </button>
+            <div class="agenda-main" onclick="openScheduleSheetById('${item.id}')" style="cursor:pointer;">
+                <div class="agenda-title">${escapeHtml(item.title)}</div>
+                <div class="agenda-sub">${subText}</div>
+            </div>
+            ${item.amount ? `<div class="agenda-amt">${rupiah(item.amount)}</div>` : ''}
+        </div>`;
+    }).join("");
+}
+
+window.toggleAgendaItem = async function(id, currentStatus, dateStr) {
+    const target = schedules.find(s => s.id === id);
+    if(target) {
+        let completedDates = target.completedDates || [];
+        if (currentStatus) {
+            completedDates = completedDates.filter(d => d !== dateStr);
+        } else {
+            completedDates.push(dateStr);
+        }
+        const isDoneOverall = target.repeat === 'none' ? !currentStatus : target.isDone;
+        await saveSchedule({ ...target, completedDates, isDone: isDoneOverall }, id);
+    }
+}
+window.openScheduleSheetById = function(id) { openScheduleSheet(schedules.find(s=>s.id===id)); }
+
+function openScheduleSheet(existing = null) {
+    const isEdit = !!existing;
+    const cat = isEdit ? (existing.category || 'tagihan') : 'tagihan';
+    openSheet(`
+        <div class="sheet-close-bar"></div>
+        <h3>${isEdit ? "Edit Jadwal" : "Tambah Jadwal & Agenda"}</h3>
+        
+        <div class="field">
+            <label>Kategori</label>
+            <div class="seg" id="s-cat-seg">
+                <button type="button" data-c="tagihan" class="${cat === 'tagihan' ? 'active' : ''}">Tagihan</button>
+                <button type="button" data-c="maintenance" class="${cat === 'maintenance' ? 'active' : ''}">Servis</button>
+                <button type="button" data-c="lainnya" class="${cat === 'lainnya' ? 'active' : ''}">Lainnya</button>
+            </div>
+        </div>
+        
+        <div class="field">
+            <label>Judul Agenda</label>
+            <input type="text" id="s-title" placeholder="Contoh: Bayar Listrik Bulanan / Servis Motor" value="${isEdit ? escapeHtml(existing.title || '') : ''}">
+        </div>
+        <div class="field">
+            <label>Tanggal Mulai</label>
+            <input type="date" id="s-date" value="${isEdit ? existing.date : toYYYYMMDD(calSelectedDate)}">
+        </div>
+        <div class="field">
+            <label>Ulangi Jadwal</label>
+            <select id="s-repeat">
+                <option value="none" ${existing && existing.repeat==='none'?'selected':''}>Tidak Diulang (Sekali Saja)</option>
+                <option value="daily" ${existing && existing.repeat==='daily'?'selected':''}>Setiap Hari</option>
+                <option value="weekly" ${existing && existing.repeat==='weekly'?'selected':''}>Setiap Minggu</option>
+                <option value="monthly" ${existing && existing.repeat==='monthly'?'selected':''}>Setiap Bulan</option>
+                <option value="yearly" ${existing && existing.repeat==='yearly'?'selected':''}>Setiap Tahun</option>
+            </select>
+        </div>
+        <div class="field" id="s-amount-wrap">
+            <label>Nominal (Opsional)</label>
+            <input type="text" inputmode="numeric" id="s-amount" placeholder="0" value="${isEdit && existing.amount ? formatNumberWithDot(existing.amount) : ''}">
+            <div class="field-hint">Nominal akan otomatis diakumulasi di ringkasan bulan terkait.</div>
+        </div>
+        
+        <button class="btn-primary" id="s-save" style="background:var(--ink);">${isEdit ? "Simpan Perubahan" : "Simpan Jadwal"}</button>
+        ${isEdit ? `<button class="btn-danger-outline" id="s-delete">Hapus Jadwal</button>` : ""}
+        <button class="btn-text-cancel" id="s-cancel">Batal</button>
+    `);
+    
+    let selCat = cat;
+    $("#s-cat-seg").querySelectorAll("button").forEach(b => {
+        b.addEventListener("click", () => {
+            selCat = b.dataset.c;
+            $("#s-cat-seg").querySelectorAll("button").forEach(x => x.classList.toggle("active", x === b));
+        });
+    });
+
+    attachNumFormatter('#s-amount');
+    
+    $("#s-cancel").addEventListener("click", closeSheet);
+    if(isEdit) $("#s-delete").addEventListener("click", ()=>{ closeSheet(); confirmDelete("schedule", existing.id); });
+    
+    $("#s-save").addEventListener("click", async () => {
+        const title = $("#s-title").value.trim();
+        const date = $("#s-date").value;
+        const repeat = $("#s-repeat").value;
+        const amount = unformatNumber($("#s-amount").value) || null;
+        
+        if(!title) { toast("Judul agenda wajib diisi"); return; }
+        if(!date) { toast("Tanggal wajib dipilih"); return; }
+        
+        $("#s-save").textContent = "Menyimpan...";
+        try {
+            await saveSchedule({ 
+                title, date, repeat, category: selCat, amount, 
+                isDone: isEdit ? existing.isDone : false,
+                completedDates: isEdit ? (existing.completedDates || []) : []
+            }, isEdit ? existing.id : null);
+            closeSheet();
+            toast("Jadwal berhasil disimpan");
+        } catch (e) { toast("Gagal menyimpan jadwal"); }
+    });
 }
 
 function renderAssetFilters(){
   const used = allCategories().filter(c => assets.some(a=>a.category===c.id));
   const wrap = $("#asset-filter-chips");
-  wrap.innerHTML = `<button class="chip ${assetFilter==="all"?"active":""}" data-f="all">Semua</button>` +
-    used.map(c => `<button class="chip ${assetFilter===c.id?"active":""}" data-f="${c.id}">${c.name}</button>`).join("");
-  wrap.querySelectorAll(".chip").forEach(btn=>{
-    btn.addEventListener("click", ()=>{ assetFilter = btn.dataset.f; renderAssetFilters(); renderAssetList(); });
-  });
+  wrap.innerHTML = `<button class="chip ${assetFilter==="all"?"active":""}" data-f="all">Semua</button>` + used.map(c => `<button class="chip ${assetFilter===c.id?"active":""}" data-f="${c.id}">${c.name}</button>`).join("");
+  wrap.querySelectorAll(".chip").forEach(btn=>{ btn.addEventListener("click", ()=>{ assetFilter = btn.dataset.f; renderAssetFilters(); renderAssetList(); }); });
 }
 
 window.openHealthSheet = function() {
-    const s = computeStats();
-    const b = s.scoreBreakdown;
-    
+    const s = computeStats(); const b = s.scoreBreakdown;
     const formatScore = (val, max) => `<span style="font-weight:700; color:var(--ink);">${Math.round(val)}</span><span style="color:var(--muted); font-size:11px;">/${max}</span>`;
-
     openSheet(`
         <div class="sheet-close-bar"></div>
         <h3>Rincian Skor Kesehatan</h3>
-        <div style="font-size:36px; font-weight:800; font-family:'Sora',sans-serif; text-align:center; color:var(--primary-ink); margin:10px 0 20px;">
-            ${s.healthScore}
-        </div>
-
+        <div style="font-size:36px; font-weight:800; font-family:'Sora',sans-serif; text-align:center; color:var(--primary-ink); margin:10px 0 20px;">${s.healthScore}</div>
         <div class="list-item" style="padding:14px 0; border-bottom:1px solid var(--line);">
-            <div class="li-main">
-                <div class="li-title" style="font-size:14px;">⚖️ Rasio Hutang</div>
-                <div class="li-sub" style="font-size:11.5px; line-height:1.4; margin-top:4px;">
-                    Hutang berbanding total aset. Idealnya 0%.<br>Saat ini: <b>${Math.round(s.debtRatio*100)}%</b>
-                </div>
-            </div>
+            <div class="li-main"><div class="li-title" style="font-size:14px;">⚖️ Rasio Hutang</div><div class="li-sub" style="font-size:11.5px; line-height:1.4; margin-top:4px;">Hutang berbanding total aset. Idealnya 0%.<br>Saat ini: <b>${Math.round(s.debtRatio*100)}%</b></div></div>
             <div style="font-family:'Sora',sans-serif; text-align:right;">${formatScore(b.debt, 40)}</div>
         </div>
-
         <div class="list-item" style="padding:14px 0; border-bottom:1px solid var(--line);">
-            <div class="li-main">
-                <div class="li-title" style="font-size:14px;">🛡️ Dana Darurat</div>
-                <div class="li-sub" style="font-size:11.5px; line-height:1.4; margin-top:4px;">
-                    Kecukupan bulan hidup dari Target "Darurat". Idealnya 6 bln.<br>Saat ini: <b>${s.efMonths.toFixed(1)} Bulan</b>
-                </div>
-            </div>
+            <div class="li-main"><div class="li-title" style="font-size:14px;">🛡️ Dana Darurat</div><div class="li-sub" style="font-size:11.5px; line-height:1.4; margin-top:4px;">Kecukupan bulan hidup dari Target "Darurat". Idealnya 6 bln.<br>Saat ini: <b>${s.efMonths.toFixed(1)} Bulan</b></div></div>
             <div style="font-family:'Sora',sans-serif; text-align:right;">${formatScore(b.ef, 30)}</div>
         </div>
-
         <div class="list-item" style="padding:14px 0; border-bottom:1px solid var(--line);">
-            <div class="li-main">
-                <div class="li-title" style="font-size:14px;">🥧 Diversifikasi</div>
-                <div class="li-sub" style="font-size:11.5px; line-height:1.4; margin-top:4px;">
-                    Variasi kategori aset. Idealnya min 4 kategori.<br>Saat ini: <b>${s.diversification} Kategori</b>
-                </div>
-            </div>
+            <div class="li-main"><div class="li-title" style="font-size:14px;">🥧 Diversifikasi</div><div class="li-sub" style="font-size:11.5px; line-height:1.4; margin-top:4px;">Variasi kategori aset. Idealnya min 4 kategori.<br>Saat ini: <b>${s.diversification} Kategori</b></div></div>
             <div style="font-family:'Sora',sans-serif; text-align:right;">${formatScore(b.div, 15)}</div>
         </div>
-
         <div class="list-item" style="padding:14px 0; border-bottom:none;">
-            <div class="li-main">
-                <div class="li-title" style="font-size:14px;">📈 Rasio Aset Investasi</div>
-                <div class="li-sub" style="font-size:11.5px; line-height:1.4; margin-top:4px;">
-                    Aset yang berkembang vs aset menyusut.<br>Saat ini: <b>${Math.round(s.assetQualityRatio*100)}% Investasi</b>
-                </div>
-            </div>
+            <div class="li-main"><div class="li-title" style="font-size:14px;">📈 Rasio Aset Investasi</div><div class="li-sub" style="font-size:11.5px; line-height:1.4; margin-top:4px;">Aset yang berkembang vs aset menyusut.<br>Saat ini: <b>${Math.round(s.assetQualityRatio*100)}% Investasi</b></div></div>
             <div style="font-family:'Sora',sans-serif; text-align:right;">${formatScore(b.qual, 15)}</div>
         </div>
-
         <button class="btn-primary" id="btn-close-health" style="margin-top:20px;">Tutup</button>
     `);
     $("#btn-close-health").addEventListener("click", closeSheet);
@@ -1400,49 +1437,19 @@ window.openHealthSheet = function() {
 
 window.openLiquiditySheet = function() {
     const s = computeStats();
-
     const renderItems = (items) => {
         if (items.length === 0) return `<div class="empty" style="padding:10px 0;">Belum ada data</div>`;
         return items.sort((a,b)=>b.calcVal - a.calcVal).map(a => {
             const cat = catById(a.category);
-            return `
-            <div class="list-item" style="padding:10px 0; border-bottom:1px solid var(--line);">
-                <div class="dot" style="background:${catDot(cat)}"></div>
-                <div class="li-main">
-                    <div class="li-title" style="font-size:13.5px;">${escapeHtml(a.name||cat.name)}</div>
-                    <div class="li-sub" style="font-size:10.5px; margin-top:4px;">Sumber: ${a.source}</div>
-                </div>
-                <div class="li-amt" style="font-size:13px;">${rupiah(a.calcVal)}</div>
-            </div>`;
+            return `<div class="list-item" style="padding:10px 0; border-bottom:1px solid var(--line);"><div class="dot" style="background:${catDot(cat)}"></div><div class="li-main"><div class="li-title" style="font-size:13.5px;">${escapeHtml(a.name||cat.name)}</div><div class="li-sub" style="font-size:10.5px; margin-top:4px;">Sumber: ${a.source}</div></div><div class="li-amt" style="font-size:13px;">${rupiah(a.calcVal)}</div></div>`;
         }).join("");
     };
-
     openSheet(`
         <div class="sheet-close-bar"></div>
         <h3>Rincian Likuiditas</h3>
-        <p style="font-size:12.5px; color:var(--muted); margin-top:-8px; margin-bottom:16px;">
-            Aset lancar mudah dicairkan menjadi uang tunai, sedangkan aset tidak lancar butuh waktu lebih lama. <b>Hanya dihitung dari tab Aset.</b>
-        </p>
-
-        <div style="margin-bottom:20px;">
-            <div style="font-size:11.5px; font-weight:700; color:#10B981; margin-bottom:8px; text-transform:uppercase; letter-spacing:0.04em; display:flex; justify-content:space-between;">
-                <span>🟢 Aset Lancar</span>
-                <span>${rupiah(s.totalLiquid)}</span>
-            </div>
-            <div style="background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:0 12px; max-height:22vh; overflow-y:auto;">
-                ${renderItems(s.liquidItems)}
-            </div>
-        </div>
-
-        <div>
-            <div style="font-size:11.5px; font-weight:700; color:#94A3B8; margin-bottom:8px; text-transform:uppercase; letter-spacing:0.04em; display:flex; justify-content:space-between;">
-                <span>⚪ Aset Tidak Lancar</span>
-                <span>${rupiah(s.totalNonLiquid)}</span>
-            </div>
-            <div style="background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:0 12px; max-height:22vh; overflow-y:auto;">
-                ${renderItems(s.nonLiquidItems)}
-            </div>
-        </div>
+        <p style="font-size:12.5px; color:var(--muted); margin-top:-8px; margin-bottom:16px;">Aset lancar mudah dicairkan menjadi uang tunai, sedangkan aset tidak lancar butuh waktu lebih lama. <b>Hanya dihitung dari tab Aset.</b></p>
+        <div style="margin-bottom:20px;"><div style="font-size:11.5px; font-weight:700; color:#10B981; margin-bottom:8px; text-transform:uppercase; letter-spacing:0.04em; display:flex; justify-content:space-between;"><span>🟢 Aset Lancar</span><span>${rupiah(s.totalLiquid)}</span></div><div style="background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:0 12px; max-height:22vh; overflow-y:auto;">${renderItems(s.liquidItems)}</div></div>
+        <div><div style="font-size:11.5px; font-weight:700; color:#94A3B8; margin-bottom:8px; text-transform:uppercase; letter-spacing:0.04em; display:flex; justify-content:space-between;"><span>⚪ Aset Tidak Lancar</span><span>${rupiah(s.totalNonLiquid)}</span></div><div style="background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:0 12px; max-height:22vh; overflow-y:auto;">${renderItems(s.nonLiquidItems)}</div></div>
         <button class="btn-primary" id="btn-close-liq" style="margin-top:16px;">Tutup</button>
     `);
     $("#btn-close-liq").addEventListener("click", closeSheet);
@@ -1463,31 +1470,13 @@ function renderAssetList(){
   if (items.length===0){ list.innerHTML=""; empty.classList.remove("hidden"); return; }
   empty.classList.add("hidden");
   list.innerHTML = items.map(a=>{
-    const cat = catById(a.category);
-    let subTxt = cat.name;
-    
+    const cat = catById(a.category); let subTxt = cat.name;
     if (a.category === 'emas' && a.qty) subTxt = `Emas ${a.subType === 'antam' ? 'Antam' : 'Galeri24'} · ${a.qty}g`;
     if (a.category === 'dinar' && a.qty) subTxt = `Dinar KR · ${a.qty} Keping`;
     if (a.category === 'valas' && a.qty) subTxt = `Valas (${a.subType.toUpperCase()}) · ${Number(a.qty).toLocaleString('id-ID')}`;
-    
     let depTxt = "";
-    if (a.assetGroup === 'penyusutan' && a.purchaseYear && a.amount > 0) {
-        depTxt = `<span style="display:block; margin-top:2px; font-size:10.5px; color:var(--muted);">Nilai Beli: <span style="color:var(--debt); text-decoration:line-through;">${rupiah(a.amount)}</span></span>`;
-    }
-    
-    return `
-    <div class="list-item">
-      <div class="dot" style="background:${catDot(cat)}"></div>
-      <div class="li-main">
-        <div class="li-title">${escapeHtml(a.name||cat.name)}</div>
-        <div class="li-sub">${subTxt}${a.note?" · "+escapeHtml(a.note):""} ${depTxt}</div>
-      </div>
-      <div class="li-amt">${rupiah(a.calcVal)}</div>
-      <div class="li-actions">
-        <button data-edit="${a.id}">${pencilIcon()}</button>
-        <button data-del="${a.id}" data-kind="asset">${trashIcon()}</button>
-      </div>
-    </div>`;
+    if (a.assetGroup === 'penyusutan' && a.purchaseYear && a.amount > 0) { depTxt = `<span style="display:block; margin-top:2px; font-size:10.5px; color:var(--muted);">Nilai Beli: <span style="color:var(--debt); text-decoration:line-through;">${rupiah(a.amount)}</span></span>`; }
+    return `<div class="list-item"><div class="dot" style="background:${catDot(cat)}"></div><div class="li-main"><div class="li-title">${escapeHtml(a.name||cat.name)}</div><div class="li-sub">${subTxt}${a.note?" · "+escapeHtml(a.note):""} ${depTxt}</div></div><div class="li-amt">${rupiah(a.calcVal)}</div><div class="li-actions"><button data-edit="${a.id}">${pencilIcon()}</button><button data-del="${a.id}" data-kind="asset">${trashIcon()}</button></div></div>`;
   }).join("");
   list.querySelectorAll("[data-edit]").forEach(b=>b.addEventListener("click",()=>openAssetSheet(assets.find(a=>a.id===b.dataset.edit))));
   list.querySelectorAll("[data-del]").forEach(b=>b.addEventListener("click",()=>confirmDelete("asset", b.dataset.del)));
@@ -1497,7 +1486,6 @@ function renderDebtList(){
   const list = $("#debt-list"); const empty = $("#debt-empty");
   const items = debts.filter(d => (debtTab==="hutang") ? d.type!=="piutang" : d.type==="piutang").sort((a,b)=>Number(b.amount||0)-Number(a.amount||0));
   $("#debt-empty-title").textContent = debtTab==="hutang" ? "Belum ada hutang tercatat" : "Belum ada piutang tercatat";
-  
   const totalTabValue = items.reduce((sum, d) => sum + Number(d.amount || 0), 0);
   $("#debt-type-label").textContent = debtTab === "hutang" ? "Daftar Hutang" : "Daftar Piutang";
   $("#debt-total-value").textContent = rupiah(totalTabValue);
@@ -1506,41 +1494,17 @@ function renderDebtList(){
   if (items.length===0){ list.innerHTML=""; empty.classList.remove("hidden"); return; }
   empty.classList.add("hidden");
   list.innerHTML = items.map(d=>{
-    let dueTxt = "";
-    let dueBadge = "";
+    let dueTxt = ""; let dueBadge = "";
     if (d.dueDate) {
-        const due = new Date(d.dueDate);
-        dueTxt = due.toLocaleDateString("id-ID",{day:"numeric",month:"short",year:"numeric"});
-        
+        const due = new Date(d.dueDate); dueTxt = due.toLocaleDateString("id-ID",{day:"numeric",month:"short",year:"numeric"});
         const today = new Date(); today.setHours(0,0,0,0);
         const dueMid = new Date(d.dueDate); dueMid.setHours(0,0,0,0);
         const diffDays = Math.ceil((dueMid - today) / (1000 * 60 * 60 * 24));
-        
-        if (diffDays < 0) {
-            dueBadge = `<span style="color:var(--debt); font-weight:700; font-size:9.5px; background:var(--debt-soft); padding:3px 6px; border-radius:6px; margin-left:6px; white-space:nowrap;">Lewat ${Math.abs(diffDays)} hr</span>`;
-        } else if (diffDays <= 7) {
-            dueBadge = `<span style="color:#D97706; font-weight:700; font-size:9.5px; background:#FEF3C7; padding:3px 6px; border-radius:6px; margin-left:6px; white-space:nowrap;">H-${diffDays}</span>`;
-        }
+        if (diffDays < 0) { dueBadge = `<span style="color:var(--debt); font-weight:700; font-size:9.5px; background:var(--debt-soft); padding:3px 6px; border-radius:6px; margin-left:6px; white-space:nowrap;">Lewat ${Math.abs(diffDays)} hr</span>`; } 
+        else if (diffDays <= 7) { dueBadge = `<span style="color:#D97706; font-weight:700; font-size:9.5px; background:#FEF3C7; padding:3px 6px; border-radius:6px; margin-left:6px; white-space:nowrap;">H-${diffDays}</span>`; }
     }
-    
     const inst = d.installment ? `<div style="font-size:11.5px; color:var(--muted); margin-top:4px; font-weight:500;">Cicilan: <span style="font-weight:700; color:var(--ink);">${rupiah(d.installment)}</span> / bln</div>` : "";
-    return `
-    <div class="list-item">
-      <div class="dot" style="background:${d.type==="piutang"?"#146356":"#B0483C"}"></div>
-      <div class="li-main">
-        <div class="li-title">${escapeHtml(d.name)}</div>
-        <div class="li-sub" style="display:flex; align-items:center;">
-           ${dueTxt?("Jatuh tempo "+dueTxt):(d.note?escapeHtml(d.note):"Tanpa catatan")}
-           ${dueBadge}
-        </div>
-        ${inst}
-      </div>
-      <div class="li-amt" style="color:${d.type==="piutang"?"var(--primary-ink)":"var(--debt)"}">${rupiah(d.amount)}</div>
-      <div class="li-actions">
-        <button data-editd="${d.id}">${pencilIcon()}</button>
-        <button data-deld="${d.id}">${trashIcon()}</button>
-      </div>
-    </div>`;
+    return `<div class="list-item"><div class="dot" style="background:${d.type==="piutang"?"#146356":"#B0483C"}"></div><div class="li-main"><div class="li-title">${escapeHtml(d.name)}</div><div class="li-sub" style="display:flex; align-items:center;">${dueTxt?("Jatuh tempo "+dueTxt):(d.note?escapeHtml(d.note):"Tanpa catatan")} ${dueBadge}</div>${inst}</div><div class="li-amt" style="color:${d.type==="piutang"?"var(--primary-ink)":"var(--debt)"}">${rupiah(d.amount)}</div><div class="li-actions"><button data-editd="${d.id}">${pencilIcon()}</button><button data-deld="${d.id}">${trashIcon()}</button></div></div>`;
   }).join("");
   list.querySelectorAll("[data-editd]").forEach(b=>b.addEventListener("click",()=>openDebtSheet(debts.find(d=>d.id===b.dataset.editd))));
   list.querySelectorAll("[data-deld]").forEach(b=>b.addEventListener("click",()=>confirmDelete("debt", b.dataset.deld)));
@@ -1548,440 +1512,57 @@ function renderDebtList(){
 
 function renderGoals(){
   const list = $("#goal-list"); const empty = $("#goal-empty"); const summaryCard = $("#goal-summary-card");
-  
-  if (goals.length === 0){ 
-     list.innerHTML = ""; 
-     empty.classList.remove("hidden"); 
-     summaryCard.classList.add("hidden");
-     return; 
-  }
-  
-  empty.classList.add("hidden");
-  summaryCard.classList.remove("hidden");
+  if (goals.length === 0){ list.innerHTML = ""; empty.classList.remove("hidden"); summaryCard.classList.add("hidden"); return; }
+  empty.classList.add("hidden"); summaryCard.classList.remove("hidden");
   
   const totalTargetAll = goals.reduce((sum, g) => sum + Number(g.target || 0), 0);
   const totalCollectedAll = goals.reduce((sum, g) => sum + (g.assets || []).reduce((s, a) => s + calcAssetValue(a), 0), 0);
   $("#goal-summary").innerHTML = `<span style="font-weight:600; color:var(--muted); font-size:11px;">Terkumpul</span> <span style="margin:0 6px; color:var(--line);">|</span> <span style="font-weight:700; color:var(--primary-ink); font-family:'Sora',sans-serif;">${rupiah(totalCollectedAll)}</span> <span style="color:var(--muted); font-size:12px; font-weight:600;">/ ${rupiah(totalTargetAll)}</span>`;
   
-  window.toggleGoal = function(id) {
-    if (expandedGoals.has(id)) expandedGoals.delete(id);
-    else expandedGoals.add(id);
-    renderGoals(); 
-  };
+  window.toggleGoal = function(id) { if (expandedGoals.has(id)) expandedGoals.delete(id); else expandedGoals.add(id); renderGoals(); };
 
   list.innerHTML = goals.sort((a,b)=> Number(b.target)-Number(a.target)).map(g => {
-    const target = Number(g.target || 0);
-    const gAssets = g.assets || [];
+    const target = Number(g.target || 0); const gAssets = g.assets || [];
     const collected = gAssets.reduce((sum, a) => sum + calcAssetValue(a), 0);
-    
-    const rem = Math.max(0, target - collected);
-    const pct = target > 0 ? Math.min(100, Math.floor((collected/target)*100)) : 0;
+    const rem = Math.max(0, target - collected); const pct = target > 0 ? Math.min(100, Math.floor((collected/target)*100)) : 0;
     const isExpanded = expandedGoals.has(g.id);
     
     let assetsHtml = "";
     if (gAssets.length > 0) {
       assetsHtml = gAssets.map(a => {
-        const cat = catById(a.category);
-        let subTxt = cat.name;
-        let eqTxt = "";
-        let valTxt = rupiah(calcAssetValue(a));
-        
-        if (a.category === 'emas' && a.qty) {
-            subTxt = `Emas ${a.subType === 'antam' ? 'Antam' : 'G24'}`;
-            valTxt = `${a.qty}g`;
-            eqTxt = `≈ ${rupiah(calcAssetValue(a))}`;
-        }
-        else if (a.category === 'dinar' && a.qty) {
-            subTxt = `Dinar KR`;
-            valTxt = `${a.qty} Kpg`;
-            eqTxt = `≈ ${rupiah(calcAssetValue(a))}`;
-        }
-        else if (a.category === 'valas' && a.qty) {
-            subTxt = `Valas (${a.subType.toUpperCase()})`;
-            valTxt = Number(a.qty).toLocaleString('id-ID');
-            eqTxt = `≈ ${rupiah(calcAssetValue(a))}`;
-        }
-
-        return `
-        <div class="goal-asset-item">
-          <div class="goal-asset-icon" style="background:${catDot(cat)}">${cat.icon||''}</div>
-          <div class="goal-asset-info">
-            <div class="goal-asset-name">${escapeHtml(a.name||cat.name)}</div>
-            <div class="goal-asset-sub">${subTxt}</div>
-          </div>
-          <div class="goal-asset-val-box">
-             <div class="goal-asset-val">${valTxt}</div>
-             ${eqTxt ? `<div class="goal-asset-val-eq">${eqTxt}</div>` : ''}
-          </div>
-          <div class="goal-asset-actions">
-             <button class="goal-asset-btn edit" onclick="editGoalAsset('${g.id}', '${a.id}')">${pencilIcon()}</button>
-             <button class="goal-asset-btn del" onclick="confirmDeleteGoalAsset('${g.id}', '${a.id}')">${trashIcon()}</button>
-          </div>
-        </div>`;
+        const cat = catById(a.category); let subTxt = cat.name; let eqTxt = ""; let valTxt = rupiah(calcAssetValue(a));
+        if (a.category === 'emas' && a.qty) { subTxt = `Emas ${a.subType === 'antam' ? 'Antam' : 'G24'}`; valTxt = `${a.qty}g`; eqTxt = `≈ ${rupiah(calcAssetValue(a))}`; }
+        else if (a.category === 'dinar' && a.qty) { subTxt = `Dinar KR`; valTxt = `${a.qty} Kpg`; eqTxt = `≈ ${rupiah(calcAssetValue(a))}`; }
+        else if (a.category === 'valas' && a.qty) { subTxt = `Valas (${a.subType.toUpperCase()})`; valTxt = Number(a.qty).toLocaleString('id-ID'); eqTxt = `≈ ${rupiah(calcAssetValue(a))}`; }
+        return `<div class="goal-asset-item"><div class="goal-asset-icon" style="background:${catDot(cat)}">${cat.icon||''}</div><div class="goal-asset-info"><div class="goal-asset-name">${escapeHtml(a.name||cat.name)}</div><div class="goal-asset-sub">${subTxt}</div></div><div class="goal-asset-val-box"><div class="goal-asset-val">${valTxt}</div>${eqTxt ? `<div class="goal-asset-val-eq">${eqTxt}</div>` : ''}</div><div class="goal-asset-actions"><button class="goal-asset-btn edit" onclick="editGoalAsset('${g.id}', '${a.id}')">${pencilIcon()}</button><button class="goal-asset-btn del" onclick="confirmDeleteGoalAsset('${g.id}', '${a.id}')">${trashIcon()}</button></div></div>`;
       }).join("");
-    } else {
-      assetsHtml = `<div class="empty" style="padding:16px 0; font-size:12px;">Belum ada aset disimpan.</div>`;
-    }
+    } else { assetsHtml = `<div class="empty" style="padding:16px 0; font-size:12px;">Belum ada aset disimpan.</div>`; }
 
-    return `
-    <div class="card ${isExpanded ? '' : 'collapsed'}" style="margin-bottom:14px; padding:20px;">
-      <div class="goal-header" onclick="toggleGoal('${g.id}')">
-        <div class="goal-title-wrap">
-          <h2 class="goal-title">${escapeHtml(g.name)}</h2>
-          <div class="goal-target-lbl">TARGET DANA: <span class="goal-target-val">${rupiah(target)}</span></div>
-        </div>
-        <div class="chevron icon-btn" style="width:32px; height:32px; border:none; box-shadow:none; margin-top:2px;">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
-        </div>
-      </div>
-      
-      <div class="goal-progress-track">
-        <div class="goal-progress-fill" style="width:${pct}%;"></div>
-      </div>
-      
-      <div class="goal-stats">
-        <div class="goal-pct">${pct}%</div>
-        <div class="goal-collected">Terkumpul: <span class="goal-collected-val">${rupiah(collected)}</span></div>
-      </div>
-      
-      <div class="goal-body">
-        <div class="goal-reco-box">
-          <div class="goal-reco-head">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
-            Rekomendasi Tabungan
-          </div>
-          <div class="goal-reco-desc">Sisa dana yang perlu dikumpulkan: <b style="color:var(--ink);">${rupiah(rem)}</b></div>
-          <div class="goal-reco-grid">
-            <div class="goal-reco-item">
-              <div class="goal-reco-lbl">6 BULAN</div>
-              <div class="goal-reco-val">${rupiah(rem/6)}</div>
-            </div>
-            <div class="goal-reco-item">
-              <div class="goal-reco-lbl">12 BULAN</div>
-              <div class="goal-reco-val">${rupiah(rem/12)}</div>
-            </div>
-            <div class="goal-reco-item">
-              <div class="goal-reco-lbl">24 BULAN</div>
-              <div class="goal-reco-val">${rupiah(rem/24)}</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="goal-assets-section">
-          <div class="goal-assets-head">
-             <span>Aset Disimpan</span>
-             <button class="icon-btn" style="width:26px;height:26px;border:none;background:var(--bg);box-shadow:none;" onclick="openGoalSheetBtn('${g.id}')">
-               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg>
-             </button>
-          </div>
-          ${assetsHtml}
-          <button class="btn-add-dashed" onclick="openGoalAssetSheet('${g.id}')" style="margin-top:12px;">
-             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
-             Tambah Catatan Aset
-          </button>
-        </div>
-      </div>
-    </div>`;
+    return `<div class="card ${isExpanded ? '' : 'collapsed'}" style="margin-bottom:14px; padding:20px;"><div class="goal-header" onclick="toggleGoal('${g.id}')"><div class="goal-title-wrap"><h2 class="goal-title">${escapeHtml(g.name)}</h2><div class="goal-target-lbl">TARGET DANA: <span class="goal-target-val">${rupiah(target)}</span></div></div><div class="chevron icon-btn" style="width:32px; height:32px; border:none; box-shadow:none; margin-top:2px;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg></div></div><div class="goal-progress-track"><div class="goal-progress-fill" style="width:${pct}%;"></div></div><div class="goal-stats"><div class="goal-pct">${pct}%</div><div class="goal-collected">Terkumpul: <span class="goal-collected-val">${rupiah(collected)}</span></div></div><div class="goal-body"><div class="goal-reco-box"><div class="goal-reco-head"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg> Rekomendasi Tabungan</div><div class="goal-reco-desc">Sisa dana yang perlu dikumpulkan: <b style="color:var(--ink);">${rupiah(rem)}</b></div><div class="goal-reco-grid"><div class="goal-reco-item"><div class="goal-reco-lbl">6 BULAN</div><div class="goal-reco-val">${rupiah(rem/6)}</div></div><div class="goal-reco-item"><div class="goal-reco-lbl">12 BULAN</div><div class="goal-reco-val">${rupiah(rem/12)}</div></div><div class="goal-reco-item"><div class="goal-reco-lbl">24 BULAN</div><div class="goal-reco-val">${rupiah(rem/24)}</div></div></div></div><div class="goal-assets-section"><div class="goal-assets-head"><span>Aset Disimpan</span><button class="icon-btn" style="width:26px;height:26px;border:none;background:var(--bg);box-shadow:none;" onclick="openGoalSheetBtn('${g.id}')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg></button></div>${assetsHtml}<button class="btn-add-dashed" onclick="openGoalAssetSheet('${g.id}')" style="margin-top:12px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg> Tambah Catatan Aset</button></div></div></div>`;
   }).join("");
-}
-
-function getMonthDays(year, month) {
-    return new Date(year, month + 1, 0).getDate();
-}
-
-function renderCalendarGrid() {
-    const year = calCurrentDate.getFullYear();
-    const month = calCurrentDate.getMonth(); // 0-11
-    const firstDayIndex = new Date(year, month, 1).getDay(); // 0(Sun) - 6(Sat)
-    const daysInMonth = getMonthDays(year, month);
-    const prevMonthDays = getMonthDays(year, month - 1);
-    
-    // Formatting title
-    const monthNames = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
-    $("#cal-month-year").textContent = `${monthNames[month]} ${year}`;
-    
-    // Build events map by date "YYYY-MM-DD"
-    const eventsMap = {};
-    schedules.forEach(s => {
-        if(s.date) {
-            if(!eventsMap[s.date]) eventsMap[s.date] = [];
-            eventsMap[s.date].push({ kind: 'schedule', ...s });
-        }
-    });
-    maintenances.forEach(m => {
-        if(m.nextDate) {
-            if(!eventsMap[m.nextDate]) eventsMap[m.nextDate] = [];
-            eventsMap[m.nextDate].push({ kind: 'maintenance', ...m });
-        }
-    });
-
-    const grid = $("#cal-days-container");
-    let html = "";
-    
-    // Prev month overflow cells
-    for(let x = firstDayIndex; x > 0; x--) {
-        html += `<div class="cal-cell empty-cell muted">${prevMonthDays - x + 1}</div>`;
-    }
-    
-    // Current month cells
-    const todayStr = toYYYYMMDD(new Date());
-    const selStr = toYYYYMMDD(calSelectedDate);
-    
-    for(let i = 1; i <= daysInMonth; i++) {
-        const dStr = year + "-" + String(month+1).padStart(2,'0') + "-" + String(i).padStart(2,'0');
-        const isActive = dStr === selStr;
-        const isToday = dStr === todayStr;
-        
-        const dayEvents = eventsMap[dStr] || [];
-        let dotsHtml = "";
-        if(dayEvents.length > 0) {
-            // Group by category to avoid too many dots
-            let hasTagihan = false, hasMaintenance = false, hasLainnya = false;
-            dayEvents.forEach(e => {
-                if (e.kind === 'schedule') {
-                    if (e.category === 'tagihan') hasTagihan = true;
-                    else if (e.category === 'maintenance') hasMaintenance = true;
-                    else hasLainnya = true;
-                } else if (e.kind === 'maintenance') {
-                    hasMaintenance = true;
-                }
-            });
-            dotsHtml += `<div class="cal-dot-wrap">`;
-            if (hasTagihan) dotsHtml += `<div class="cal-dot tagihan"></div>`;
-            if (hasMaintenance) dotsHtml += `<div class="cal-dot maintenance"></div>`;
-            if (hasLainnya) dotsHtml += `<div class="cal-dot lainnya"></div>`;
-            dotsHtml += `</div>`;
-        } else {
-            dotsHtml = `<div class="cal-dot-wrap"></div>`; // Empty spacer
-        }
-
-        html += `
-            <div class="cal-cell ${isActive ? 'active' : ''} ${isToday && !isActive ? 'is-today' : ''}" data-date="${dStr}">
-                ${i}
-                ${dotsHtml}
-            </div>
-        `;
-    }
-    
-    // Next month overflow
-    const totalCells = firstDayIndex + daysInMonth;
-    let nextDays = 42 - totalCells; // Max 6 rows = 42 cells
-    if (nextDays >= 7) nextDays -= 7; // If full row empty, remove it
-    
-    for(let j = 1; j <= nextDays; j++) {
-        html += `<div class="cal-cell empty-cell muted">${j}</div>`;
-    }
-    
-    grid.innerHTML = html;
-    
-    grid.querySelectorAll(".cal-cell:not(.empty-cell)").forEach(cell => {
-        cell.addEventListener("click", () => {
-            const dateStr = cell.dataset.date;
-            calSelectedDate = new Date(dateStr);
-            renderCalendarGrid(); // Refresh grid to highlight
-            renderAgendaList();   // Show items for this day
-        });
-    });
-}
-
-$("#cal-prev").addEventListener("click", () => {
-    calCurrentDate.setMonth(calCurrentDate.getMonth() - 1);
-    renderCalendarGrid();
-});
-$("#cal-next").addEventListener("click", () => {
-    calCurrentDate.setMonth(calCurrentDate.getMonth() + 1);
-    renderCalendarGrid();
-});
-
-function renderAgendaList() {
-    const listEl = $("#agenda-list");
-    const emptyEl = $("#agenda-empty");
-    const dStr = toYYYYMMDD(calSelectedDate);
-    
-    // Formatting display string
-    const dayNames = ["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"];
-    const monthNames = ["Jan","Feb","Mar","Apr","Mei","Jun","Jul","Agu","Sep","Okt","Nov","Des"];
-    const dObj = new Date(calSelectedDate);
-    $("#agenda-date-lbl").textContent = `${dayNames[dObj.getDay()]}, ${dObj.getDate()} ${monthNames[dObj.getMonth()]}`;
-
-    let dayItems = [];
-    schedules.forEach(s => {
-        if(s.date === dStr) dayItems.push({ ...s, kind: 'schedule' });
-    });
-    maintenances.forEach(m => {
-        if(m.nextDate === dStr) dayItems.push({ ...m, kind: 'maintenance' });
-    });
-    
-    if (dayItems.length === 0) {
-        listEl.innerHTML = "";
-        emptyEl.classList.remove("hidden");
-        return;
-    }
-    emptyEl.classList.add("hidden");
-    
-    listEl.innerHTML = dayItems.map(item => {
-        const isDone = item.isDone;
-        let subText = "";
-        let dotColor = "var(--muted)";
-        
-        if (item.kind === 'schedule') {
-            if(item.category === 'tagihan') { subText = "Tagihan / Cicilan"; dotColor = "var(--blue)"; }
-            else if (item.category === 'maintenance') { subText = "Jadwal Servis"; dotColor = "var(--gold)"; }
-            else { subText = "Agenda Lainnya"; }
-        } else {
-            subText = `Maintenance ${item.type === 'kendaraan' ? 'Kendaraan' : 'Rumah'}`;
-            dotColor = "var(--gold)";
-        }
-        
-        return `
-        <div class="agenda-item ${isDone ? 'done' : ''}">
-            <button class="checkbox-custom ${isDone ? 'checked' : ''}" onclick="toggleAgendaItem('${item.kind}', '${item.id}', ${isDone})">
-                ${isDone ? `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>` : ''}
-            </button>
-            <div class="agenda-main">
-                <div class="agenda-title">${escapeHtml(item.title || item.name)}</div>
-                <div class="agenda-sub">
-                    <div class="agenda-sub-dot" style="background:${dotColor}"></div>
-                    ${subText}
-                </div>
-                ${item.amount ? `<div class="agenda-amt">${rupiah(item.amount)}</div>` : ''}
-            </div>
-            <div style="display:flex; gap:6px; margin-left:6px; flex:0 0 auto;">
-                <button class="icon-btn" style="width:28px;height:28px;border:none;background:var(--line);" onclick="openAgendaEditor('${item.kind}', '${item.id}')">${pencilIcon()}</button>
-                <button class="icon-btn" style="width:28px;height:28px;border:none;background:var(--debt-soft);color:var(--debt);" onclick="confirmDeleteAgenda('${item.kind}', '${item.id}')">${trashIcon()}</button>
-            </div>
-        </div>`;
-    }).join("");
-}
-
-window.toggleAgendaItem = async function(kind, id, currentStatus) {
-    if (kind === 'schedule') {
-        const target = schedules.find(s => s.id === id);
-        if(target) await saveSchedule({ ...target, isDone: !currentStatus }, id);
-    } else {
-        const target = maintenances.find(m => m.id === id);
-        if(target) {
-            // Unchecking maintenance is simple, just set isDone to false (though we don't really have an isDone for maintenance, we update the nextDate).
-            // Actually, for maintenance items, "Done" means we prompt for the next date!
-            openRescheduleSheet(target, toYYYYMMDD(calSelectedDate));
-        }
-    }
-}
-
-function openRescheduleSheet(item, dateStr) {
-    openSheet(`
-        <div class="sheet-close-bar"></div>
-        <h3>Tandai Selesai</h3>
-        <p style="font-size:13px; color:var(--muted); line-height:1.5;">Kamu telah menyelesaikan perawatan untuk <b>${escapeHtml(item.name)}</b>. Kapan jadwal servis/perawatan berikutnya?</p>
-        
-        <div class="field" style="margin-top:16px;">
-            <label>Jadwal Servis Berikutnya</label>
-            <input type="date" id="m-new-date" value="${dateStr}">
-        </div>
-        <button class="btn-primary" id="btn-reschedule" style="background:var(--gold);">Simpan Jadwal Baru</button>
-        <button class="btn-text-cancel" id="btn-reschedule-cancel">Batal</button>
-    `);
-    
-    $("#btn-reschedule-cancel").addEventListener("click", closeSheet);
-    $("#btn-reschedule").addEventListener("click", async () => {
-        const newDate = $("#m-new-date").value;
-        if (!newDate) { toast("Pilih tanggal berikutnya"); return; }
-        
-        $("#btn-reschedule").textContent = "Menyimpan...";
-        try {
-            await saveMaintenance({ ...item, nextDate: newDate }, item.id);
-            closeSheet();
-            toast("Jadwal servis diperbarui!");
-        } catch (e) {
-            toast("Gagal mengupdate jadwal");
-        }
-    });
-}
-
-function renderMaintenanceList() {
-    const listEl = $("#maintenance-list");
-    const emptyEl = $("#maintenance-empty");
-    
-    const items = maintenances.filter(m => m.type === maintTab).sort((a,b) => (a.nextDate||"").localeCompare(b.nextDate||""));
-    
-    if (items.length === 0) {
-        listEl.innerHTML = "";
-        emptyEl.classList.remove("hidden");
-        return;
-    }
-    emptyEl.classList.add("hidden");
-    
-    const todayStr = toYYYYMMDD(new Date());
-    
-    listEl.innerHTML = items.map(m => {
-        let badgeHtml = "";
-        let dateStr = "Belum diatur";
-        if (m.nextDate) {
-            const d = new Date(m.nextDate);
-            dateStr = d.toLocaleDateString("id-ID", { day:'numeric', month:'short', year:'numeric' });
-            
-            if (m.nextDate < todayStr) {
-                badgeHtml = `<div class="maintenance-badge urgent">Terlewat</div>`;
-            } else if (m.nextDate === todayStr) {
-                badgeHtml = `<div class="maintenance-badge urgent">Hari ini!</div>`;
-            }
-        }
-        
-        return `
-        <div class="maintenance-card" onclick="openMaintenanceSheet('${m.id}')" style="cursor:pointer;">
-            ${badgeHtml}
-            <div class="maintenance-icon">
-                ${m.type === 'kendaraan' ? '🚗' : '🏠'}
-            </div>
-            <div class="maintenance-title">${escapeHtml(m.name)}</div>
-            <div class="maintenance-date">Servis berikut: <b style="color:var(--ink);">${dateStr}</b></div>
-            ${m.note ? `<div style="font-size:10.5px; color:var(--muted); margin-top:6px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">📝 ${escapeHtml(m.note)}</div>` : ''}
-        </div>
-        `;
-    }).join("");
 }
 
 window.openGoalSheetBtn = function(id) { openGoalSheet(goals.find(g=>g.id===id)); };
 window.openGoalAssetSheet = function(id) { openGoalAssetForm(id); };
 window.confirmDeleteGoalAsset = function(goalId, assetId) { confirmDelete("goalAsset", assetId, goalId); };
-window.editGoalAsset = function(goalId, assetId) { 
-    const goal = goals.find(g => g.id === goalId);
-    if(goal) {
-        const asset = (goal.assets || []).find(a => a.id === assetId);
-        if(asset) openGoalAssetForm(goalId, asset);
-    }
-};
-window.openAgendaEditor = function(kind, id) {
-    if (kind === 'schedule') {
-        const s = schedules.find(x => x.id === id);
-        if(s) openScheduleSheet(s);
-    } else {
-        const m = maintenances.find(x => x.id === id);
-        if(m) openMaintenanceSheet(id); // Using ID string
-    }
-};
-window.confirmDeleteAgenda = function(kind, id) {
-    confirmDelete(kind === 'schedule' ? 'schedule' : 'maintenance', id);
-};
+window.editGoalAsset = function(goalId, assetId) { const goal = goals.find(g => g.id === goalId); if(goal) { const asset = (goal.assets || []).find(a => a.id === assetId); if(asset) openGoalAssetForm(goalId, asset); } };
 
-$("#btn-add-maintenance").addEventListener("click", () => openMaintenanceSheet());
-
-function pencilIcon(){ return `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>`; }
-function trashIcon(){ return `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0-1 14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L4 6h16z"/></svg>`; }
+function pencilIcon(){ return `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>`; }
+function trashIcon(){ return `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0-1 14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L4 6h16z"/></svg>`; }
 
 $("#btn-fab").addEventListener("click", ()=>{
   openSheet(`
     <div class="sheet-close-bar"></div>
     <h3>Tambah Catatan</h3>
     <button class="btn-primary" id="qa-asset" style="margin-bottom:10px;">+ Tambah Aset Inventaris</button>
-    <button class="btn-primary" id="qa-debt" style="background:var(--debt); margin-bottom:10px;">+ Tambah Hutang / Piutang</button>
     <button class="btn-primary" id="qa-schedule" style="background:var(--ink); margin-bottom:10px;">+ Tambah Jadwal & Agenda</button>
-    <button class="btn-primary" id="qa-goal" style="background:var(--blue); margin-bottom:10px;">+ Buat Target Tabungan</button>
+    <button class="btn-primary" id="qa-debt" style="background:var(--debt); margin-bottom:10px;">+ Tambah Hutang / Piutang</button>
+    <button class="btn-primary" id="qa-goal" style="background:var(--blue);">+ Buat Target Tabungan</button>
     <button class="btn-text-cancel" id="qa-cancel" style="margin-top:8px;">Batal</button>
   `);
   $("#qa-asset").addEventListener("click", ()=>{ closeSheet(); openAssetSheet(); });
-  $("#qa-debt").addEventListener("click", ()=>{ closeSheet(); openDebtSheet(); });
   $("#qa-schedule").addEventListener("click", ()=>{ closeSheet(); openScheduleSheet(); });
+  $("#qa-debt").addEventListener("click", ()=>{ closeSheet(); openDebtSheet(); });
   $("#qa-goal").addEventListener("click", ()=>{ closeSheet(); openGoalSheet(); });
   $("#qa-cancel").addEventListener("click", closeSheet);
 });
@@ -2009,143 +1590,9 @@ function confirmDelete(kind, id, extraId = null){
       else if (kind==="goal") await removeGoal(id);
       else if (kind==="goalAsset") await removeGoalAsset(extraId, id);
       else if (kind==="schedule") await removeSchedule(id);
-      else if (kind==="maintenance") await removeMaintenance(id);
       closeSheet(); toast("Berhasil dihapus");
-    } catch(e){ console.error(e); toast("Gagal menghapus"); }
+    } catch(e){ toast("Gagal menghapus"); }
   });
-}
-
-function openScheduleSheet(existing = null) {
-    const isEdit = !!existing;
-    const cat = isEdit ? (existing.category || 'tagihan') : 'tagihan';
-    openSheet(`
-        <div class="sheet-close-bar"></div>
-        <h3>${isEdit ? "Edit Jadwal" : "Tambah Jadwal & Agenda"}</h3>
-        
-        <div class="field">
-            <label>Kategori</label>
-            <div class="seg" id="s-cat-seg">
-                <button type="button" data-c="tagihan" class="${cat === 'tagihan' ? 'active' : ''}">Tagihan</button>
-                <button type="button" data-c="maintenance" class="${cat === 'maintenance' ? 'active' : ''}">Servis</button>
-                <button type="button" data-c="lainnya" class="${cat === 'lainnya' ? 'active' : ''}">Lainnya</button>
-            </div>
-        </div>
-        
-        <div class="field">
-            <label>Judul Agenda</label>
-            <input type="text" id="s-title" placeholder="Contoh: Bayar Listrik Bulanan" value="${isEdit ? escapeHtml(existing.title || '') : ''}">
-        </div>
-        <div class="field">
-            <label>Tanggal</label>
-            <input type="date" id="s-date" value="${isEdit ? existing.date : toYYYYMMDD(calSelectedDate)}">
-        </div>
-        <div class="field" id="s-amount-wrap" class="${cat === 'lainnya' ? 'hidden' : ''}">
-            <label>Nominal (Opsional)</label>
-            <input type="text" inputmode="numeric" id="s-amount" placeholder="0" value="${isEdit && existing.amount ? formatNumberWithDot(existing.amount) : ''}">
-        </div>
-        
-        <button class="btn-primary" id="s-save" style="background:var(--ink);">${isEdit ? "Simpan Perubahan" : "Simpan Jadwal"}</button>
-        ${isEdit ? `<button class="btn-danger-outline" id="s-delete">Hapus Jadwal</button>` : ""}
-        <button class="btn-text-cancel" id="s-cancel">Batal</button>
-    `);
-    
-    let selCat = cat;
-    $("#s-cat-seg").querySelectorAll("button").forEach(b => {
-        b.addEventListener("click", () => {
-            selCat = b.dataset.c;
-            $("#s-cat-seg").querySelectorAll("button").forEach(x => x.classList.toggle("active", x === b));
-            
-            if(selCat === 'lainnya') $("#s-amount-wrap").classList.add("hidden");
-            else $("#s-amount-wrap").classList.remove("hidden");
-        });
-    });
-    
-    attachNumFormatter('#s-amount');
-    
-    $("#s-cancel").addEventListener("click", closeSheet);
-    if(isEdit) $("#s-delete").addEventListener("click", () => { closeSheet(); confirmDelete('schedule', existing.id); });
-    
-    $("#s-save").addEventListener("click", async () => {
-        const title = $("#s-title").value.trim();
-        const date = $("#s-date").value;
-        const amount = selCat !== 'lainnya' ? unformatNumber($("#s-amount").value) : null;
-        
-        if(!title) { toast("Judul agenda wajib diisi"); return; }
-        if(!date) { toast("Tanggal wajib dipilih"); return; }
-        
-        $("#s-save").textContent = "Menyimpan...";
-        try {
-            await saveSchedule({ title, date, category: selCat, amount, isDone: isEdit ? existing.isDone : false }, isEdit ? existing.id : null);
-            closeSheet();
-            toast("Jadwal berhasil disimpan");
-        } catch (e) {
-            toast("Gagal menyimpan jadwal");
-        }
-    });
-}
-
-function openMaintenanceSheet(existingId = null) {
-    const existing = existingId ? maintenances.find(m => m.id === existingId) : null;
-    const isEdit = !!existing;
-    const type = isEdit ? (existing.type || 'kendaraan') : maintTab;
-    openSheet(`
-        <div class="sheet-close-bar"></div>
-        <h3>${isEdit ? "Detail Maintenance" : "Tambah Item Maintenance"}</h3>
-        
-        <div class="field">
-            <label>Jenis Item</label>
-            <div class="seg" id="m-type-seg">
-                <button type="button" data-t="kendaraan" class="${type === 'kendaraan' ? 'active' : ''}">Kendaraan</button>
-                <button type="button" data-t="rumah" class="${type === 'rumah' ? 'active' : ''}">Rumah & Lainnya</button>
-            </div>
-        </div>
-        
-        <div class="field">
-            <label>Nama Item</label>
-            <input type="text" id="m-name" placeholder="Contoh: Mobil Keluarga / AC Kamar" value="${isEdit ? escapeHtml(existing.name || '') : ''}">
-        </div>
-        <div class="field">
-            <label>Tanggal Jadwal Servis</label>
-            <input type="date" id="m-date" value="${isEdit && existing.nextDate ? existing.nextDate : toYYYYMMDD(new Date())}">
-        </div>
-        <div class="field">
-            <label>Catatan Servis (Opsional)</label>
-            <input type="text" id="m-note" placeholder="Misal: Ganti Oli & Filter" value="${isEdit ? escapeHtml(existing.note || '') : ''}">
-        </div>
-        
-        <button class="btn-primary" id="m-save" style="background:var(--gold);">${isEdit ? "Simpan Perubahan" : "Simpan Item"}</button>
-        ${isEdit ? `<button class="btn-danger-outline" id="m-delete">Hapus Item</button>` : ""}
-        <button class="btn-text-cancel" id="m-cancel">Batal</button>
-    `);
-    
-    let selType = type;
-    $("#m-type-seg").querySelectorAll("button").forEach(b => {
-        b.addEventListener("click", () => {
-            selType = b.dataset.t;
-            $("#m-type-seg").querySelectorAll("button").forEach(x => x.classList.toggle("active", x === b));
-        });
-    });
-    
-    $("#m-cancel").addEventListener("click", closeSheet);
-    if(isEdit) $("#m-delete").addEventListener("click", () => { closeSheet(); confirmDelete('maintenance', existing.id); });
-    
-    $("#m-save").addEventListener("click", async () => {
-        const name = $("#m-name").value.trim();
-        const nextDate = $("#m-date").value;
-        const note = $("#m-note").value.trim();
-        
-        if(!name) { toast("Nama item wajib diisi"); return; }
-        if(!nextDate) { toast("Tanggal servis wajib dipilih"); return; }
-        
-        $("#m-save").textContent = "Menyimpan...";
-        try {
-            await saveMaintenance({ name, type: selType, nextDate, note }, isEdit ? existing.id : null);
-            closeSheet();
-            toast("Item maintenance berhasil disimpan");
-        } catch (e) {
-            toast("Gagal menyimpan item");
-        }
-    });
 }
 
 function categoryOptions(selected){
@@ -2153,81 +1600,22 @@ function categoryOptions(selected){
 }
 
 function openAssetSheet(existing){
-  const isEdit = !!existing;
-  const currentGroup = isEdit ? (existing.assetGroup || "investasi") : assetGroupTab;
+  const isEdit = !!existing; const currentGroup = isEdit ? (existing.assetGroup || "investasi") : assetGroupTab;
   openSheet(`
     <div class="sheet-close-bar"></div>
     <h3>${isEdit?"Edit Aset":"Tambah Aset Inventaris"}</h3>
-    <div class="field">
-      <label>Grup Aset</label>
-      <div class="seg" id="f-group-seg">
-        <button type="button" data-g="investasi" class="${currentGroup==="investasi"?"active":""}">Investasi</button>
-        <button type="button" data-g="penyusutan" class="${currentGroup==="penyusutan"?"active":""}">Penyusutan / Tetap</button>
-      </div>
-      <div class="field-hint">Aset inventaris (diluar target) tidak dimasukkan ke kalkulasi kekayaan bersih utama.</div>
-    </div>
-    <div class="field">
-      <label>Nama Aset</label>
-      <input type="text" id="f-name" placeholder="Contoh: Mobil Keluarga" value="${isEdit?escapeHtml(existing.name||""):""}">
-    </div>
-    <div class="field">
-      <label>Kategori</label>
-      <select id="f-category">${categoryOptions(isEdit?existing.category:"tabungan")}</select>
-    </div>
-    
-    <div id="dyn-qty-wrap" class="hidden">
-      <div class="field" id="f-subtype-wrap">
-        <label id="lbl-subtype">Penyedia / Mata Uang</label>
-        <select id="f-subtype"></select>
-      </div>
-      <div class="field">
-        <label id="lbl-qty">Jumlah</label>
-        <input type="number" step="any" inputmode="decimal" id="f-qty" placeholder="0" value="${isEdit?existing.qty||"":""}">
-        <div class="field-hint" id="hint-calc">Nilai saat ini: Rp 0</div>
-      </div>
-    </div>
-
-    <div class="field" id="dyn-amount-wrap">
-      <label id="lbl-amount">Nilai Manual (Rp)</label>
-      <input type="text" inputmode="numeric" id="f-amount" placeholder="0" value="${isEdit?formatNumberWithDot(existing.amount):""}">
-    </div>
-
-    <div id="dyn-depreciation-wrap" class="hidden" style="background:#F8FAFC; border:1px dashed #CBD5E1; padding:12px; border-radius:12px; margin-bottom:14px;">
-      <div style="font-size:11px; font-weight:700; color:var(--muted); margin-bottom:8px;">PARAMETER PENYUSUTAN</div>
-      <div style="display:flex; gap:10px;">
-        <div class="field" style="flex:1; margin-bottom:0;">
-          <label>Tahun Beli</label>
-          <input type="number" id="f-year" placeholder="Misal: 2023" value="${isEdit?existing.purchaseYear||"":new Date().getFullYear()}">
-        </div>
-        <div class="field" style="flex:1; margin-bottom:0;">
-          <label>Lama Pemakaian</label>
-          <div style="display:flex; align-items:center; gap:6px;">
-             <input type="number" id="f-age" placeholder="0" value="${isEdit ? (new Date().getFullYear() - (existing.purchaseYear||new Date().getFullYear())) : 0}">
-             <span style="font-size:12px; color:var(--muted); font-weight:600;">Tahun</span>
-          </div>
-        </div>
-      </div>
-      <div style="margin-top:12px; padding-top:12px; border-top:1px dashed #CBD5E1; font-size:12.5px; font-weight:700; color:var(--primary-ink);" id="hint-dep-calc">
-        Estimasi Nilai Saat Ini: Rp 0
-      </div>
-      <div style="font-size:10px; color:var(--muted); margin-top:6px; line-height:1.4;" id="hint-dep-desc">
-         *Otomatis disusutkan selama <b id="lbl-cat-life"></b> tahun berdasarkan kategori <b id="lbl-cat-name"></b>.
-      </div>
-    </div>
-    
-    <div class="field">
-      <label>Catatan (opsional)</label>
-      <input type="text" id="f-note" placeholder="Catatan singkat" value="${isEdit?escapeHtml(existing.note||""):""}">
-    </div>
+    <div class="field"><label>Grup Aset</label><div class="seg" id="f-group-seg"><button type="button" data-g="investasi" class="${currentGroup==="investasi"?"active":""}">Investasi</button><button type="button" data-g="penyusutan" class="${currentGroup==="penyusutan"?"active":""}">Penyusutan / Tetap</button></div><div class="field-hint">Aset inventaris tidak masuk kalkulasi total aset dari target.</div></div>
+    <div class="field"><label>Nama Aset</label><input type="text" id="f-name" placeholder="Contoh: Mobil Keluarga" value="${isEdit?escapeHtml(existing.name||""):""}"></div>
+    <div class="field"><label>Kategori</label><select id="f-category">${categoryOptions(isEdit?existing.category:"tabungan")}</select></div>
+    <div id="dyn-qty-wrap" class="hidden"><div class="field" id="f-subtype-wrap"><label id="lbl-subtype">Penyedia</label><select id="f-subtype"></select></div><div class="field"><label id="lbl-qty">Jumlah</label><input type="number" step="any" inputmode="decimal" id="f-qty" placeholder="0" value="${isEdit?existing.qty||"":""}"><div class="field-hint" id="hint-calc">Nilai saat ini: Rp 0</div></div></div>
+    <div class="field" id="dyn-amount-wrap"><label id="lbl-amount">Nilai Manual (Rp)</label><input type="text" inputmode="numeric" id="f-amount" placeholder="0" value="${isEdit?formatNumberWithDot(existing.amount):""}"></div>
+    <div id="dyn-depreciation-wrap" class="hidden" style="background:#F8FAFC; border:1px dashed #CBD5E1; padding:12px; border-radius:12px; margin-bottom:14px;"><div style="font-size:11px; font-weight:700; color:var(--muted); margin-bottom:8px;">PARAMETER PENYUSUTAN</div><div style="display:flex; gap:10px;"><div class="field" style="flex:1; margin-bottom:0;"><label>Tahun Beli</label><input type="number" id="f-year" placeholder="Misal: 2023" value="${isEdit?existing.purchaseYear||"":new Date().getFullYear()}"></div><div class="field" style="flex:1; margin-bottom:0;"><label>Lama Pemakaian</label><div style="display:flex; align-items:center; gap:6px;"><input type="number" id="f-age" placeholder="0" value="${isEdit ? (new Date().getFullYear() - (existing.purchaseYear||new Date().getFullYear())) : 0}"><span style="font-size:12px; color:var(--muted); font-weight:600;">Tahun</span></div></div></div><div style="margin-top:12px; padding-top:12px; border-top:1px dashed #CBD5E1; font-size:12.5px; font-weight:700; color:var(--primary-ink);" id="hint-dep-calc">Estimasi Nilai Saat Ini: Rp 0</div><div style="font-size:10px; color:var(--muted); margin-top:6px; line-height:1.4;" id="hint-dep-desc">*Otomatis disusutkan selama <b id="lbl-cat-life"></b> tahun berdasarkan kategori.</div></div>
+    <div class="field"><label>Catatan (opsional)</label><input type="text" id="f-note" placeholder="Catatan singkat" value="${isEdit?escapeHtml(existing.note||""):""}"></div>
     <button class="btn-primary" id="f-save">${isEdit?"Simpan Perubahan":"Simpan Aset"}</button>
     ${isEdit?`<button class="btn-danger-outline" id="f-delete">Hapus Aset</button>`:""}
     <button class="btn-text-cancel" id="f-cancel">Batal</button>
   `);
-  
-  setupAssetFormLogic(isEdit ? existing : null, async (payload) => {
-     await saveAsset(payload, isEdit?existing.id:null);
-     toast(isEdit?"Aset diperbarui":"Aset ditambahkan");
-  });
+  setupAssetFormLogic(isEdit ? existing : null, async (payload) => { await saveAsset(payload, isEdit?existing.id:null); toast(isEdit?"Aset diperbarui":"Aset ditambahkan"); });
 }
 
 function openGoalAssetForm(goalId, existingAsset = null){
@@ -2235,278 +1623,105 @@ function openGoalAssetForm(goalId, existingAsset = null){
   openSheet(`
     <div class="sheet-close-bar"></div>
     <h3>${isEdit?"Edit Aset Target":"Tambah Aset ke Target"}</h3>
-    <div class="field">
-      <label>Nama Aset</label>
-      <input type="text" id="f-name" placeholder="Contoh: Reksadana Sucor" value="${isEdit?escapeHtml(existingAsset.name||""):""}">
-    </div>
-    <div class="field">
-      <label>Kategori</label>
-      <select id="f-category">${categoryOptions(isEdit?existingAsset.category:"tabungan")}</select>
-    </div>
-    
-    <div id="dyn-qty-wrap" class="hidden">
-      <div class="field" id="f-subtype-wrap">
-        <label id="lbl-subtype">Penyedia / Mata Uang</label>
-        <select id="f-subtype"></select>
-      </div>
-      <div class="field">
-        <label id="lbl-qty">Jumlah</label>
-        <input type="number" step="any" inputmode="decimal" id="f-qty" placeholder="0" value="${isEdit?existingAsset.qty||"":""}">
-        <div class="field-hint" id="hint-calc">Nilai saat ini: Rp 0</div>
-      </div>
-    </div>
-
-    <div class="field" id="dyn-amount-wrap">
-      <label>Nilai Dialokasikan (Rp)</label>
-      <input type="text" inputmode="numeric" id="f-amount" placeholder="0" value="${isEdit?formatNumberWithDot(existingAsset.amount):""}">
-    </div>
-    
+    <div class="field"><label>Nama Aset</label><input type="text" id="f-name" placeholder="Contoh: Reksadana Sucor" value="${isEdit?escapeHtml(existingAsset.name||""):""}"></div>
+    <div class="field"><label>Kategori</label><select id="f-category">${categoryOptions(isEdit?existingAsset.category:"tabungan")}</select></div>
+    <div id="dyn-qty-wrap" class="hidden"><div class="field" id="f-subtype-wrap"><label id="lbl-subtype">Penyedia</label><select id="f-subtype"></select></div><div class="field"><label id="lbl-qty">Jumlah</label><input type="number" step="any" inputmode="decimal" id="f-qty" placeholder="0" value="${isEdit?existingAsset.qty||"":""}"><div class="field-hint" id="hint-calc">Nilai saat ini: Rp 0</div></div></div>
+    <div class="field" id="dyn-amount-wrap"><label>Nilai Dialokasikan (Rp)</label><input type="text" inputmode="numeric" id="f-amount" placeholder="0" value="${isEdit?formatNumberWithDot(existingAsset.amount):""}"></div>
     <button class="btn-primary" id="f-save" style="background:var(--blue);">${isEdit?"Simpan Perubahan":"Simpan Aset"}</button>
     <button class="btn-text-cancel" id="f-cancel">Batal</button>
   `);
-  
-  setupAssetFormLogic(isEdit ? existingAsset : null, async (payload) => {
-     await saveGoalAsset(goalId, payload, isEdit?existingAsset.id:null);
-     toast(isEdit?"Aset target diperbarui":"Aset target ditambahkan");
-  });
+  setupAssetFormLogic(isEdit ? existingAsset : null, async (payload) => { await saveGoalAsset(goalId, payload, isEdit?existingAsset.id:null); toast(isEdit?"Aset target diperbarui":"Aset target ditambahkan"); });
 }
 
 function setupAssetFormLogic(existing, onSaveCallback) {
-  const isEdit = !!existing;
-  const catSel = $("#f-category");
-  const dynQtyWrap = $("#dyn-qty-wrap");
-  const dynAmountWrap = $("#dyn-amount-wrap");
-  const fSubtypeWrap = $("#f-subtype-wrap");
-  const fSubtype = $("#f-subtype");
-  const fQty = $("#f-qty");
-  const lblQty = $("#lbl-qty");
-  const hintCalc = $("#hint-calc");
-  const dynDepWrap = $("#dyn-depreciation-wrap");
-  const lblAmount = $("#lbl-amount");
-  const fYear = $("#f-year");
-  const fAge = $("#f-age");
-  const fAmount = $("#f-amount");
-
+  const isEdit = !!existing; const catSel = $("#f-category"); const dynQtyWrap = $("#dyn-qty-wrap"); const dynAmountWrap = $("#dyn-amount-wrap"); const fSubtypeWrap = $("#f-subtype-wrap"); const fSubtype = $("#f-subtype"); const fQty = $("#f-qty"); const lblQty = $("#lbl-qty"); const hintCalc = $("#hint-calc"); const dynDepWrap = $("#dyn-depreciation-wrap"); const lblAmount = $("#lbl-amount"); const fYear = $("#f-year"); const fAge = $("#f-age"); const fAmount = $("#f-amount");
   let selectedGroup = isEdit ? (existing.assetGroup || "investasi") : assetGroupTab;
   
   function updateGroupUI() {
      if (dynDepWrap) {
-        if (selectedGroup === 'penyusutan') {
-            dynDepWrap.classList.remove("hidden");
-            if (lblAmount) lblAmount.textContent = "Harga Beli / Nilai Awal (Rp)";
-            calcDepreciationPreview();
-        } else {
-            dynDepWrap.classList.add("hidden");
-            if (lblAmount) lblAmount.textContent = "Nilai Manual (Rp)";
-        }
+        if (selectedGroup === 'penyusutan') { dynDepWrap.classList.remove("hidden"); if (lblAmount) lblAmount.textContent = "Harga Beli / Nilai Awal (Rp)"; calcDepreciationPreview(); } 
+        else { dynDepWrap.classList.add("hidden"); if (lblAmount) lblAmount.textContent = "Nilai Manual (Rp)"; }
      }
   }
 
   function calcDepreciationPreview() {
      if (selectedGroup !== 'penyusutan' || !fYear || !fAmount) return;
-     
-     const base = unformatNumber(fAmount.value);
-     const year = Number(fYear.value) || new Date().getFullYear();
-     const age = Math.max(0, new Date().getFullYear() - year);
-     const life = getDefaultUsefulLife(catSel.value) || 5;
-     
-     if($("#lbl-cat-name")) $("#lbl-cat-name").textContent = catSel.options[catSel.selectedIndex]?.text || "";
+     const base = unformatNumber(fAmount.value); const year = Number(fYear.value) || new Date().getFullYear(); const age = Math.max(0, new Date().getFullYear() - year); const life = getDefaultUsefulLife(catSel.value) || 5;
      if($("#lbl-cat-life")) $("#lbl-cat-life").textContent = life;
-
-     const salvageValue = base * 0.10;
-     let val = base;
-
-     if (life > 0) {
-         if (age >= life) {
-             val = salvageValue;
-         } else {
-             const yearly = (base - salvageValue) / life;
-             val = base - (yearly * age);
-         }
-     }
-
-     const hintDep = $("#hint-dep-calc");
-     if (hintDep) {
-         hintDep.textContent = "Estimasi Nilai Saat Ini: " + rupiah(val);
-     }
+     const salvageValue = base * 0.10; let val = base;
+     if (life > 0) { if (age >= life) val = salvageValue; else val = base - (((base - salvageValue) / life) * age); }
+     if ($("#hint-dep-calc")) $("#hint-dep-calc").textContent = "Estimasi Nilai Saat Ini: " + rupiah(val);
   }
 
-  if ($("#f-group-seg")) {
-      $("#f-group-seg").querySelectorAll("button").forEach(b => {
-          b.addEventListener("click", () => {
-              selectedGroup = b.dataset.g;
-              $("#f-group-seg").querySelectorAll("button").forEach(x => x.classList.toggle("active", x === b));
-              updateGroupUI();
-          });
-      });
-      updateGroupUI();
-  }
+  if ($("#f-group-seg")) { $("#f-group-seg").querySelectorAll("button").forEach(b => { b.addEventListener("click", () => { selectedGroup = b.dataset.g; $("#f-group-seg").querySelectorAll("button").forEach(x => x.classList.toggle("active", x === b)); updateGroupUI(); }); }); updateGroupUI(); }
 
   function syncForm(){
-    const cat = catSel.value;
-    dynQtyWrap.classList.add("hidden"); dynAmountWrap.classList.remove("hidden");
-    
-    if (selectedGroup === 'penyusutan') {
-        calcDepreciationPreview();
-    }
-    
+    const cat = catSel.value; dynQtyWrap.classList.add("hidden"); dynAmountWrap.classList.remove("hidden");
+    if (selectedGroup === 'penyusutan') calcDepreciationPreview();
     if(['emas','dinar','valas'].includes(cat)){
       dynQtyWrap.classList.remove("hidden"); dynAmountWrap.classList.add("hidden");
-      if(cat === 'emas'){
-        fSubtypeWrap.classList.remove("hidden");
-        fSubtype.innerHTML = `<option value="antam">Antam</option><option value="galeri24">Galeri24</option>`;
-        lblQty.textContent = "Jumlah (Gram)";
-      } else if (cat === 'dinar'){
-        fSubtypeWrap.classList.add("hidden");
-        lblQty.textContent = "Jumlah (Keping)";
-      } else if (cat === 'valas'){
-        fSubtypeWrap.classList.remove("hidden");
-        fSubtype.innerHTML = `<option value="usd">USD</option><option value="sgd">SGD</option><option value="aud">AUD</option>`;
-        lblQty.textContent = "Nominal";
-      }
+      if(cat === 'emas'){ fSubtypeWrap.classList.remove("hidden"); fSubtype.innerHTML = `<option value="antam">Antam</option><option value="galeri24">Galeri24</option>`; lblQty.textContent = "Jumlah (Gram)"; } 
+      else if (cat === 'dinar'){ fSubtypeWrap.classList.add("hidden"); lblQty.textContent = "Jumlah (Keping)"; } 
+      else if (cat === 'valas'){ fSubtypeWrap.classList.remove("hidden"); fSubtype.innerHTML = `<option value="usd">USD</option><option value="sgd">SGD</option><option value="aud">AUD</option>`; lblQty.textContent = "Nominal"; }
       if(isEdit && existing.category === cat && existing.subType) fSubtype.value = existing.subType;
       calcPreview();
     }
   }
 
   function calcPreview(){
-    const cat = catSel.value;
-    const qty = Number(fQty.value || 0);
-    let val = 0;
-    if(cat==='emas') val = qty * (rates[fSubtype.value]||0);
-    else if(cat==='dinar') val = qty * rates.dinarKR;
-    else if(cat==='valas') val = qty * (rates["valas_"+fSubtype.value]||0);
+    const cat = catSel.value; const qty = Number(fQty.value || 0); let val = 0;
+    if(cat==='emas') val = qty * (rates[fSubtype.value]||0); else if(cat==='dinar') val = qty * rates.dinarKR; else if(cat==='valas') val = qty * (rates["valas_"+fSubtype.value]||0);
     hintCalc.textContent = "Estimasi Nilai: " + rupiah(val);
   }
 
-  catSel.addEventListener("change", syncForm);
-  fSubtype.addEventListener("change", calcPreview);
-  fQty.addEventListener("input", calcPreview);
-  
-  if (fYear && fAge) {
-      fYear.addEventListener("input", () => {
-          if (fYear.value) fAge.value = Math.max(0, new Date().getFullYear() - Number(fYear.value));
-          calcDepreciationPreview();
-      });
-      fAge.addEventListener("input", () => {
-          if (fAge.value) fYear.value = new Date().getFullYear() - Number(fAge.value);
-          calcDepreciationPreview();
-      });
-  }
+  catSel.addEventListener("change", syncForm); fSubtype.addEventListener("change", calcPreview); fQty.addEventListener("input", calcPreview);
+  if (fYear && fAge) { fYear.addEventListener("input", () => { if (fYear.value) fAge.value = Math.max(0, new Date().getFullYear() - Number(fYear.value)); calcDepreciationPreview(); }); fAge.addEventListener("input", () => { if (fAge.value) fYear.value = new Date().getFullYear() - Number(fAge.value); calcDepreciationPreview(); }); }
   if (fAmount) fAmount.addEventListener("input", calcDepreciationPreview);
 
-  syncForm();
-  attachNumFormatter('#f-amount');
-
+  syncForm(); attachNumFormatter('#f-amount');
   $("#f-cancel").addEventListener("click", closeSheet);
-  if (isEdit && $("#f-delete")) {
-      $("#f-delete").addEventListener("click", ()=>{ closeSheet(); confirmDelete("asset", existing.id); });
-  }
+  if (isEdit && $("#f-delete")) $("#f-delete").addEventListener("click", ()=>{ closeSheet(); confirmDelete("asset", existing.id); });
   
   $("#f-save").addEventListener("click", async ()=>{
-    const name = $("#f-name").value.trim();
-    const category = catSel.value;
-    const noteEl = $("#f-note");
-    const note = noteEl ? noteEl.value.trim() : "";
-    
+    const name = $("#f-name").value.trim(); const category = catSel.value; const note = $("#f-note") ? $("#f-note").value.trim() : "";
     let payload = { name, category, note };
-    if ($("#f-group-seg")) {
-        payload.assetGroup = selectedGroup;
-        if (selectedGroup === 'penyusutan') {
-            payload.purchaseYear = Number($("#f-year").value) || new Date().getFullYear();
-        }
-    }
-
+    if ($("#f-group-seg")) { payload.assetGroup = selectedGroup; if (selectedGroup === 'penyusutan') payload.purchaseYear = Number($("#f-year").value) || new Date().getFullYear(); }
     if(['emas','dinar','valas'].includes(category)){
-      payload.qty = Number(fQty.value || 0);
-      if(category !== 'dinar') payload.subType = fSubtype.value;
+      payload.qty = Number(fQty.value || 0); if(category !== 'dinar') payload.subType = fSubtype.value;
       if(payload.qty <= 0){ toast("Jumlah harus lebih dari 0"); return; }
     } else {
-      payload.amount = unformatNumber($("#f-amount").value);
-      if(payload.amount <= 0){ toast("Nilai/Harga Beli harus lebih dari 0"); return; }
+      payload.amount = unformatNumber($("#f-amount").value); if(payload.amount <= 0){ toast("Nilai/Harga harus > 0"); return; }
     }
-    
-    if (!name){ toast("Nama aset wajib diisi"); return; }
-    const btn = $("#f-save");
-    const originalText = btn.textContent;
-    btn.textContent = "Menyimpan...";
-    btn.disabled = true;
-    try {
-      await onSaveCallback(payload);
-      closeSheet();
-    } catch(e){ 
-        console.error(e); 
-        toast("Gagal menyimpan"); 
-        btn.textContent = originalText;
-        btn.disabled = false;
-    }
+    if (!name){ toast("Nama wajib diisi"); return; }
+    const btn = $("#f-save"); const originalText = btn.textContent; btn.textContent = "Menyimpan..."; btn.disabled = true;
+    try { await onSaveCallback(payload); closeSheet(); } catch(e){ toast("Gagal menyimpan"); btn.textContent = originalText; btn.disabled = false; }
   });
 }
 
 function openDebtSheet(existing){
-  const isEdit = !!existing;
-  const type = isEdit ? (existing.type||"hutang") : debtTab;
+  const isEdit = !!existing; const type = isEdit ? (existing.type||"hutang") : debtTab;
   openSheet(`
     <div class="sheet-close-bar"></div>
     <h3>${isEdit?"Edit Catatan":"Tambah Hutang / Piutang"}</h3>
-    <div class="field">
-      <label>Jenis</label>
-      <div class="seg" id="f-type-seg">
-        <button type="button" data-t="hutang" class="${type==="hutang"?"active":""}">Hutang</button>
-        <button type="button" data-t="piutang" class="${type==="piutang"?"active":""}">Piutang</button>
-      </div>
-    </div>
-    <div class="field">
-      <label>Nama</label>
-      <input type="text" id="f-name" placeholder="Contoh: Cicilan Motor" value="${isEdit?escapeHtml(existing.name||""):""}">
-    </div>
-    <div class="field">
-      <label>Sisa Pokok (Rp)</label>
-      <input type="text" inputmode="numeric" id="f-amount" placeholder="0" value="${isEdit?formatNumberWithDot(existing.amount):""}">
-    </div>
-    <div class="field">
-      <label>Cicilan per Bulan (Rp) - Opsional</label>
-      <input type="text" inputmode="numeric" id="f-installment" placeholder="0" value="${isEdit&&existing.installment?formatNumberWithDot(existing.installment):""}">
-    </div>
-    <div class="field">
-      <label>Jatuh Tempo (opsional)</label>
-      <input type="date" id="f-due" value="${isEdit&&existing.dueDate?existing.dueDate:""}">
-    </div>
-    <div class="field">
-      <label>Catatan (opsional)</label>
-      <input type="text" id="f-note" placeholder="Catatan singkat" value="${isEdit?escapeHtml(existing.note||""):""}">
-    </div>
+    <div class="field"><label>Jenis</label><div class="seg" id="f-type-seg"><button type="button" data-t="hutang" class="${type==="hutang"?"active":""}">Hutang</button><button type="button" data-t="piutang" class="${type==="piutang"?"active":""}">Piutang</button></div></div>
+    <div class="field"><label>Nama</label><input type="text" id="f-name" placeholder="Contoh: Cicilan Motor" value="${isEdit?escapeHtml(existing.name||""):""}"></div>
+    <div class="field"><label>Sisa Pokok (Rp)</label><input type="text" inputmode="numeric" id="f-amount" placeholder="0" value="${isEdit?formatNumberWithDot(existing.amount):""}"></div>
+    <div class="field"><label>Cicilan per Bulan (Rp) - Opsional</label><input type="text" inputmode="numeric" id="f-installment" placeholder="0" value="${isEdit&&existing.installment?formatNumberWithDot(existing.installment):""}"></div>
+    <div class="field"><label>Jatuh Tempo (opsional)</label><input type="date" id="f-due" value="${isEdit&&existing.dueDate?existing.dueDate:""}"></div>
+    <div class="field"><label>Catatan (opsional)</label><input type="text" id="f-note" placeholder="Catatan singkat" value="${isEdit?escapeHtml(existing.note||""):""}"></div>
     <button class="btn-primary" id="f-save" style="background:var(--debt);">${isEdit?"Simpan Perubahan":"Simpan"}</button>
     ${isEdit?`<button class="btn-danger-outline" id="f-delete">Hapus</button>`:""}
     <button class="btn-text-cancel" id="f-cancel">Batal</button>
   `);
   let selType = type;
-  $("#f-type-seg").querySelectorAll("button").forEach(b=>{
-    b.addEventListener("click", ()=>{
-      selType = b.dataset.t;
-      $("#f-type-seg").querySelectorAll("button").forEach(x=>x.classList.toggle("active", x===b));
-    });
-  });
-  $("#f-cancel").addEventListener("click", closeSheet);
-  if (isEdit) $("#f-delete").addEventListener("click", ()=>{ closeSheet(); confirmDelete("debt", existing.id); });
-  
-  attachNumFormatter('#f-amount');
-  attachNumFormatter('#f-installment');
-  
+  $("#f-type-seg").querySelectorAll("button").forEach(b=>{ b.addEventListener("click", ()=>{ selType = b.dataset.t; $("#f-type-seg").querySelectorAll("button").forEach(x=>x.classList.toggle("active", x===b)); }); });
+  $("#f-cancel").addEventListener("click", closeSheet); if (isEdit) $("#f-delete").addEventListener("click", ()=>{ closeSheet(); confirmDelete("debt", existing.id); });
+  attachNumFormatter('#f-amount'); attachNumFormatter('#f-installment');
   $("#f-save").addEventListener("click", async ()=>{
-    const name = $("#f-name").value.trim();
-    const amount = unformatNumber($("#f-amount").value);
-    const installment = unformatNumber($("#f-installment").value);
-    const dueDate = $("#f-due").value || null;
-    const note = $("#f-note").value.trim();
-    
-    if (!name){ toast("Nama wajib diisi"); return; }
-    if (amount <= 0){ toast("Sisa pokok harus lebih dari 0"); return; }
+    const name = $("#f-name").value.trim(), amount = unformatNumber($("#f-amount").value), installment = unformatNumber($("#f-installment").value), dueDate = $("#f-due").value || null, note = $("#f-note").value.trim();
+    if (!name){ toast("Nama wajib diisi"); return; } if (amount <= 0){ toast("Sisa pokok harus > 0"); return; }
     $("#f-save").textContent = "Menyimpan...";
-    try {
-      await saveDebt({ name, amount, installment, dueDate, note, type: selType }, isEdit?existing.id:null);
-      closeSheet(); toast(isEdit?"Catatan diperbarui":"Catatan ditambahkan");
-    } catch(e){ console.error(e); toast("Gagal menyimpan"); }
+    try { await saveDebt({ name, amount, installment, dueDate, note, type: selType }, isEdit?existing.id:null); closeSheet(); toast(isEdit?"Catatan diperbarui":"Catatan ditambahkan"); } catch(e){ toast("Gagal menyimpan"); }
   });
 }
 
@@ -2515,39 +1730,19 @@ function openGoalSheet(existing){
   openSheet(`
     <div class="sheet-close-bar"></div>
     <h3>${isEdit?"Edit Target":"Buat Target Tabungan"}</h3>
-    <div class="field">
-      <label>Nama Target</label>
-      <input type="text" id="g-name" placeholder="Contoh: Dana Darurat" value="${isEdit?escapeHtml(existing.name||""):""}">
-    </div>
-    <div class="field">
-      <label>Target Dana (Rp)</label>
-      <input type="text" inputmode="numeric" id="g-target" placeholder="0" value="${isEdit?formatNumberWithDot(existing.target):""}">
-    </div>
+    <div class="field"><label>Nama Target</label><input type="text" id="g-name" placeholder="Contoh: Dana Darurat" value="${isEdit?escapeHtml(existing.name||""):""}"></div>
+    <div class="field"><label>Target Dana (Rp)</label><input type="text" inputmode="numeric" id="g-target" placeholder="0" value="${isEdit?formatNumberWithDot(existing.target):""}"></div>
     <button class="btn-primary" id="g-save" style="background:var(--blue);">${isEdit?"Simpan Perubahan":"Simpan Target"}</button>
-    ${isEdit?`<button class="btn-danger-outline" id="g-delete">Hapus Target & Semua Aset di Dalamnya</button>`:""}
+    ${isEdit?`<button class="btn-danger-outline" id="g-delete">Hapus Target & Asetnya</button>`:""}
     <button class="btn-text-cancel" id="g-cancel">Batal</button>
   `);
-  
-  $("#g-cancel").addEventListener("click", closeSheet);
-  if (isEdit) $("#g-delete").addEventListener("click", ()=>{ closeSheet(); confirmDelete("goal", existing.id); });
-  
+  $("#g-cancel").addEventListener("click", closeSheet); if (isEdit) $("#g-delete").addEventListener("click", ()=>{ closeSheet(); confirmDelete("goal", existing.id); });
   attachNumFormatter('#g-target');
-  
   $("#g-save").addEventListener("click", async ()=>{
-    const name = $("#g-name").value.trim();
-    const target = unformatNumber($("#g-target").value);
-    
-    if (!name){ toast("Nama target wajib diisi"); return; }
-    if (target <= 0){ toast("Target dana harus lebih dari 0"); return; }
+    const name = $("#g-name").value.trim(), target = unformatNumber($("#g-target").value);
+    if (!name){ toast("Nama target wajib diisi"); return; } if (target <= 0){ toast("Target dana > 0"); return; }
     $("#g-save").textContent = "Menyimpan...";
-    try {
-      const payload = { name, target };
-      if(!isEdit) payload.assets = []; 
-      
-      await saveGoal(payload, isEdit?existing.id:null);
-      closeSheet(); toast(isEdit?"Target diperbarui":"Target ditambahkan");
-      if(!isEdit && currentUser) expandedGoals.add(existing?.id || 'new');
-    } catch(e){ console.error(e); toast("Gagal menyimpan target"); }
+    try { const payload = { name, target }; if(!isEdit) payload.assets = []; await saveGoal(payload, isEdit?existing.id:null); closeSheet(); toast(isEdit?"Target diperbarui":"Target ditambahkan"); if(!isEdit) expandedGoals.add(existing?.id || 'new'); } catch(e){ toast("Gagal menyimpan target"); }
   });
 }
 
@@ -2555,77 +1750,29 @@ $("#btn-manage-rates").addEventListener("click", ()=>{
   openSheet(`
     <div class="sheet-close-bar"></div>
     <h3>Pengaturan Harga (IDR)</h3>
-    <p style="font-size:12px; color:var(--muted); margin-top:-10px; margin-bottom:18px;">
-      Ubah harga acuan di bawah ini. Semua aset Emas, Dinar, dan Valas yang tercatat akan otomatis terupdate mengikuti harga ini.
-    </p>
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
-      <div class="field">
-        <label>Emas Antam / g</label>
-        <input type="text" inputmode="numeric" id="r-antam" value="${formatNumberWithDot(rates.antam)}">
-      </div>
-      <div class="field">
-        <label>Emas Galeri24 / g</label>
-        <input type="text" inputmode="numeric" id="r-galeri" value="${formatNumberWithDot(rates.galeri24)}">
-      </div>
-    </div>
-    <div class="field">
-      <label>Dinar KR / Keping</label>
-      <input type="text" inputmode="numeric" id="r-dinar" value="${formatNumberWithDot(rates.dinarKR)}">
-    </div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;"><div class="field"><label>Emas Antam / g</label><input type="text" inputmode="numeric" id="r-antam" value="${formatNumberWithDot(rates.antam)}"></div><div class="field"><label>Emas Galeri24 / g</label><input type="text" inputmode="numeric" id="r-galeri" value="${formatNumberWithDot(rates.galeri24)}"></div></div>
+    <div class="field"><label>Dinar KR / Keping</label><input type="text" inputmode="numeric" id="r-dinar" value="${formatNumberWithDot(rates.dinarKR)}"></div>
     <div style="height:1px; background:var(--line); margin:18px 0;"></div>
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-        <div style="font-size:12px; font-weight:700; color:var(--muted); letter-spacing:0.04em;">NILAI TUKAR VALAS (IDR)</div>
-        <button id="r-auto-valas" style="background:#E0F2FE; color:#0284C7; border:1px solid #BAE6FD; padding:5px 10px; border-radius:8px; font-size:11px; font-weight:700; cursor:pointer;">Update Otomatis</button>
-    </div>
-    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px;">
-      <div class="field"><label>1 USD</label><input type="text" inputmode="numeric" id="r-usd" value="${formatNumberWithDot(rates.valas_usd)}"></div>
-      <div class="field"><label>1 SGD</label><input type="text" inputmode="numeric" id="r-sgd" value="${formatNumberWithDot(rates.valas_sgd)}"></div>
-      <div class="field"><label>1 AUD</label><input type="text" inputmode="numeric" id="r-aud" value="${formatNumberWithDot(rates.valas_aud)}"></div>
-    </div>
-    
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;"><div style="font-size:12px; font-weight:700; color:var(--muted); letter-spacing:0.04em;">NILAI TUKAR VALAS (IDR)</div><button id="r-auto-valas" style="background:#E0F2FE; color:#0284C7; border:1px solid #BAE6FD; padding:5px 10px; border-radius:8px; font-size:11px; font-weight:700; cursor:pointer;">Update Otomatis</button></div>
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px;"><div class="field"><label>1 USD</label><input type="text" inputmode="numeric" id="r-usd" value="${formatNumberWithDot(rates.valas_usd)}"></div><div class="field"><label>1 SGD</label><input type="text" inputmode="numeric" id="r-sgd" value="${formatNumberWithDot(rates.valas_sgd)}"></div><div class="field"><label>1 AUD</label><input type="text" inputmode="numeric" id="r-aud" value="${formatNumberWithDot(rates.valas_aud)}"></div></div>
     <button class="btn-primary" id="r-save" style="margin-top:10px;">Simpan Pengaturan</button>
     <button class="btn-text-cancel" id="r-cancel">Batal</button>
   `);
-  
   $("#r-cancel").addEventListener("click", closeSheet);
-
-  attachNumFormatter('#r-antam'); attachNumFormatter('#r-galeri'); attachNumFormatter('#r-dinar');
-  attachNumFormatter('#r-usd'); attachNumFormatter('#r-sgd'); attachNumFormatter('#r-aud');
-
+  attachNumFormatter('#r-antam'); attachNumFormatter('#r-galeri'); attachNumFormatter('#r-dinar'); attachNumFormatter('#r-usd'); attachNumFormatter('#r-sgd'); attachNumFormatter('#r-aud');
   $("#r-auto-valas").addEventListener("click", async () => {
-      const btn = $("#r-auto-valas");
-      btn.textContent = "Loading..."; btn.disabled = true;
-      try {
-          const res = await fetch("https://open.er-api.com/v6/latest/USD");
-          const data = await res.json();
-          const r = data.rates;
-          $("#r-usd").value = formatNumberWithDot(Math.round(r.IDR));
-          $("#r-sgd").value = formatNumberWithDot(Math.round(r.IDR / r.SGD));
-          $("#r-aud").value = formatNumberWithDot(Math.round(r.IDR / r.AUD));
-          toast("Kurs Valas berhasil diperbarui dari internet!");
-      } catch (e) {
-          toast("Gagal mengupdate kurs otomatis");
-      }
+      const btn = $("#r-auto-valas"); btn.textContent = "Loading..."; btn.disabled = true;
+      try { const res = await fetch("https://open.er-api.com/v6/latest/USD"); const data = await res.json(); const r = data.rates; $("#r-usd").value = formatNumberWithDot(Math.round(r.IDR)); $("#r-sgd").value = formatNumberWithDot(Math.round(r.IDR / r.SGD)); $("#r-aud").value = formatNumberWithDot(Math.round(r.IDR / r.AUD)); toast("Kurs Valas berhasil diperbarui"); } catch (e) { toast("Gagal mengupdate kurs"); }
       btn.textContent = "Update Otomatis"; btn.disabled = false;
   });
-
   $("#r-save").addEventListener("click", async ()=>{
     $("#r-save").textContent = "Menyimpan...";
-    const newRates = {
-      antam: unformatNumber($("#r-antam").value),
-      galeri24: unformatNumber($("#r-galeri").value),
-      dinarKR: unformatNumber($("#r-dinar").value),
-      valas_usd: unformatNumber($("#r-usd").value),
-      valas_sgd: unformatNumber($("#r-sgd").value),
-      valas_aud: unformatNumber($("#r-aud").value)
-    };
-    await updateRates(newRates);
-    closeSheet();
+    const newRates = { antam: unformatNumber($("#r-antam").value), galeri24: unformatNumber($("#r-galeri").value), dinarKR: unformatNumber($("#r-dinar").value), valas_usd: unformatNumber($("#r-usd").value), valas_sgd: unformatNumber($("#r-sgd").value), valas_aud: unformatNumber($("#r-aud").value) };
+    await updateRates(newRates); closeSheet();
   });
 });
 
 $("#btn-manage-categories").addEventListener("click", openCategoryManager);
-
 function openCategoryManager() {
   openSheet(`
     <div class="sheet-close-bar"></div>
@@ -2634,132 +1781,58 @@ function openCategoryManager() {
     <button class="btn-primary" id="cat-add" style="background:var(--surface); color:var(--primary-ink); border:1px solid var(--primary-soft);">+ Tambah Kategori Baru</button>
     <button class="btn-text-cancel" id="cat-close">Tutup</button>
   `);
-
   function draw() {
-    const defaultsHTML = DEFAULT_CATEGORIES.map(c=>`
-      <div class="list-item" style="padding:8px 0;">
-        <div class="dot" style="background:${catDot(c)}"></div>
-        <div class="li-main"><div class="li-title">${c.icon||''} ${c.name}</div></div>
-        <div style="font-size:10px; color:var(--muted); font-weight:600; padding:2px 6px; background:#F1F5F9; border-radius:6px;">Bawaan</div>
-      </div>
-    `).join("");
-
-    const customsHTML = customCategories.map(c=>`
-      <div class="list-item" style="padding:8px 0;">
-        <div class="dot" style="background:${catDot(c)}"></div>
-        <div class="li-main"><div class="li-title">${c.icon||''} ${c.name}</div></div>
-        <button class="icon-btn" style="width:28px;height:28px;border:none;background:var(--debt-soft);color:var(--debt);" onclick="openDeleteCategoryConfirm('${c.id}')">
-          ${trashIcon()}
-        </button>
-      </div>
-    `).join("");
-
-    $("#catlist").innerHTML = `
-      ${customCategories.length > 0 ? `
-      <div style="font-size:11.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin:6px 0 4px;">Kategori Kustom</div>
-      ${customsHTML}
-      <div style="height:1px; background:var(--line); margin:12px 0;"></div>
-      ` : ''}
-      <div style="font-size:11.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin:6px 0 4px;">Bawaan (Auto-Konversi)</div>
-      ${defaultsHTML}
-    `;
+    const defaultsHTML = DEFAULT_CATEGORIES.map(c=>`<div class="list-item" style="padding:8px 0;"><div class="dot" style="background:${catDot(c)}"></div><div class="li-main"><div class="li-title">${c.icon||''} ${c.name}</div></div><div style="font-size:10px; color:var(--muted); font-weight:600; padding:2px 6px; background:#F1F5F9; border-radius:6px;">Bawaan</div></div>`).join("");
+    const customsHTML = customCategories.map(c=>`<div class="list-item" style="padding:8px 0;"><div class="dot" style="background:${catDot(c)}"></div><div class="li-main"><div class="li-title">${c.icon||''} ${c.name}</div></div><button class="icon-btn" style="width:28px;height:28px;border:none;background:var(--debt-soft);color:var(--debt);" onclick="deleteCategory('${c.id}')">${trashIcon()}</button></div>`).join("");
+    $("#catlist").innerHTML = `${customCategories.length > 0 ? `<div style="font-size:11.5px;font-weight:700;color:var(--muted);margin:6px 0 4px;">Kategori Kustom</div>${customsHTML}<div style="height:1px; background:var(--line); margin:12px 0;"></div>` : ''}<div style="font-size:11.5px;font-weight:700;color:var(--muted);margin:6px 0 4px;">Bawaan</div>${defaultsHTML}`;
   }
   draw();
-
   $("#cat-close").addEventListener("click", closeSheet);
   $("#cat-add").addEventListener("click", () => {
       openSheet(`
         <div class="sheet-close-bar"></div>
         <h3>Kategori Baru</h3>
-        <div class="field">
-            <label>Nama Kategori</label>
-            <input type="text" id="new-cat-name" placeholder="Misal: Peer-to-Peer Lending">
-        </div>
-        <div class="field">
-            <label>Ikon / Emoji (1 Karakter)</label>
-            <input type="text" id="new-cat-icon" placeholder="💸" maxlength="2">
-        </div>
+        <div class="field"><label>Nama Kategori</label><input type="text" id="new-cat-name" placeholder="Misal: P2P Lending"></div>
+        <div class="field"><label>Ikon / Emoji (1 Karakter)</label><input type="text" id="new-cat-icon" placeholder="💸" maxlength="2"></div>
         <button class="btn-primary" id="new-cat-save">Simpan Kategori</button>
         <button class="btn-text-cancel" id="new-cat-cancel">Batal</button>
       `);
       $("#new-cat-cancel").addEventListener("click", openCategoryManager);
       $("#new-cat-save").addEventListener("click", async () => {
-          const name = $("#new-cat-name").value.trim();
-          const icon = $("#new-cat-icon").value.trim() || "📦";
-          if (!name) { toast("Nama kategori wajib diisi"); return; }
-          
+          const name = $("#new-cat-name").value.trim(), icon = $("#new-cat-icon").value.trim() || "📦";
+          if (!name) { toast("Nama wajib diisi"); return; }
           const u = uid(); if(!u) return;
-          const hue = Math.floor(Math.random() * 360);
-          const btn = $("#new-cat-save"); btn.textContent="Menyimpan..."; btn.disabled=true;
-          try {
-              await addDoc(collection(db, "users", u, "categories"), { name, icon, hue, createdAt: serverTimestamp() });
-              toast("Kategori ditambahkan");
-              openCategoryManager();
-          } catch(e) { toast("Gagal menyimpan"); }
+          const hue = Math.floor(Math.random() * 360), btn = $("#new-cat-save"); btn.textContent="Menyimpan..."; btn.disabled=true;
+          try { await addDoc(collection(db, "users", u, "categories"), { name, icon, hue, createdAt: serverTimestamp() }); toast("Kategori ditambahkan"); openCategoryManager(); } catch(e) { toast("Gagal menyimpan"); }
       });
   });
 }
 
-window.openDeleteCategoryConfirm = function(catId) {
-    openSheet(`
-        <div class="sheet-close-bar"></div>
-        <h3>Hapus kategori ini?</h3>
-        <p style="color:var(--muted);font-size:13.5px;margin-top:-8px;">Catatan lama yang menggunakan kategori ini akan tetap memiliki nama kategori tersebut, namun warnanya menjadi abu-abu (Lainnya).</p>
-        <button class="btn-danger-outline" id="cd-yes" style="margin-top:14px;">Ya, Hapus</button>
-        <button class="btn-text-cancel" id="cd-no">Batal</button>
-    `);
-    $("#cd-no").addEventListener("click", openCategoryManager);
-    $("#cd-yes").addEventListener("click", async () => {
-        const u = uid(); if(!u) return;
-        try {
-            await deleteDoc(doc(db, "users", u, "categories", catId));
-            toast("Kategori dihapus");
-            openCategoryManager();
-        } catch(e) { toast("Gagal menghapus kategori"); }
-    });
+window.deleteCategory = async function(catId) {
+    if(!confirm("Hapus kategori ini? Catatan aset akan tetap ada namun berwarna abu-abu.")) return;
+    const u = uid(); if(!u) return;
+    try { await deleteDoc(doc(db, "users", u, "categories", catId)); toast("Kategori dihapus"); openCategoryManager(); } catch(e) { toast("Gagal menghapus"); }
 }
 
 function openPengeluaranSheet() {
     openSheet(`
       <div class="sheet-close-bar"></div>
       <h3>Atur Pengeluaran Bulanan</h3>
-      <p style="font-size:12.5px; color:var(--muted); margin-top:-8px; margin-bottom:16px; line-height:1.5;">
-          Masukkan estimasi rata-rata pengeluaranmu dalam sebulan. Data ini digunakan untuk menganalisis kecukupan <b>Dana Darurat</b> berdasarkan target yang Anda buat.
-      </p>
-      <div class="field">
-        <label>Pengeluaran Bulanan (Rp)</label>
-        <input type="text" inputmode="numeric" id="p-amount" placeholder="0" value="${monthlyExpenses ? formatNumberWithDot(monthlyExpenses) : ""}">
-      </div>
+      <p style="font-size:12.5px; color:var(--muted); margin-top:-8px; margin-bottom:16px; line-height:1.5;">Masukkan estimasi rata-rata pengeluaran bulananmu untuk menghitung ketahanan <b>Dana Darurat</b>.</p>
+      <div class="field"><label>Pengeluaran Bulanan (Rp)</label><input type="text" inputmode="numeric" id="p-amount" placeholder="0" value="${monthlyExpenses ? formatNumberWithDot(monthlyExpenses) : ""}"></div>
       <button class="btn-primary" id="p-save" style="margin-top:8px;">Simpan Pengeluaran</button>
       <button class="btn-text-cancel" id="p-cancel">Batal</button>
     `);
-    
-    attachNumFormatter('#p-amount');
-    $("#p-cancel").addEventListener("click", closeSheet);
+    attachNumFormatter('#p-amount'); $("#p-cancel").addEventListener("click", closeSheet);
     $("#p-save").addEventListener("click", async () => {
-       const val = unformatNumber($("#p-amount").value);
-       if (val <= 0) { toast("Masukkan nominal yang valid"); return; }
-       
+       const val = unformatNumber($("#p-amount").value); if (val <= 0) { toast("Masukkan nominal valid"); return; }
        const u = uid(); if(!u) return;
        const btn = $("#p-save"); btn.textContent = "Menyimpan..."; btn.disabled = true;
-       try {
-           await setDoc(doc(db, "users", u, "settings", "profile"), { monthlyExpenses: val }, { merge:true });
-           monthlyExpenses = val;
-           closeSheet();
-           toast("Pengeluaran disimpan");
-           renderBeranda();
-       } catch(e) {
-           console.error(e); toast("Gagal menyimpan");
-           btn.textContent = "Simpan Pengeluaran"; btn.disabled = false;
-       }
+       try { await setDoc(doc(db, "users", u, "settings", "profile"), { monthlyExpenses: val }, { merge:true }); monthlyExpenses = val; closeSheet(); toast("Pengeluaran disimpan"); renderBeranda(); } catch(e) { toast("Gagal menyimpan"); btn.textContent = "Simpan Pengeluaran"; btn.disabled = false; }
     });
 }
 
-function boot(){
-  $("#loading-overlay").classList.add("hidden");
-  initFirebase();
-}
-
+function boot(){ $("#loading-overlay").classList.add("hidden"); initFirebase(); }
 boot();
 </script>
 </body>
