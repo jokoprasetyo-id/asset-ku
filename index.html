@@ -10,7 +10,7 @@
 
 <!-- PWA Manifest & Icons -->
 <link rel="manifest" href="manifest.json">
-<link rel="apple-touch-icon" href="Asetku.png">
+<link rel="apple-touch-icon" href="logo.png">
 
 <!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -19,7 +19,7 @@
 
 <style>
   :root {
-    --bg: #EEF2F4;
+    --bg: #F4F6F8;
     --surface: #FFFFFF;
     --ink: #0F172A;
     --muted: #64748B;
@@ -35,6 +35,10 @@
     --blue-soft: #E0F2FE;
     --radius: 18px;
     --shadow: 0 1px 2px rgba(15,23,42,.04), 0 8px 24px -12px rgba(15,23,42,.12);
+    
+    /* New Model Colors */
+    --card-green: #EEF5F1;
+    --card-beige: #F5F4EF;
   }
   * { box-sizing: border-box; }
   html, body { height: 100%; }
@@ -78,7 +82,7 @@
   #app { max-width: 520px; margin: 0 auto; padding-bottom: 96px; min-height: 100vh; position: relative; }
   header.topbar {
     position: sticky; top: 0; z-index: 20;
-    background: linear-gradient(180deg, var(--bg) 70%, rgba(238,242,244,0));
+    background: linear-gradient(180deg, var(--bg) 70%, rgba(244,246,248,0));
     padding: 18px 18px 10px; display: flex; align-items: center; justify-content: space-between;
   }
   .topbar-left { display: flex; align-items: center; gap: 10px; }
@@ -104,15 +108,47 @@
     font-size: 11.5px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
     color: var(--muted); display: flex; align-items: center; gap: 6px;
   }
-  .hero-num { font-size: 32px; font-weight: 700; letter-spacing: -.02em; margin: 6px 0 2px; }
-  .hero-rule { height: 3px; width: 46px; background: var(--gold); border-radius: 3px; margin: 4px 0 14px; }
-  .hero-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; border-top: 1px solid var(--line); padding-top: 14px; }
-  .hero-grid div { font-size: 11px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .04em; }
-  .hero-grid .val { display: block; font-size: 14.5px; color: var(--ink); font-weight: 700; margin-top: 3px; text-transform: none; letter-spacing: 0; font-family: 'Sora', sans-serif; }
-  .val.pos { color: var(--primary-ink); } .val.neg { color: var(--debt); }
+  
+  /* New Dashboard Header Tabs */
+  .dash-tabs {
+    display: flex; background: #EAECEF; border-radius: 30px; padding: 4px; margin-bottom: 16px;
+  }
+  .dash-tab {
+    flex: 1; text-align: center; padding: 10px 0; border-radius: 24px; font-weight: 700; font-size: 13px; cursor: pointer; color: #6B7280; transition: all 0.2s;
+  }
+  .dash-tab.active {
+    background: #fff; color: #111827; box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+
+  /* New Model: Ringkasan Keuangan */
+  .summary-main {
+    background-color: var(--card-green); border-radius: 20px; padding: 22px; margin-bottom: 12px;
+  }
+  .summary-main-lbl {
+    font-size: 13px; font-weight: 600; color: #4B5563;
+  }
+  .summary-main-val {
+    font-size: 34px; font-weight: 800; color: #111827; margin: 6px 0 4px; font-family: 'Sora', sans-serif;
+  }
+  .summary-main-sub {
+    font-size: 12px; color: #6B7280; font-weight: 500;
+  }
+  
+  .summary-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px;
+  }
+  .summary-box {
+    background-color: var(--card-beige); border-radius: 16px; padding: 16px;
+  }
+  .summary-box-lbl {
+    font-size: 12.5px; font-weight: 600; color: #4B5563;
+  }
+  .summary-box-val {
+    font-size: 17px; font-weight: 800; color: #111827; margin-top: 6px; font-family: 'Sora', sans-serif; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+
   .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 
-  /* Gaugue & Charts */
   .gauge-wrap { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px 10px; }
   .gauge-title { font-size: 13px; font-weight: 700; color: var(--ink); margin-top: 14px; text-align: center; }
   .gauge-sub { font-size: 11.5px; color: var(--muted); margin-top: 4px; text-align: center; line-height: 1.4; }
@@ -152,6 +188,51 @@
     display: flex; align-items: center; justify-content: center; cursor: pointer;
   }
   .li-actions button:active { background: var(--line); }
+
+  /* New Agenda Items (Matching Photos) */
+  .agenda-header-new {
+    display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;
+  }
+  .agenda-header-title {
+    font-size: 12px; font-weight: 700; color: #4B5563; text-transform: uppercase; letter-spacing: 0.05em; display: flex; align-items: center; gap: 8px;
+  }
+  .agenda-add-btn {
+    width: 32px; height: 32px; border-radius: 50%; background: #E6F0EB; color: #146356; border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.15s;
+  }
+  .agenda-add-btn:active { transform: scale(0.9); }
+  
+  .agenda-item-new {
+    display: flex; align-items: center; gap: 14px; padding: 14px; background: #FFFFFF; border-radius: 16px; border: 1px solid #E5E7EB; margin-bottom: 10px; transition: opacity .3s, background .3s;
+  }
+  .agenda-item-new:active { background: #F9FAFB; }
+  .agenda-item-new.done {
+    opacity: 0.7;
+  }
+  .agenda-icon-new {
+    width: 40px; height: 40px; border-radius: 12px; background: #EBF1EF; display: flex; align-items: center; justify-content: center; font-size: 20px; flex: 0 0 auto;
+  }
+  .agenda-item-new.done .agenda-icon-new {
+    background: #609689; color: #fff; font-size: 18px;
+  }
+  .agenda-main-new { flex: 1; min-width: 0; cursor: pointer; }
+  .agenda-title-new {
+    font-size: 14.5px; font-weight: 700; color: #1F2937; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .agenda-item-new.done .agenda-title-new { text-decoration: line-through; color: #9CA3AF; }
+  .agenda-sub-new {
+    font-size: 12px; color: #6B7280; margin-top: 4px; display: flex; align-items: center; gap: 4px; font-weight: 500;
+  }
+  .agenda-amt-new {
+    font-size: 15px; font-weight: 800; font-family: 'Sora', sans-serif; color: #1F2937; text-align: right;
+  }
+  .agenda-item-new.done .agenda-amt-new { color: #9CA3AF; }
+  
+  .checkbox-new {
+    width: 26px; height: 26px; border-radius: 8px; border: 2px solid #D1D5DB; display: flex; align-items: center; justify-content: center; cursor: pointer; background: white; color: transparent; flex: 0 0 auto; transition: all .2s;
+  }
+  .checkbox-new.checked {
+    background: #609689; border-color: #609689; color: #fff;
+  }
 
   .chip-row { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 2px; }
   .chip {
@@ -210,7 +291,7 @@
   nav.bottomnav {
     position: fixed; bottom: 0; left: 0; right: 0; z-index: 30; display: flex; justify-content: center;
     padding: 10px 14px calc(10px + env(safe-area-inset-bottom));
-    background: linear-gradient(0deg, var(--bg) 60%, rgba(238,242,244,0));
+    background: linear-gradient(0deg, var(--bg) 60%, rgba(244,246,248,0));
   }
   .nav-inner {
     max-width: 480px; width: 100%; background: var(--surface); border-radius: 20px;
@@ -253,16 +334,6 @@
   .cal-dot.tagihan { background: var(--blue); }
   .cal-dot.maintenance { background: var(--gold); }
   .cal-dot.lainnya { background: var(--muted); }
-
-  .agenda-item { display: flex; gap: 12px; padding: 14px; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; margin-bottom: 10px; transition: opacity .3s; }
-  .agenda-item.done { opacity: 0.6; }
-  .agenda-item.done .agenda-title { text-decoration: line-through; color: var(--muted); }
-  .checkbox-custom { width: 24px; height: 24px; border-radius: 8px; border: 2px solid var(--line); display: flex; align-items: center; justify-content: center; cursor: pointer; background: var(--surface); color: transparent; flex: 0 0 auto; transition: all .2s; }
-  .checkbox-custom.checked { background: var(--primary); border-color: var(--primary); color: #fff; }
-  .agenda-main { flex: 1; min-width: 0; }
-  .agenda-title { font-size: 14.5px; font-weight: 600; color: var(--ink); margin-bottom: 4px; line-height: 1.4; }
-  .agenda-sub { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 6px; }
-  .agenda-amt { font-size: 14.5px; font-weight: 700; font-family: 'Sora', sans-serif; text-align: right; margin-top: 2px; }
 
   .overlay {
     position: fixed; inset: 0; background: rgba(15,23,42,.42); z-index: 50;
@@ -351,25 +422,51 @@
         <div class="topbar-sub" id="period-label">—</div>
       </div>
     </div>
-    <button class="icon-btn" id="btn-open-lainnya-avatar" style="border:none; padding:0; background:none;">
-      <img class="avatar" id="user-avatar" src="" alt="Profil">
-    </button>
+    <div style="display:flex; align-items:center; gap:10px;">
+      <!-- Toggle Masking Button -->
+      <button class="icon-btn" id="btn-toggle-mask" style="border:none; padding:0; background:none; color:var(--ink);">
+        <!-- Eye Open -->
+        <svg id="icon-eye-open" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        <!-- Eye Closed -->
+        <svg id="icon-eye-closed" class="hidden" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+      </button>
+      <button class="icon-btn" id="btn-open-lainnya-avatar" style="border:none; padding:0; background:none;">
+        <img class="avatar" id="user-avatar" src="" alt="Profil">
+      </button>
+    </div>
   </header>
 
   <main>
     <!-- VIEW: BERANDA -->
     <section class="view" id="view-beranda">
-      <div class="card">
-        <div class="card-label">Kekayaan Bersih</div>
-        <div class="hero-num" id="net-worth">Rp 0</div>
-        <div class="hero-rule"></div>
-        <div class="hero-grid">
-          <div>Total Tabungan<span class="val pos" id="sum-tabungan">Rp 0</span></div>
-          <div>Total Hutang<span class="val neg" id="sum-debt">Rp 0</span></div>
-          <div>Piutang<span class="val" id="sum-receivable">Rp 0</span></div>
+      
+      <!-- Dash Tabs -->
+      <div class="dash-tabs">
+        <div class="dash-tab active" data-tab="ringkasan">Ringkasan Keuangan</div>
+        <div class="dash-tab" data-tab="agenda" onclick="switchView('kalender')">Agenda Minggu ini</div>
+      </div>
+
+      <!-- New Summary Models (Saldo Aktif & Pemasukan/Pengeluaran style) -->
+      <div class="summary-main">
+        <div class="summary-main-lbl">Saldo Aktif (Kekayaan Bersih)</div>
+        <div class="summary-main-val" id="net-worth">Rp 0</div>
+        <div class="summary-main-sub">Di luar hutang & kewajiban</div>
+      </div>
+      
+      <div class="summary-grid">
+        <div class="summary-box">
+          <div class="summary-box-lbl">Total Aset</div>
+          <div class="summary-box-val" id="sum-tabungan">Rp 0</div>
         </div>
-        <div style="border-top:1px solid var(--line); padding-top:12px; margin-top:12px; cursor:pointer;" onclick="openLiquiditySheet()">
-           <div style="font-size:11px; color:var(--muted); font-weight:700; text-transform:uppercase; margin-bottom:6px; letter-spacing:0.04em; display:flex; justify-content:space-between; align-items:center;">
+        <div class="summary-box">
+          <div class="summary-box-lbl">Total Hutang</div>
+          <div class="summary-box-val" id="sum-debt">Rp 0</div>
+        </div>
+      </div>
+
+      <div class="card" style="padding: 14px 18px;">
+        <div style="cursor:pointer;" onclick="openLiquiditySheet()">
+           <div style="font-size:11.5px; color:var(--muted); font-weight:700; text-transform:uppercase; margin-bottom:6px; letter-spacing:0.04em; display:flex; justify-content:space-between; align-items:center;">
               <span>Likuiditas Aset</span>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
            </div>
@@ -406,11 +503,13 @@
       </div>
       
       <!-- Card Dashboard Agenda -->
-      <div class="card">
-         <div class="card-label" style="justify-content:space-between; margin-bottom:12px;">
-            <span>🗓️ Agenda Terdekat (7 Hari)</span>
-            <button class="icon-btn" style="width:26px;height:26px;border:none;background:var(--primary-soft);color:var(--primary-ink);box-shadow:none;" onclick="openScheduleSheet()">
-               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+      <div class="card" style="padding: 16px;">
+         <div class="agenda-header-new">
+            <div class="agenda-header-title">
+               📅 Agenda Terdekat (7 Hari)
+            </div>
+            <button class="agenda-add-btn" onclick="openScheduleSheet()">
+               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
             </button>
          </div>
          <div id="dash-agenda-list">
@@ -456,7 +555,6 @@
       </div>
     </section>
 
-    <!-- VIEW: ASET -->
     <section class="view hidden" id="view-aset">
       <div class="card" style="padding:6px 18px; margin-bottom: 14px;" id="asset-summary-card">
         <div class="card-label" style="justify-content:space-between; margin-bottom:8px; margin-top:8px; border-bottom: 1px solid var(--line); padding-bottom:8px;">
@@ -482,7 +580,6 @@
       </div>
     </section>
 
-    <!-- VIEW: KALENDER -->
     <section class="view hidden" id="view-kalender">
        <div class="card" style="padding:16px;">
           <div class="cal-header">
@@ -519,9 +616,9 @@
        </div>
 
        <div>
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; padding:0 4px;">
-             <div style="font-size:14px; font-weight:700; color:var(--ink);" id="agenda-date-lbl">Tanggal Terpilih</div>
-             <button style="background:none; border:none; color:var(--blue); font-size:12px; font-weight:700; cursor:pointer;" onclick="openScheduleSheet()">+ Tambah</button>
+          <div class="agenda-header-new" style="padding:0 4px;">
+             <div class="agenda-header-title" id="agenda-date-lbl" style="font-size: 15px; color:var(--ink); text-transform:none;">Tanggal Terpilih</div>
+             <button style="background:none; border:none; color:var(--blue); font-size:13px; font-weight:700; cursor:pointer;" onclick="openScheduleSheet()">+ Tambah</button>
           </div>
           <div id="agenda-list"></div>
           <div class="empty hidden" id="agenda-empty" style="padding-top:20px;">
@@ -604,7 +701,7 @@
   </main>
 </div>
 
-<button class="fab hidden" id="btn-fab">
+<button class="fab hidden" id="btn-fab" style="cursor: pointer;">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
 </button>
 
@@ -656,6 +753,9 @@ let unsubAssets = null, unsubDebts = null, unsubCats = null, unsubGoals = null, 
 const $ = (sel) => document.querySelector(sel);
 const $$ = (sel) => Array.from(document.querySelectorAll(sel));
 
+// Make isMasked globally available for the toggle
+window.isMasked = false;
+
 const DEFAULT_CATEGORIES = [
   { id: "tabungan", name: "Tabungan / Kas", hue: 158, icon: "💰" },
   { id: "saham",    name: "Saham",          hue: 265, icon: "📈" },
@@ -686,7 +786,7 @@ function getDefaultUsefulLife(categoryId) {
 let assets = [];
 let debts = [];
 let goals = [];
-let schedules = []; // For Calendar agendas and maintenance
+let schedules = []; 
 let historyData = [];
 let lastSavedNetWorth = null;
 let lastSavedMonth = null;
@@ -701,7 +801,10 @@ let calSelectedDate = new Date();
 
 let rates = { antam: 1350000, galeri24: 1320000, dinarKR: 4400000, valas_usd: 15500, valas_sgd: 11500, valas_aud: 10200 };
 
-function rupiah(n){ return "Rp " + Math.round(Number(n) || 0).toLocaleString("id-ID"); }
+function rupiah(n, forceUnmask = false){ 
+  if (window.isMasked && !forceUnmask) return "Rp •••••••";
+  return "Rp " + Math.round(Number(n) || 0).toLocaleString("id-ID"); 
+}
 function formatNumberWithDot(num) {
   if (num === null || num === undefined) return "";
   return new Intl.NumberFormat('id-ID').format(num);
@@ -727,6 +830,19 @@ document.addEventListener('click', (e) => {
   if(e.target.closest("#btn-set-pengeluaran")) openPengeluaranSheet();
 });
 
+// Setup Toggle Mask feature
+$("#btn-toggle-mask").addEventListener("click", () => {
+    window.isMasked = !window.isMasked;
+    if(window.isMasked) {
+        $("#icon-eye-open").classList.add("hidden");
+        $("#icon-eye-closed").classList.remove("hidden");
+    } else {
+        $("#icon-eye-open").classList.remove("hidden");
+        $("#icon-eye-closed").classList.add("hidden");
+    }
+    renderAll();
+});
+
 function toast(msg){
   const t = $("#toast"); t.textContent = msg; t.classList.add("show");
   clearTimeout(toast._t); toast._t = setTimeout(()=>t.classList.remove("show"), 2500);
@@ -735,7 +851,6 @@ function uid(){ return currentUser ? currentUser.uid : null; }
 function escapeHtml(s){ return String(s??"").replace(/[&<>"']/g, m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m])); }
 function generateId(){ return Date.now().toString(36) + Math.random().toString(36).substr(2); }
 
-// --- STREAMING_CHUNK:Schedule and Repeating Logic ---
 function doesScheduleOccur(s, dateStr) {
     if (!s.date) return false;
     if (s.date === dateStr) return true;
@@ -823,7 +938,7 @@ function fallbackAvatar(name){
 $("#btn-logout").addEventListener("click", () => signOut(auth));
 $("#btn-open-lainnya-avatar").addEventListener("click", () => switchView("lainnya"));
 
-function switchView(name){
+window.switchView = function(name){
   $$(".view").forEach(v=>v.classList.add("hidden"));
   $("#view-"+name).classList.remove("hidden");
   $$(".nav-btn").forEach(b=>b.classList.toggle("active", b.dataset.view===name));
@@ -996,7 +1111,7 @@ function renderBeranda(){
   $("#net-worth").textContent = rupiah(s.netWorth);
   $("#sum-tabungan").textContent = rupiah(s.totalTarget);
   $("#sum-debt").textContent = rupiah(s.totalDebt);
-  $("#sum-receivable").textContent = rupiah(s.totalReceivable);
+  if ($("#sum-receivable")) $("#sum-receivable").textContent = rupiah(s.totalReceivable);
 
   let health = s.healthScore;
   const CIRC = 238.7; const healthOffset = CIRC - (CIRC * health/100);
@@ -1058,7 +1173,7 @@ function renderDashAgenda() {
     }
     
     items.sort((a,b) => a.instanceDate.localeCompare(b.instanceDate));
-    items = items.slice(0, 3);
+    items = items.slice(0, 3); // max show 3 items in dashboard
     
     if (items.length === 0) {
         listEl.innerHTML = `<div style="text-align:center; padding:16px; font-size:12px; color:var(--muted); background:#F8FAFC; border:1px dashed var(--line); border-radius:12px;">Hore! Tidak ada tagihan atau agenda mendesak dalam 7 hari ke depan.</div>`;
@@ -1069,26 +1184,25 @@ function renderDashAgenda() {
     listEl.innerHTML = items.map(item => {
         const dObj = new Date(item.instanceDate);
         const dateStr = item.instanceDate === todayStr ? "Hari Ini" : dObj.toLocaleDateString('id-ID', {day:'numeric', month:'short'});
-        let icon = "🔔"; let typeColor = "var(--ink)";
+        let icon = "🔔"; 
         
-        if (item.category === 'tagihan') { icon = "💳"; typeColor = "var(--blue)"; }
-        else if (item.category === 'maintenance') { icon = "🔧"; typeColor = "var(--gold)"; }
+        if (item.category === 'tagihan') { icon = "💳"; }
+        else if (item.category === 'maintenance') { icon = "🔧"; }
         
         return `
-            <div style="display:flex; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid var(--line);">
-                <div style="width:34px; height:34px; border-radius:10px; background:var(--bg); display:flex; align-items:center; justify-content:center; font-size:16px;">${icon}</div>
-                <div style="flex:1; min-width:0;">
-                    <div style="font-size:13.5px; font-weight:600; color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(item.title)}</div>
-                    <div style="font-size:11px; color:var(--muted); margin-top:2px; display:flex; align-items:center; gap:4px;">
-                        <span style="font-weight:700; color:${item.instanceDate===todayStr ? 'var(--debt)' : 'var(--muted)'};">${dateStr}</span>
-                        ${item.amount ? ` • ${rupiah(item.amount)}` : ''}
+            <div class="agenda-item-new">
+                <div class="agenda-icon-new">${icon}</div>
+                <div class="agenda-main-new" onclick="openScheduleSheetById('${item.id}')">
+                    <div class="agenda-title-new">${escapeHtml(item.title)}</div>
+                    <div class="agenda-sub-new">
+                        <span style="font-weight:700; color:${item.instanceDate===todayStr ? 'var(--debt)' : '#6B7280'};">${dateStr}</span>
+                        ${item.amount ? ` • <span style="color: #F59E0B;">${rupiah(item.amount)}</span>` : ''}
                     </div>
                 </div>
-                <button class="checkbox-custom" onclick="toggleAgendaItem('${item.id}', false, '${item.instanceDate}')"></button>
+                <button class="checkbox-new" onclick="toggleAgendaItem('${item.id}', false, '${item.instanceDate}')"></button>
             </div>
         `;
     }).join("");
-    if(listEl.lastElementChild) listEl.lastElementChild.style.borderBottom = "none";
 }
 
 function renderAllocationChart(catTotals, total) {
@@ -1286,21 +1400,24 @@ function renderAgendaList() {
     listEl.innerHTML = dayItems.map(item => {
         const isDone = isScheduleDone(item, item.instanceDate);
         let subText = "";
+        let icon = "📌";
         
-        if (item.category === 'tagihan') subText = "💳 Tagihan";
-        else if (item.category === 'maintenance') subText = "🔧 Servis/Maintenance";
-        else subText = "📌 Lainnya";
+        if (item.category === 'tagihan') { subText = "Tagihan"; icon = "💳"; }
+        else if (item.category === 'maintenance') { subText = "Servis/Maintenance"; icon = "🔧"; }
+        else subText = "Lainnya";
         
         return `
-        <div class="agenda-item ${isDone ? 'done' : ''}">
-            <button class="checkbox-custom ${isDone ? 'checked' : ''}" onclick="toggleAgendaItem('${item.id}', ${isDone}, '${item.instanceDate}')">
-                ${isDone ? `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>` : ''}
-            </button>
-            <div class="agenda-main" onclick="openScheduleSheetById('${item.id}')" style="cursor:pointer;">
-                <div class="agenda-title">${escapeHtml(item.title)}</div>
-                <div class="agenda-sub">${subText}</div>
+        <div class="agenda-item-new ${isDone ? 'done' : ''}">
+            <div class="checkbox-new ${isDone ? 'checked' : ''}" onclick="toggleAgendaItem('${item.id}', ${isDone}, '${item.instanceDate}')">
+                ${isDone ? `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>` : ''}
             </div>
-            ${item.amount ? `<div class="agenda-amt">${rupiah(item.amount)}</div>` : ''}
+            <div class="agenda-main-new" onclick="openScheduleSheetById('${item.id}')">
+                <div class="agenda-title-new">${escapeHtml(item.title)}</div>
+                <div class="agenda-sub-new">
+                    <span style="display:inline-block; margin-right:4px; font-size:10px;">${icon}</span> ${subText}
+                </div>
+            </div>
+            ${item.amount ? `<div class="agenda-amt-new">${rupiah(item.amount)}</div>` : ''}
         </div>`;
     }).join("");
 }
@@ -1319,6 +1436,11 @@ window.toggleAgendaItem = async function(id, currentStatus, dateStr) {
     }
 }
 window.openScheduleSheetById = function(id) { openScheduleSheet(schedules.find(s=>s.id===id)); }
+window.openScheduleSheet = openScheduleSheet;
+window.openAssetSheet = openAssetSheet;
+window.openDebtSheet = openDebtSheet;
+window.openGoalSheet = openGoalSheet;
+window.closeSheet = closeSheet;
 
 function openScheduleSheet(existing = null) {
     const isEdit = !!existing;
@@ -1338,7 +1460,7 @@ function openScheduleSheet(existing = null) {
         
         <div class="field">
             <label>Judul Agenda</label>
-            <input type="text" id="s-title" placeholder="Contoh: Bayar Listrik Bulanan / Servis Motor" value="${isEdit ? escapeHtml(existing.title || '') : ''}">
+            <input type="text" id="s-title" placeholder="Contoh: Bayar Listrik / Servis Motor" value="${isEdit ? escapeHtml(existing.title || '') : ''}">
         </div>
         <div class="field">
             <label>Tanggal Mulai</label>
@@ -1448,8 +1570,8 @@ window.openLiquiditySheet = function() {
         <div class="sheet-close-bar"></div>
         <h3>Rincian Likuiditas</h3>
         <p style="font-size:12.5px; color:var(--muted); margin-top:-8px; margin-bottom:16px;">Aset lancar mudah dicairkan menjadi uang tunai, sedangkan aset tidak lancar butuh waktu lebih lama. <b>Hanya dihitung dari tab Aset.</b></p>
-        <div style="margin-bottom:20px;"><div style="font-size:11.5px; font-weight:700; color:#10B981; margin-bottom:8px; text-transform:uppercase; letter-spacing:0.04em; display:flex; justify-content:space-between;"><span>🟢 Aset Lancar</span><span>${rupiah(s.totalLiquid)}</span></div><div style="background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:0 12px; max-height:22vh; overflow-y:auto;">${renderItems(s.liquidItems)}</div></div>
-        <div><div style="font-size:11.5px; font-weight:700; color:#94A3B8; margin-bottom:8px; text-transform:uppercase; letter-spacing:0.04em; display:flex; justify-content:space-between;"><span>⚪ Aset Tidak Lancar</span><span>${rupiah(s.totalNonLiquid)}</span></div><div style="background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:0 12px; max-height:22vh; overflow-y:auto;">${renderItems(s.nonLiquidItems)}</div></div>
+        <div style="margin-bottom:20px;"><div style="font-size:11.5px; font-weight:700; color:#10B981; margin-bottom:8px; text-transform:uppercase; letter-spacing:0.04em; display:flex; justify-content:space-between;"><span>🟢 Aset Lancar</span><span>${rupiah(s.totalLiquid, true)}</span></div><div style="background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:0 12px; max-height:22vh; overflow-y:auto;">${renderItems(s.liquidItems)}</div></div>
+        <div><div style="font-size:11.5px; font-weight:700; color:#94A3B8; margin-bottom:8px; text-transform:uppercase; letter-spacing:0.04em; display:flex; justify-content:space-between;"><span>⚪ Aset Tidak Lancar</span><span>${rupiah(s.totalNonLiquid, true)}</span></div><div style="background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:0 12px; max-height:22vh; overflow-y:auto;">${renderItems(s.nonLiquidItems)}</div></div>
         <button class="btn-primary" id="btn-close-liq" style="margin-top:16px;">Tutup</button>
     `);
     $("#btn-close-liq").addEventListener("click", closeSheet);
@@ -1538,7 +1660,7 @@ function renderGoals(){
       }).join("");
     } else { assetsHtml = `<div class="empty" style="padding:16px 0; font-size:12px;">Belum ada aset disimpan.</div>`; }
 
-    return `<div class="card ${isExpanded ? '' : 'collapsed'}" style="margin-bottom:14px; padding:20px;"><div class="goal-header" onclick="toggleGoal('${g.id}')"><div class="goal-title-wrap"><h2 class="goal-title">${escapeHtml(g.name)}</h2><div class="goal-target-lbl">TARGET DANA: <span class="goal-target-val">${rupiah(target)}</span></div></div><div class="chevron icon-btn" style="width:32px; height:32px; border:none; box-shadow:none; margin-top:2px;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg></div></div><div class="goal-progress-track"><div class="goal-progress-fill" style="width:${pct}%;"></div></div><div class="goal-stats"><div class="goal-pct">${pct}%</div><div class="goal-collected">Terkumpul: <span class="goal-collected-val">${rupiah(collected)}</span></div></div><div class="goal-body"><div class="goal-reco-box"><div class="goal-reco-head"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg> Rekomendasi Tabungan</div><div class="goal-reco-desc">Sisa dana yang perlu dikumpulkan: <b style="color:var(--ink);">${rupiah(rem)}</b></div><div class="goal-reco-grid"><div class="goal-reco-item"><div class="goal-reco-lbl">6 BULAN</div><div class="goal-reco-val">${rupiah(rem/6)}</div></div><div class="goal-reco-item"><div class="goal-reco-lbl">12 BULAN</div><div class="goal-reco-val">${rupiah(rem/12)}</div></div><div class="goal-reco-item"><div class="goal-reco-lbl">24 BULAN</div><div class="goal-reco-val">${rupiah(rem/24)}</div></div></div></div><div class="goal-assets-section"><div class="goal-assets-head"><span>Aset Disimpan</span><button class="icon-btn" style="width:26px;height:26px;border:none;background:var(--bg);box-shadow:none;" onclick="openGoalSheetBtn('${g.id}')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg></button></div>${assetsHtml}<button class="btn-add-dashed" onclick="openGoalAssetSheet('${g.id}')" style="margin-top:12px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg> Tambah Catatan Aset</button></div></div></div>`;
+    return `<div class="card ${isExpanded ? '' : 'collapsed'}" style="margin-bottom:14px; padding:20px;"><div class="goal-header" onclick="toggleGoal('${g.id}')"><div class="goal-title-wrap"><h2 class="goal-title">${escapeHtml(g.name)}</h2><div class="goal-target-lbl">TARGET DANA: <span class="goal-target-val">${rupiah(target, true)}</span></div></div><div class="chevron icon-btn" style="width:32px; height:32px; border:none; box-shadow:none; margin-top:2px;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg></div></div><div class="goal-progress-track"><div class="goal-progress-fill" style="width:${pct}%;"></div></div><div class="goal-stats"><div class="goal-pct">${pct}%</div><div class="goal-collected">Terkumpul: <span class="goal-collected-val">${rupiah(collected, true)}</span></div></div><div class="goal-body"><div class="goal-reco-box"><div class="goal-reco-head"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg> Rekomendasi Tabungan</div><div class="goal-reco-desc">Sisa dana yang perlu dikumpulkan: <b style="color:var(--ink);">${rupiah(rem, true)}</b></div><div class="goal-reco-grid"><div class="goal-reco-item"><div class="goal-reco-lbl">6 BULAN</div><div class="goal-reco-val">${rupiah(rem/6, true)}</div></div><div class="goal-reco-item"><div class="goal-reco-lbl">12 BULAN</div><div class="goal-reco-val">${rupiah(rem/12, true)}</div></div><div class="goal-reco-item"><div class="goal-reco-lbl">24 BULAN</div><div class="goal-reco-val">${rupiah(rem/24, true)}</div></div></div></div><div class="goal-assets-section"><div class="goal-assets-head"><span>Aset Disimpan</span><button class="icon-btn" style="width:26px;height:26px;border:none;background:var(--bg);box-shadow:none;" onclick="openGoalSheetBtn('${g.id}')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg></button></div>${assetsHtml}<button class="btn-add-dashed" onclick="openGoalAssetSheet('${g.id}')" style="margin-top:12px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg> Tambah Catatan Aset</button></div></div></div>`;
   }).join("");
 }
 
@@ -1650,7 +1772,8 @@ function setupAssetFormLogic(existing, onSaveCallback) {
      if($("#lbl-cat-life")) $("#lbl-cat-life").textContent = life;
      const salvageValue = base * 0.10; let val = base;
      if (life > 0) { if (age >= life) val = salvageValue; else val = base - (((base - salvageValue) / life) * age); }
-     if ($("#hint-dep-calc")) $("#hint-dep-calc").textContent = "Estimasi Nilai Saat Ini: " + rupiah(val);
+     // Force unmask the calculated value in forms
+     if ($("#hint-dep-calc")) $("#hint-dep-calc").textContent = "Estimasi Nilai Saat Ini: " + rupiah(val, true);
   }
 
   if ($("#f-group-seg")) { $("#f-group-seg").querySelectorAll("button").forEach(b => { b.addEventListener("click", () => { selectedGroup = b.dataset.g; $("#f-group-seg").querySelectorAll("button").forEach(x => x.classList.toggle("active", x === b)); updateGroupUI(); }); }); updateGroupUI(); }
@@ -1671,7 +1794,7 @@ function setupAssetFormLogic(existing, onSaveCallback) {
   function calcPreview(){
     const cat = catSel.value; const qty = Number(fQty.value || 0); let val = 0;
     if(cat==='emas') val = qty * (rates[fSubtype.value]||0); else if(cat==='dinar') val = qty * rates.dinarKR; else if(cat==='valas') val = qty * (rates["valas_"+fSubtype.value]||0);
-    hintCalc.textContent = "Estimasi Nilai: " + rupiah(val);
+    hintCalc.textContent = "Estimasi Nilai: " + rupiah(val, true);
   }
 
   catSel.addEventListener("change", syncForm); fSubtype.addEventListener("change", calcPreview); fQty.addEventListener("input", calcPreview);
